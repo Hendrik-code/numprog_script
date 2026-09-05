@@ -2,7 +2,7 @@ name: Release
 
 # The PDFs live here, not in the repository. Push a tag (for example
 # `git tag ss25 && git push origin ss25`) and every document is compiled from a
-# clean checkout and attached to a GitHub release.
+# clean checkout and attached to a GitHub release as a single zip.
 
 on:
   push:
@@ -62,7 +62,7 @@ jobs:
                 fi
               done
 
-      - name: Collect PDFs
+      - name: Collect the PDFs into one archive
         run: |
           # An empty release is a failure, not something to publish quietly.
           shopt -s nullglob
@@ -72,11 +72,19 @@ jobs:
             echo "::error::No PDFs were produced; nothing to release."
             exit 1
           fi
-          echo "${#pdfs[@]} PDFs ready for the release."
+
+          # One archive instead of thirty assets: the release page stays
+          # readable and the whole set can be grabbed in a single download.
+          tag="${{ github.event.inputs.tag || github.ref_name }}"
+          # Written outside release/ so the archive cannot pick itself up.
+          mkdir -p dist
+          # -j stores the PDFs flat, without the release/ directory around them.
+          zip -j -9 "dist/numprog-pdfs-$tag.zip" "${pdfs[@]}"
+          echo "${#pdfs[@]} PDFs archived in numprog-pdfs-$tag.zip."
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag || github.ref_name }}
-          files: release/*.pdf
+          files: dist/*.zip
           generate_release_notes: true
