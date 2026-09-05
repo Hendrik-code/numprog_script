@@ -27,18 +27,26 @@ jobs:
         with:
           # The action needs a root file, so point it at the complete script
           # and let the script below do the full sweep in the same container.
+          # work_in_root_file_dir is what makes that second, redundant compile
+          # succeed: every document resolves \npbase relative to its own folder,
+          # so it has to be built from there and not from the repository root.
           root_file: dokumente/skript/numprog_skript.tex
           working_directory: .
+          work_in_root_file_dir: true
           pre_compile: |
             set -e
-            mkdir -p /tmp/pdfs
+            # The PDFs have to land inside the workspace. Everything else in
+            # this script runs in the action's container, and only the
+            # workspace is shared with the steps that follow.
+            mkdir -p "$GITHUB_WORKSPACE/release"
             build() {   # build <dir> <base> <jobname> [pretex]
               local dir=$1 base=$2 job=$3 pretex=${4:-}
               local args="-pdf -interaction=nonstopmode -halt-on-error"
               args="$args -file-line-error -jobname=$job"
               [ -n "$pretex" ] && args="$args -usepretex=$pretex"
               ( cd "$dir" && latexmk $args "$base.tex" )
-              cp "$dir/$job.pdf" "/tmp/pdfs/$(echo "${dir#./}/$job" | tr '/' '_').pdf"
+              cp "$dir/$job.pdf" \
+                 "$GITHUB_WORKSPACE/release/$(echo "${dir#./}/$job" | tr '/' '_').pdf"
             }
             grep -rl --include='*.tex' -F '\begin{document}' . \
               | grep -v '^\./gemeinsam/' \
@@ -53,8 +61,6 @@ jobs:
 
       - name: Collect PDFs
         run: |
-          mkdir -p release
-          cp /tmp/pdfs/*.pdf release/
           ls -la release
 
       - name: Publish release
