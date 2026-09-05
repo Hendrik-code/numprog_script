@@ -35,33 +35,44 @@ jobs:
           work_in_root_file_dir: true
           pre_compile: |
             set -e
-            # The PDFs have to land inside the workspace. Everything else in
-            # this script runs in the action's container, and only the
-            # workspace is shared with the steps that follow.
+            # This runs inside the TeX Live image, which is Alpine: grep, find
+            # and friends are BusyBox, not GNU. BusyBox grep has no --include,
+            # so the sweep picks the .tex files with find and skips gemeinsam/
+            # with a case statement. The discover job in build.yml may use GNU
+            # grep for the same job -- it runs on the runner, not in here.
             mkdir -p "$GITHUB_WORKSPACE/release"
             build() {   # build <dir> <base> <jobname> [pretex]
               local dir=$1 base=$2 job=$3 pretex=${4:-}
-              local args="-pdf -interaction=nonstopmode -halt-on-error"
-              args="$args -file-line-error -jobname=$job"
-              [ -n "$pretex" ] && args="$args -usepretex=$pretex"
-              ( cd "$dir" && latexmk $args "$base.tex" )
+              local args=(-pdf -interaction=nonstopmode -halt-on-error
+                          -file-line-error -jobname="$job")
+              [ -n "$pretex" ] && args+=(-usepretex="$pretex")
+              ( cd "$dir" && latexmk "${args[@]}" "$base.tex" )
               cp "$dir/$job.pdf" \
                  "$GITHUB_WORKSPACE/release/$(echo "${dir#./}/$job" | tr '/' '_').pdf"
             }
-            grep -rl --include='*.tex' -F '\begin{document}' . \
-              | grep -v '^\./gemeinsam/' \
-              | while read -r doc; do
-                  dir=$(dirname "$doc"); base=$(basename "$doc" .tex)
-                  echo "=== $doc"
-                  build "$dir" "$base" "$base"
-                  if grep -q 'ifdefined.npprint' "$doc"; then
-                    build "$dir" "$base" "${base}_print" '\def\npprint{}'
-                  fi
-                done
+            find . -type f -name '*.tex' | sort |
+              while read -r doc; do
+                case "$doc" in ./gemeinsam/*) continue ;; esac
+                grep -q -F '\begin{document}' "$doc" || continue
+                dir=$(dirname "$doc"); base=$(basename "$doc" .tex)
+                echo "=== $doc"
+                build "$dir" "$base" "$base"
+                if grep -q 'ifdefined.npprint' "$doc"; then
+                  build "$dir" "$base" "${base}_print" '\def\npprint{}'
+                fi
+              done
 
       - name: Collect PDFs
         run: |
-          ls -la release
+          # An empty release is a failure, not something to publish quietly.
+          shopt -s nullglob
+          pdfs=(release/*.pdf)
+          printf '  %s\n' "${pdfs[@]}"
+          if [ "${#pdfs[@]}" -eq 0 ]; then
+            echo "::error::No PDFs were produced; nothing to release."
+            exit 1
+          fi
+          echo "${#pdfs[@]} PDFs ready for the release."
 
       - name: Publish release
         uses: softprops/action-gh-release@v2
