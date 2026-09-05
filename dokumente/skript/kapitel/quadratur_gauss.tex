@@ -1,0 +1,164 @@
+\newpage
+	% -----------------------------------------
+	\subsection{Gauß Quadratur}
+	
+	\defi{
+		\n 
+		Bisher haben wir bei der Interpolation mit den verschiedenen Methoden hauptsächlich die sogenannte Gewichtung einzelner Stützstellen ausgerechnet. Z.B. hatte die Trapezregel (siehe \refChapter{sec:quadratur_regeln}) eine Gewichtung von $0.5$ bei beiden Stützstellen.
+		\n 
+		Die Gauß Quadratur gibt jetzt nicht nur die Gewichtung der einzelnen Stützstellen, sondern auch die Position der Stützstellen selbst vor, um die Anzahl der Bedingungen zu verdoppeln. Der erreichbare Polynomgrad liegt also bei $(2\cdot n - 1)$ bei $n$ Stützstellen, was ziemlich hoch ist.
+		\n 
+		Eine Einschränkung ist, dass das Integrationsgebiet immer von $-1$ bis $1$ geht. Andere Intervalle müssen wir also ähnlich wie bei Hermite-Interpolation (siehe \refChapter{chap:hermite_interpolation}) erst einmal strecken und verschieben bzw. transformieren, also ist diese Einschränkung eigentlich kein Thema.
+		\n 
+		Außerdem erhalten wir bei der Gauß-Quadratur nur positive Gewichte $w_i$, wodurch die Quadraturformel immer stabil bleibt, die Kondition immer gleich $b-a$ ist (siehe \refChapter{defi:quadratur_kondition}). Um eine Gauß-Quadratur Formel herzuleiten, wird die "Methode der unbestimmten Koeffizienten" verwendent.
+	}
+	
+	\sbreak
+	\methode{ Methode der unbestimmten Koeffizienten:
+		\n 
+		Wir können folgende Gleichung aufstellen, die im Grunde unser allgemeines Quadraturproblem zusammenfasst. Nämlich die Summe von Funktionswerten mal Gewichtungen soll gleich dem Integralwert der Funktion entsprechen.
+		\begin{align} 
+ 			\sum_{i=0}^{n}f(x_i)\cdot w_i \shouldEq \int_{a}^{b}f(x) \d x 
+ 		\end{align}
+ 		Diesen Term kann man nun für unterschiedliche Grade aufschreiben, wo diese gelten sollen (bei $n$ Stützstellen darf ja nach Gauß-Quadratur der bis zum $(2 \cdot n - 1)$'ten Grad erreicht werden). Danach versuchen wir, dass alle aufgestellten Gleichungen erfüllt werden (ähnlich zu einem LGS). Damit kann man dann auf alle $x_i$ und alle $w_i$ schließen und damit die Regel der entsprechenden Gauß-Quadratur.
+ 		\n
+ 		Die Funktion $f(x)$ entspricht natürlich den Standard Polynom Grad Funktionen, also für Grad 0 wäre $f(x) = 1$, für Grad 1 ist es $f(x) = x$ usw.
+	}
+	
+	\newpage
+	\bsp {
+		\n 
+		Es soll eine unbekannte Funktion mithilfe von einer Stützstelle $x_0$ und der Gauß-Quadratur bestimmt werden. Mit einer Stützelle, also $n=1$, müssen wir die Grade von $0$ bis $(2 \cdot n) - 1 = 1$ aufstellen. \\
+		Alle Informationen mithilfe von der obigen Formel aufschreiben: \n 
+		Grad 0 mit $f(x) = 1$:
+		\begin{align*}
+			f(x_0) \cdot w_0 = w_0 \shouldEq \int_{-1}^{1}f(x)\d x = 2 
+		\end{align*}
+		Grad 1 mit $f(x) = x$:
+		\begin{align*} 
+			f(x_0) \cdot w_0 = w_0 x_0 \shouldEq \int_{-1}^{1}f(x)\d x = 0 
+		\end{align*}
+		Daraus können wir also folgern:
+		\begin{align*}
+			w_0 &= 2 \\
+			w_0 x_0 &= 0 \\
+			\Longrightarrow x_0 &= 0
+		\end{align*}
+		Das ist natürlich ein etwas bescheuertes Beispiel, da man mit einer Stützstelle niemals Gauß-Quadratur machen würde. Trotzdem interessant, dass man im Falle einer Stützstelle im besten Falle die in der Mitte des Bereiches nehmen sollte.
+		\n
+		\noindent Jetzt gibt es noch ein komplexeres Beispiel.
+	}
+	
+	\sbreak
+	\bsp{ 
+		\n
+		Gauß-Quadratur mit 3 Stützstellen an den Stellen $x_0 = -1 \aae x_1 = 0 \aae x_2 = 1$.
+		Alle Informationen mithilfe von der obigen Formel aufschreiben: \n 
+		Grad 0 mit $f(x) = 1$: 
+		\begin{align*} 
+			f(x_0) \cdot w_0 + f(x_1) \cdot w_1 + f(x_2) \cdot w_2 = w_0 + w_1 + w_2\shouldEq \int_{-1}^{1}f(x)\d x = 2 
+		\end{align*}
+		Grad 1 mit $f(x) = x$:
+		\begin{align*} 
+			f(x_0) \cdot w_0 + f(x_1) \cdot w_1 + f(x_2) \cdot w_2 = w_0x_0 + w_1x_1 + w_2x_2 \shouldEq \int_{-1}^{1}f(x)\d x = 0 
+		\end{align*}
+		Grad 2 mit $f(x) = x^2$:
+		\begin{align*} 
+			f(x_0) \cdot w_0 + f(x_1) \cdot w_1 + f(x_2) \cdot w_2 = w_0x_0^2 + w_1x_1^2 + w_2x_2^2 \shouldEq \int_{-1}^{1}f(x)\d x = \frac{2}{3}
+		\end{align*}
+		\n 
+		Weil wir oben schon die Positionen der Stützstellen (vereinfachtes Beispiel) gegeben haben, müssen wir die Gleichung noch höherer Grade (wir könnten bis Grad 5 aufschreiben) nicht mehr verwenden, weil das genügend Informationen sind (noch drei Unbekannte, drei Gleichungen).
+		\begin{align*}
+			w_0 + w_1 + w_2 &= 2 &&(I)\\
+			-w_0 + w_1 0 + w_2 &= 0 &&(II)\\
+			w_0 + w_1 0 + w_2 &= \frac{2}{3} &&(III) \\
+			\\
+			\text{Wir können schließen:}& \\
+			-w_0 + w_2 &= 0 &&(II)\\
+			w_0 &= w_2 \\
+			\\
+			w_0 + w_2 &= \frac{2}{3} &&(III)\\
+			w_0 &= \frac{2}{3} - w_2 \\
+			\text{Einsetzen in (II):}& \\
+			-\frac{2}{3} + w_2 + w_2 &= 0 \\
+			2w_2 &= \frac{2}{3} \\
+			w_2 &= w_0 = \frac{1}{3}\\
+			\\
+			\text{Den Rest erschließen:}&\\
+			w_0 + w_1 + w_2 &= 2 &&(I)\\
+			w_1 &= 2 - w_0 - w_2 = 2 - 2w_2 \\
+			w_1 &= 2 - \frac{2}{3} = \frac{4}{3}
+		\end{align*}
+		Also zusammenfassend könnte man sagen, dass die Fläche einer unbekannten Funktion mit Gauß-Quadratur mit Stützstellen $-1, 0$ und $1$ folgendermaßen ausrechnet:
+		\begin{align*}
+			Q = f(-1) \cdot \frac{1}{3} + f(0) \cdot \frac{4}{3} + f(1) \cdot \frac{1}{3}
+		\end{align*}
+		Das könnte bekannt vorkommen, da das einfach \fat{Simpsonregel} (siehe \refEquation{eq:simpsonregel}) für unser spezifisches Beispiel ist \Winkey. \\
+		Es ist äquivalent zu:
+		\begin{align*}
+			Q_S = 2 \cdot \frac{1}{6} \cdot \l(f(-1) + 4 f(0) + f(1) \r)
+		\end{align*}
+	}
+
+	%-------------------------
+	% ALTE BEISPIELE, DIE NOCH VERVOLLSTÄNDIGT WERDEN MÜSSEN
+	
+	%		Gauß-Quadratur mit 3 beliebigen Stützstellen $x_0, x_1, x_2$. Dadurch hat man auch drei Gewichtungen $w_0, w_1, w_2$. \\
+	%		Alle Informationen mithilfe von der obigen Formel aufschreiben: \n 
+	%		Grad 0 mit $f(x) = 1$: 
+	%			f(x_0) \cdot w_0 + f(x_1) \cdot w_1 + f(x_2) \cdot w_2 = w_0 + w_1 + w_2\shouldEq \int_{-1}^{1}f(x)\d x = 2 
+	%		Grad 1 mit $f(x) = x$:
+	%			f(x_0) \cdot w_0 + f(x_1) \cdot w_1 + f(x_2) \cdot w_2 = w_0x_0 + w_1x_1 + w_2x_2 \shouldEq \int_{-1}^{1}f(x)\d x = 0 
+	%		Grad 2 mit $f(x) = x^2$:
+	%			f(x_0) \cdot w_0 + f(x_1) \cdot w_1 + f(x_2) \cdot w_2 = w_0x_0^2 + w_1x_1^2 + w_2x_2^2 \shouldEq \int_{-1}^{1}f(x)\d x = \frac{2}{3}
+	%%		Grad 3 mit $f(x) = x^3$:
+	%%			f(x_0) \cdot w_0 + f(x_1) \cdot w_1 + f(x_2) \cdot w_2 = w_0x_0^3 + w_1x_1^3 + w_2x_2^3 \shouldEq \int_{-1}^{1}f(x)\d x = 0
+	%%		Grad 4 mit $f(x) = x^4$:
+	%%			w_0x_0^4 + w_1x_1^4 + w_2x_2^4 \shouldEq \int_{-1}^{1}f(x)\d x = \frac{2}{5}
+	%%		Grad 5 mit $f(x) = x^5$:
+	%%			w_0x_0^5 + w_1x_1^5 + w_2x_2^5 \shouldEq \int_{-1}^{1}f(x)\d x = 0
+	%		Um das Beispiel etwas zu vereinfachen gehen wir davon aus, dass $x_1 = 0$ sowie $x_0 = -x_2$ gilt. Aus diesem Grund müssen wir die Gleichung höherer Grades nicht mehr aufschreiben, weil das genügend Informationen sind.
+	%			x_1 &= 0 \\
+	%			x_0 &= -x_2 \\
+	%			w_0 + w_1 + w_2 &= 2 \\
+	%			w_0 x_0 + w_1 x_1 + w_2 x_2 &= 0 \\
+	%			w_0 x_0^2 + w_1 x_1^2 + w_2 x_2^2 &= \frac{2}{3}
+	%		Jetzt können wir das auflösen: (2. Gleichung)
+	%			w_0 x_0 + w_1 0 + w_2 x_2 &= 0 \\
+	%			w_0 x_0 + w_2 x_2 &= 0 \\
+	%			w_0 x_0 &= -w_2 x_2 \\
+	%			w_0 x_0 &= w_2 x_0 \\
+	%			w_0 &= w_2
+	%%		Da $x_0 = x_2 = 0$ nicht sein kann, können wir außerdem schließen: (2. Gleichung)
+	%%			w_0x_0 + w_1x_1 &= 0
+	%		Und damit: (1. Gleichung)
+	%			w_0 + w_1 + w_2 &= 2 \\
+	%			2 - w_1 &= 2w_0 = 2w_2 \\
+	%		Dritte Gleichung:
+	%			w_0w_0 x_0^2 + w_1 x_1^2 + w_2 x_2^2 &= \frac{2}{3} \\
+	%			w_0 x_0^2 + w_2 x_2^2 &= \frac{2}{3} \\
+	%			2w_0x_0^2 &= \frac{2}{3}
+	
+	%		Wenn man dies nun weiterführt, kommt man auf folgende Ergebnisse (davon ausgehend, dass $x_0 = -x_1$)
+	%			w_0 = w_1 = 1 \aae x_0 = \frac{1}{\sqrt{3}} \aae x_1 = -\frac{1}{\sqrt{3}} 
+	%		Um nun also auf das Integral zu schließen, muss man nur noch den Stützwert an der Stelle $x_0$ und $x_1$ ausrechnen, mit ihrer Gewichtung multiplizieren und dann schlussendlich addieren. \\
+	%Mit mehr Stützstellen geht das dann natürlich analog.
+
+	\sbreak
+	\defi{
+		\n 
+		Sobald wir alle $x_i$ und $w_i$ aufgestellt haben, können wir die entstandene Formel nutzen, um das Integral einer Funktion anzunähern.
+		\n 
+		Das geht dann wie gewohnt mit folgender Formel:
+		\begin{align}
+			\sum_{i=0}^{n-1}f(x_i)\cdot w_i
+		\end{align}
+		Die $f(x_i)$ müssen wir unter Umständen noch ausrechnen. In der Praxis ist das deswegen insofern relevant, weil die Gauß-Quadratur im Grunde über \fat{Gewichtung und Stützposition} optimiert. 
+		\n 
+		Sprich wenn ein Stützwert auszurechnen kostenaufwändig ist (weil man die Funktion zwar gegeben hat, diese aber sehr komplex ist auszuwerten), dann könnte man zu einer bestimmten Anzahl beliebig zu wählender Stützstellen die Quadratur mit Gauß optimieren.
+		\n 
+		Die Einschränkung bezüglich des Integrationsgebietes hebt sich da natürlich auf! Kann man sich eigentlich sowieso überlegen, wenn wir mit letztem Beispiel auf die Simpsonregel kamen, die ja auch allgemeingültig ist.
+	}
+
+%		Zur Vertiefung verweise ich mal auf Online-Quellen:
+%	}

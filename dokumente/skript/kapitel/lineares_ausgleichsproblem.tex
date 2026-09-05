@@ -1,0 +1,394 @@
+
+	 
+	 \newpage
+ % =========================================================
+	 \subsection{Lineares Ausgleichsproblem}
+ % =========================================================
+	
+	\defi{ 
+		\n 
+		Unter einem linearen Ausgleichsproblem versteht man z.B. die Problemstellung, eine Gerade zu finden, die durch alle Stützpunkte hindurchgeht. Das Problem: Wenn man mehr als $2$ Punkte hat und diese nicht zufälligerweise genau eine Gerade bilden ist das unlösbar. Man sucht also eine Gerade, die \fat{möglichst nah} durch alle Stützpunkte geht (aka möglichst exakt ist).
+		\n
+		Wiederholung Geraden Gleichung:
+		\begin{align} 
+	 		y = m \cdot x + t 
+	 	\end{align}
+	%}
+		Unser Problem lässt sich in ein überbestimmtes LGS darstellen: $Ax = b$ mit $A \in \reals^{m \times n}$ und $m > n$. Solch ein überbestimmtes LGS können wir nicht (perfekt) lösen. $Ax = b \Longrightarrow$ nicht direkt lösbar!
+		\n
+		Wir können jedoch das Ergebnis annähern: $A x' \approx b$. 
+		\n 
+		Mit $a := Ax'$ als skalierbarer Vektor kann man das Problem grafisch folgendermaßen darstellen:
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+					axis lines=middle,
+					xlabel=$x$,
+					ylabel=$y$,
+					enlargelimits,
+					legend pos=outer north east,
+					grid=both,
+					ymax=6,
+					]
+					\addplot[domain=0:6.5, color=gray] {0} node[left]{};
+					\addplot[domain=0:6.5, color=gray] {6} node[left]{};
+					\tikzNormalLine{$a$}{0,0}{3,6}
+					\tikzArrow{$b$}{0,0}{6,2}
+					\tikzArrow{$e$}{6,2}{2,4}
+				\end{axis}
+			\end{tikzpicture}
+			\caption{Veranschaulichung eines linearen Ausgleichsproblems}
+		\end{figure}
+		\noindent Wir möchten also ein $x'$ so wählen, dass $Ax' \approx b$. Als Maß dient uns (auf die Grafik bezogen!) die Distanz des Vektors $b$ zu einer beliebigen Stelle von $a$ (also $e = b-Ax'$). Die kürzeste Distanz haben wir, wenn wir vom Vektor $a$ senkrecht zu $b$ "laufen", wir nennen diesen Vektor $e$ (siehe Grafik). Wir versuchen also $e$, der ja die Distanz und damit auch den Fehler angibt, zu \fat{minimieren}.
+		\n
+		Weil $e$ senkrecht auf $a$ steht, wissen wir, dass $e \cdot a = 0$ (Skalarprodukt!) gilt.\n	
+		Folgender (rechnerischer) Gedankengang:
+		\begin{align*} 
+			%p &= x' \cdot a \\
+			%e &= b - p  \\
+			e &= b - x' \cdot a  \\
+			\min \norm{e}_2 &= \min \norm{b - x' \cdot a}_2 \\
+			\Longrightarrow e\cdot a &= 0 \\
+			(b - x'\cdot a) \cdot a &= 0 \\
+			a \cdot b - a \cdot x' \cdot a &= 0  \\
+			a \cdot b &= a \cdot x' \cdot a \\
+			a\trans \cdot b &= a\trans \cdot a \cdot x'  
+ 		\end{align*}
+		Man nennt sie die \fat{Normalengleichung:}
+		\begin{align} 
+			A\trans \cdot b = A\trans \cdot A \cdot x'  
+ 		\end{align}
+		Das ist natürlich allgemeingültig, sprich für höhere Dimensionen ist $A$ halt eine größere Matrix etc\dots; Die Rechnung und Formel bleibt aber dieselbe!
+	}
+	
+	\sbreak
+	\methode{ \fat{Lösen von linearen Ausgleichsproblemen}
+		\n
+		Die z.B. drei Punkte $p_1, p_2$ und $p_3$ haben die Koordinaten $(x_1, y_1)$ bis $(x_3, y_3)$.
+		\n
+		Folgende Matrix aufstellen:
+		\begin{align*}
+			\begin{bmatrix}
+				&\\
+				&A&\\
+				&
+			\end{bmatrix} \cdot \nvector{
+				t\\
+				m
+		} = \nvector{
+				\; \\
+				b \\
+				\;
+			}
+		\end{align*}
+		Die erste Spalte von $A$ sind nur Einser (in der Geradengleichung ist $t$ immer genau einmal vorhanden) und die zweite die jeweiligen $x$ Koordinaten der Punkte. In $b$ stehen jeweils die $y$ Werte der Punkte.
+		\n
+		Damit lässt sich obige Normalengleichung durch normale Operationen lösen:
+		\begin{align*} 
+			A\trans \cdot b = A\trans \cdot A \cdot x'  
+		\end{align*}
+		In $x'$ stehen dann unsere Ergebnisse für $t$ und $m$ drin. Wir stellen unsere Ergebnisgerade mit folgender Gleichung auf:
+		\begin{align}
+			y = m \cdot x + t
+		\end{align}
+	}
+	
+	\newpage
+	\bsp { \n
+		Wir möchten eine Gerade so bestimmen, dass sie möglichst nahe die folgenden Punkte durchläuft:
+		\begin{align*} 
+ 			P_1 = (1, 2)\aae P_2 = (2, 4)\aae P_3 = (3, 3) 
+ 		\end{align*}
+		Mit der Geradenfunktion stellen wir folgende Gleichungen auf:
+		\begin{align*} 
+ 			y &= m \cdot x + t \\
+ 			2 &= m \cdot 1 + t \\
+			4 &= m \cdot 2 + t \\
+			3 &= m \cdot 3 + t 
+ 		\end{align*}
+		Aufstellen des LGS:
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 1\\
+				1 & 2\\
+				1 & 3
+			\end{bmatrix} \cdot 
+			\nvector{
+				t\\
+				m
+			} = 
+			\nvector{
+				2\\
+				4\\
+				3
+			}
+		\end{align*}
+		Hier sehen wir schon, dass wir das nicht einfach mit Gauß oder LR Zerlegung lösen können!
+		\n
+		Mit Normalengleichung:
+		\begin{align*} 
+  			A\trans \cdot b = A\trans \cdot A \cdot x'  
+ 		\end{align*}
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 1 & 1\\
+				1 & 2 & 3
+			\end{bmatrix} \cdot 
+			\nvector{
+				2 \\ 4 \\ 3
+			} = 
+			\begin{bmatrix}
+				1 & 1 & 1\\
+				1 & 2 & 3
+			\end{bmatrix} \cdot 
+			\begin{bmatrix}
+				1 & 1\\
+				1 & 2\\
+				1 & 3
+			\end{bmatrix} \cdot 
+			\nvector{
+				t \\ m
+			} \\
+			\Longrightarrow
+			\nvector{
+				9 \\
+				19
+			} = 
+			\begin{bmatrix}
+				3 & 6\\
+				6 & 14
+			\end{bmatrix} \cdot 
+			\nvector{
+				t \\ m
+			}
+		\end{align*}
+		Und das können wir dann wieder mit einer beliebigen LGS--Lösungsmethode ausrechnen:
+		\begin{align*}
+			\begin{bmatrix}
+				3 & 6 & | & 9\\
+				6 & 14 & | & 19
+			\end{bmatrix} = 
+			\begin{bmatrix}
+				3 & 6 & | & 9\\
+				0 & 2 & | & 1
+			\end{bmatrix}
+		\end{align*}
+		Rückwärtssubstitution ergibt den Lösungsvektor: 
+		\begin{align*}
+			(2, 0.5)\trans
+		\end{align*}
+		\n 
+		Damit hätten wir als Lösung folgende Gerade: 
+		\begin{align*} 
+			y = \frac{1}{2} x + 2 
+		\end{align*}
+	%}
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+			\begin{axis}[
+			axis lines=middle,
+			xlabel=$x$,
+			ylabel=$y$,
+			enlargelimits,
+			grid=major,
+			legend pos=outer north east,
+			%ymin=-0.3,
+			%xmax=5.8,
+			%xticklabels={,,},
+			%yticklabels={,,},
+			]
+			\addplot[domain=0:5] {(1/2)*x + 2} node[left]{};
+			\tikzPointUR{$P_1$}{1,2}
+			\tikzLine{black, thick}{$e_1$}{1,2}{1,2.5}
+			\tikzPointUL{$P_2$}{2,4}
+			\tikzLine{black, thick}{$e_2$}{2,4}{2,3}
+			\tikzPointDR{$P_3$}{3,3}
+			\tikzLine{black, thick}{$e_3$}{3,3}{3,3.5}
+			\legend{Ausgleichsgerade}
+			\end{axis}
+			\end{tikzpicture}
+			\caption{Die Ausgleichsgerade sowie die drei für die Rechnung verwendeten Punkte und die einzelnen Fehler (nur die $y$-Differenz!).}
+		\end{figure}
+	}
+	
+	\sbreak
+	\wichtig{ 
+		\begin{align} 
+			 \cond(A\trans\cdot A) = \cond(A)^2 
+	 	\end{align}
+		Obwohl wir einen stabilen Algorithmus haben kann sich auf dem Weg dahin die Kondition enorm verschlechtert haben!
+	}
+	
+	\newpage
+	\subsubsection{Lösung mit QR-Zerlegung}
+	
+	\sbreak
+	\defi{ 
+		\n
+		Wenn man die QR-Zerlegung für das lineare Ausgleichsproblem nutzt, erkennt man, dass es viel stabiler wird (wir arbeiten mit orthogonalen Matrizen, das ist immer super \Smiley). Im Endeffekt rotiert man hier genauso wie bei der normalen QR-Zerlegung so, dass alles unter der Diagonalen zu null wird.
+		\n
+		Dadurch ergibt sich dasselbe Minimierungsproblem und die Lösung ergibt sich durch:
+		\begin{align*}
+			Rx = \beta_1 \text{, wobei } \nvector{
+				\beta_1\\
+				\beta_2
+			} := Q\trans \cdot b
+		\end{align*}
+		Die rechte Seite der Gleichung entspricht \fat{NICHT} einem Bruch, sondern der Aufteilung des Vektores in einen oberen ($=\beta_1$) und unteren ($=\beta_2$) Teil.
+		\n
+		Dabei kann in $\beta_2$ zwar etwas anderes stehen als Nullen, es interessiert uns aber gar nicht.
+		\n
+		Denn sobald wir die QR-Zerlegung gemacht haben, können wir den Bereich streichen, den das LGS überbestimmt macht.
+		Sprich wir streichen den unteren Teil der Matrizen, sodass sie wieder quadratisch wird und wir das Ergebnis ausrechnen können. 
+	}
+
+	\sbreak
+	\wichtig{ 
+		\n 
+		Dieses Prinzip sowie die Normalengleichung funktioniert mit beliebigen überbestimmten LGS (weil das alle lineare Ausgleichsprobleme im Grunde sind).
+	}
+	
+	\newpage
+	\bsp{ \n 
+		Wir möchten folgendes überbestimmtes LGS mithilfe von QR-Zerlegung lösen:
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 2 \\
+				0 & 3 \\
+				0 & 4 
+			\end{bmatrix} \cdot 
+			\nvector{
+				x_1 \\ x_2
+			} = 
+			\nvector{
+				4 \\ 2 \\ 6
+			}
+		\end{align*}
+		Wir konstruieren uns nach \refChapter{chap:qr3d} die Matrix $G_{3,2}$, weil die anderen Positionen schon Nullen sind und wir nur noch die Zahl aus der zweiten Spalte, dritten Zeile "wegrotieren" müssen.
+		\begin{align*}
+			G_{3,2} = 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				0 & c_a & s\\
+				0 & -s_b & c
+			\end{bmatrix}
+		\end{align*}
+		$a$ und $b$ auslesen:
+		\begin{align*}
+ 			a &= 3 \aae b = 4 \\
+			c &= \frac{a}{\sqrt{a^2 + b^2}} = \frac{3}{\sqrt{3^2 + 4^2}} = \frac{3}{\sqrt{25}} \\
+ 			s &= \frac{b}{\sqrt{a^2 + b^2}} = \frac{4}{5} 
+		\end{align*}
+		Jetzt rotieren mit Matrix $A$:
+		\begin{align*}
+			G_{3,2} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				0 & \nicefrac{3}{5} & \nicefrac{4}{5}\\
+				0 & \nicefrac{-4}{5} & \nicefrac{3}{5}
+			\end{bmatrix} \\
+			G_{3,2} &\cdot A = A_1 \\
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				0 & \nicefrac{3}{5} & \nicefrac{4}{5}\\
+				0 & \nicefrac{-4}{5} & \nicefrac{3}{5}
+			\end{bmatrix} &\cdot 
+			\begin{bmatrix}
+				1 & 2 \\
+				0 & 3 \\
+				0 & 4
+			\end{bmatrix} = 
+			\begin{bmatrix}
+				1 & 2 \\
+				0 & 5 \\
+				0 & 0
+			\end{bmatrix}
+		\end{align*}
+		Jetzt haben wir schon die Matrix $A$ in $Q$ und $R$ zerteilt (da einfach gewählt \Laughey)
+		\begin{align*}
+			Q = G_{3,2}\trans = 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				0 & \nicefrac{3}{5} & \nicefrac{-4}{5}\\
+				0 & \nicefrac{4}{5} & \nicefrac{3}{5}
+			\end{bmatrix} 
+			\aae R = 
+			\begin{bmatrix}
+				1 & 2 \\
+				0 & 5 \\
+				0 & 0 
+			\end{bmatrix}
+		\end{align*}
+		\n 
+		Jetzt noch lösen:
+		\begin{align*}
+			Q\trans \cdot b &= Rx \\
+			Q\trans \cdot b = 
+			G_{3,2} \cdot b = 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				0 & \nicefrac{3}{5} & \nicefrac{4}{5}\\
+				0 & \nicefrac{-4}{5} & \nicefrac{3}{5}
+			\end{bmatrix} &\cdot 
+			\nvector{
+				4 \\ 2 \\ 6
+			} = 
+			\nvector{
+				4 \\ \nicefrac{30}{5} \\ \nicefrac{10}{5}
+			} = 
+			\nvector{
+			4 \\ 6 \\ 2
+			}
+		\end{align*}
+		Gesamte Gleichung aufstellen:
+		\begin{align*}
+ 			Rx &= Q\trans \cdot b\\
+			\begin{bmatrix}
+				1 & 2 \\
+				0 & 5 \\
+				0 & 0 \\
+			\end{bmatrix} \cdot 
+			\nvector{
+				x_1 \\ x_2
+			} &= 
+			\nvector{
+				4 \\ 6 \\ 2
+			}
+		\end{align*}
+		Genau hier (und sonst nie) dürfen wir alle Zeilen streichen, die das Problem überbestimmt machen:
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 2 \\
+				0 & 5 \\
+			\end{bmatrix} \cdot 
+			\nvector{
+				x_1 \\ x_2
+			} = 
+			\nvector{
+				4 \\ 6
+			}
+		\end{align*}
+		Das ist nach Gauß lösbar und wir erhalten als Ergebnis unser $x_1$ und ein $x_2$. Wenn das ein lineares Ausgleichsproblem wäre, dann entspräche $x_1$ dem $t$ und $x_2$ dem $m$, mit der wir dann unsere Geradenfunktion aufstellen könnten.
+	}
+	
+	\sbreak
+	\vertief{
+		\n 
+%		Für einen Beweis, warum diese Methode nichts anderes als die Normalengleichung ausrechnet, könnt ihr auf das entsprechende Lösungsblatt schauen. Ich werde das hier nicht weiter erläutern.
+		Beweis, dass die QR-Zerlegung hier nichts anderes ausrechnet als die Normalengleichung:
+		\begin{align*}
+			A\trans Ax &= A\trans b \\
+			A &= QR \\
+			Q\trans Q &= \unitM
+		\end{align*}
+		Wenn wir das jetzt miteinander einsetzen:
+		\begin{align*}
+			R\trans Q\trans Q R x &= R\trans Q \trans b \\
+			R\trans R x &= R \trans Q\trans b \\
+			Rx &= Q\trans b \\
+			Rx &= \beta_1
+		\end{align*}
+	}
+	

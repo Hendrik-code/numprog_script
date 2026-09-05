@@ -1,0 +1,327 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \usepackage{tikz}
+ \usetikzlibrary{datavisualization}
+ \usetikzlibrary{datavisualization.formats.functions}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Wintersemester 2017/18}
+\author{\npauthor{}}
+\date{Version vom: \today}
+\maketitle
+
+\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben oder Lösungen. \n Des Weiteren ist diese Klausur nur als ein ''Vorschlag'' von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Altklausuren (der von Wintersemester 2017/18 zum Beispiel) oder Aufgaben sind vollkommen willkürlich.}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90 Minuten
+	\item In dieser Klausur können Sie insgesamt 42 Punkte erreichen. \\Zum Bestehen werden 17 Punkte benötigt.
+	\item Die einzelnen Teilaufgaben sind unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+
+%--------------------------------------------------------------
+\task{Gleitkommazahlen [5 + 3 = 8 Pkt.]}
+%--------------------------------------------------------------
+	a) 
+	Schreiben sie $x = \frac{1}{15}$ als binäre IEEE floating point number um. Schreiben sie alle 32 Bits auf und markieren sie die einzelne Teile.
+	\n
+	Hinweis: IEEE Format verwendet 1 Bit für das Vorzeichen, 8 für den Exponenten und 23 Bits für die Mantisse. 
+	\lbreak \lbreak \lbreak \lbreak \lbreak
+	\\
+	b) 
+	Viele Programmiersprachen verwenden denormalisierte Gleitkommazahlen, damit der Zahlenbereich von float vergrößert wird. Für den kleinsten Exponenten wird die Restriktion aufgehoben, dass vor den Mantissenbits eine 1 stehen muss.
+	\n 
+	Was die kleinste Zahl $>0$ im Standard IEEE Float Format?
+	\n 
+	Was ist die kleinste Zahl $>0$, welche mit obiger Denormalisierung angegeben werden kann?
+	
+
+%--------------------------------------------------------------
+\task{Interpolation \& Quadratur [3 + 2 + 1 = 6 Pkt.]}
+%--------------------------------------------------------------
+	\begin{align*}
+	\int_{0}^{\pi} f(x) dx \text{ mit } f(x) = \frac{\sin(x)}{x}
+	\end{align*}
+	Die Funktion ist bei $x=0$ nicht definiert, deswegen können manche Standard-Quadraturverfahren mit Punkten an der Intervalluntergrenze nicht verwendet werden. 
+	\n 
+	Wir möchten ein neues Verfahren entwickeln mit den Punkten an den Positionen $x_0 = 0.5 \cdot \pi$ und $x_1 = \pi$.
+	\n 
+	a)
+	Berechnen Sie das Interpolationspolynom $p(x)$ von $f$ mit den Punkten an den Positionen $x_0$ und $x_1$.
+	\lbreak \lbreak \lbreak
+	\\
+	(b)
+	Nutzen Sie das Ergebnis aus (a), um mit der dazugehörigen Quadraturregel eine Annäherung für das obige Intergal zu erhalten.
+	\lbreak \lbreak \lbreak
+	\\
+	(c) 
+	Zeichnen Sie die berechnete Fläche der Approximation grafisch in folgende Abbildung ein.
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				axis lines=left,
+				xlabel=$x$,
+				ylabel=$f(x)$,
+				grid=major,
+				enlargelimits,
+				xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+				xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+				ymax=2,
+				ymin=-0.5]
+				%[domain=0:1,legend pos=outer north east]
+				\addplot[domain=-pi:(3/2)*pi] {sin(deg(x)) / x} node[left]{};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Plot der Funktion $f$}
+	\end{figure}
+
+
+%--------------------------------------------------------------
+\task{  Iterative Verfahren [2 + 5 + 3 = 10 Pkt.]}
+%--------------------------------------------------------------
+
+	(a)
+	Das Verfahren des steilsten Abstiegs (steepest descent) verwendet die Darstellung:
+	\begin{align*}
+		f(x) = 0.5x^TAx - b^Tx + c
+	\end{align*}
+	Wir schauen uns den Fixpunkt des Verfahrens $x*$ für die symmetrisch positiv definite Matrix $A$ an.
+	\n 
+	Erklären Sie anschaulich (keine Formeln!), wie das Verfahren vom Startpunkt zu diesem Fixpunkt läuft. Erklären Sie auch die Richtungen der Bewegungen der einzelnen Iterationen ein.
+	\n 
+	Welche geometrische Eigenschaft besitzt der Fixpunkt, $f(x)$ betrachtend?
+	\lbreak \lbreak \lbreak
+	\\
+	(b)
+	Berechnen Sie $2$ Schritte von steepest descent mit 
+	$A= \begin{pmatrix}
+		2 & 1\\
+		1 & 2
+	\end{pmatrix}$ und 
+	$b= \begin{pmatrix}
+		2 \\ 1
+	\end{pmatrix}$.
+	Benutzen Sie $x^{(0)} = \begin{pmatrix}
+		0 \\ 2
+	\end{pmatrix}$ als Startvektor.
+	\lbreak \lbreak \lbreak
+	\\
+	(c)
+	Jetzt wird eine symmetrisch, negativ definite Matrix $B$ anstelle von $A$ verwendet.
+	\n 
+	Beschreiben Sie (wieder anschaulich, keine Formeln) wie sich hierdurch das Vorgehen verändert?
+	\n 
+	Ändert sich hierdurch die Iterationsvorschrift im Gegensatz zum herkömmlichen Verfahren? Begründen Sie mathematisch.
+	\n 
+	\textbf{Hinweis:} Betrachten Sie die Schrittweite $\alpha$. \\
+	Negativ definit bedeutet, dass alle Eigenwert $\lambda_i < 0$ bzw. $x^TBx<0$ für alle Vektoren $x\ne0$.
+
+	
+%--------------------------------------------------------------
+\task{  Gewöhnliche Differentialgleichungen [2 + 2 + 1 + 3 = 8 Pkt.]}
+%--------------------------------------------------------------
+	
+	\begin{align*}
+		y'(t) &= f(t,y) = (y(t) \cdot t)^2 \\ \\
+		y(0) &= y_0 = 1
+	\end{align*}
+	\\
+	(a)
+	Nennen Sie die Berechnungsvorschrift des expliziten Eulerverfahrens mit diskreten Werten $y_k$ und Zeitschrittweite $\delta t$ für ein Anfangswertproblem.
+	\n 
+	Berechnen Sie zwei Schritte jenes Verfahrens mit obigen Anfangswertbedingungen und Schrittweite $\delta t = t_{k+1} - t_k = 1$, das Zeitintervall ist also in $[0;2]$.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Ein Mehrschrittverfahren zweiter Ordnung hat die Vorschrift:
+	\begin{align*}
+		y_{k+1} := y_k + \frac{\delta t}{2} \cdot \left( 3\cdot f(t_k, y_k) - f(t_{k-1}, y_{k-1}) \right)
+	\end{align*}
+	Führen Sie einen Schritt dieses Verfahrens mit Schrittweite $\delta t = 1$ und Anfangswert $y_0 = 1$ aus. Sie rechnen also $y_2$ aus, benötigen hierfür noch $y_1$. Nehmen Sie hierfür einfach ihre Approximation aus Teilaufgabe (a). Falls Sie Teilaufgabe (a) nicht lösen konnten, verwenden Sie $y_1=1$.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c)
+	Wie verändert sich der globale Diskretisierungsfehler für das Mehrschrittverfahren aus Teilaufgabe (b) bei Halbierung der Schrittweite?
+	
+	\newpage
+	\noindent(d)
+	Im Folgenden ist eine Abbildung, bei der eine Funktion $f(x)$ zu sehen ist sowie die verschiedenen Iterationschritte drei verschiedener Verfahren.
+	\n 
+	Die drei genutzten Verfahren sind der explizite Euler, der implizite Euler sowie das Runge-Kutta Verfahren. Welche Farbe gehört zu welchem Verfahren? Geben Sie eine Begründung ein (Ausschlusskriterium ist hierbei nicht erlaubt)!
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+		\begin{axis}[
+		axis lines=left,
+		xlabel=$x$,
+		ylabel=$f(x)$,
+		grid=major,
+		enlargelimits,
+		%xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+		%xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+		%ymax=2,
+		%ymin=-0.5
+		legend pos=outer north east
+		]
+		%[domain=0:1,legend pos=outer north east]
+		\addplot[domain=0:3.5] {4 + 12*x - 12*x^2 + 2.5*x^3} node[left]{};
+		\addplot coordinates {
+			( 0, 4 )
+			( 0.5, 5.2 )
+			(  1,  3.6 )
+			(  1.5,  0.1 )
+			(  2,   -2.6 )
+			(  2.5,   -3.6 )
+			(  3,   3.4 )
+			(  3.5,   15 )
+		};
+		\addplot coordinates {
+			( 0, 4 )
+			( 0.5, 7.2 )
+			(  1,  6.5 )
+			(  1.5,  3.6 )
+			(  2,   0.23 )
+			(  2.5,   -1.95 )
+			(  3,   -0.34 )
+			(  3.5,   6 )
+		};
+		\addplot coordinates {
+			( 0, 4 )
+			( 0.5, 9.6 )
+			(  1,  10.8 )
+			(  1.5,  9 )
+			(  2,   6.5 )
+			(  2.5,   4 )
+			(  3,   3 )
+			(  3.5,   10 )
+		};
+		\legend{$f(x)$,rot, braun, schwarz}
+		\end{axis}
+		\end{tikzpicture}
+		\caption{Die Lösungen der Iterationen drei verschiedener numerischer Verfahren.}
+	\end{figure}
+
+
+%%--------------------------------------------------------------
+%\task{  Differentialgleichungen [X + X Pkte]}
+%%--------------------------------------------------------------
+%	
+%	Erklärung
+%	(a)
+%	Aufgabenstellung
+%	\lbreak \lbreak \lbreak \lbreak
+%	\\
+%	(b)
+%	Aufgabenstellung
+%	
+
+
+%--------------------------------------------------------------
+\task{  Programmieraufgabe [4 + 1 + 3 + 2 = 10 Pkt.]}
+%--------------------------------------------------------------
+
+	Eine reelle, tridiagonale Matrix $T \in \mathbb{R}^{n \times n}$ hat die Form
+	\begin{align*}
+		T = \begin{pmatrix}
+			t_{1,1} & t_{1,2} & 0 & \dots & 0 \\
+			t_{2,1} & t_{2,2} & t_{2,3} & \ddots & \vdots \\
+			0 & t_{3,2} & \ddots & \ddots & 0 \\
+			\vdots & \ddots & \ddots & \ddots & t_{n-1,n} \\
+			0 & \dots & 0 & t_{n,n-1} & t_{n,n}
+		\end{pmatrix}
+	\end{align*}
+	mit $t_{i,j}  = 0$ wenn $|i-j| > 1$. Wir speichern solche Matrizen als ein 2D-Array inklusive der Einträge mit Nullen.
+	\n 
+	Folgende Methoden dürfen verwendet werden, als wären sie vollständig und korrekt implementiert worden:		
+	\begin{lstlisting}
+		// Gibt das Skalarprodukt x^T y zweier Vektoren x,y zurueck
+		public static double scalarProd(int n, double[] x, double[] y);
+		
+		// Gibt die Norm eines Vektors x zurueck:
+		public static double compNorm(int n, double[] x);
+		
+		// Gibt den skalierten Vektor a*x fuer Skalar a und Vektor x zurueck:
+		public static double[] scaleVec(int n, double alpha, double[] x);
+	\end{lstlisting}
+	\lbreak
+	(a) 
+	Implementieren Sie die folgende Methode möglichst effizient sprich vermeiden Sie unnötige Rechenoperationen.
+	\begin{lstlisting}
+		// Berechnet das Produkt y = T*x einer tridiagonalen Matrix T mit einem Vektor x und gibt y zurueck:
+		public static double[] computeTriDiagMatvec(int n, double[][] T, double[] x) {
+		
+			double y[] = new double[n];
+		
+		
+			return y;
+		}
+	\end{lstlisting}
+	\lbreak   
+	(b)
+	In welcher Laufzeitklasse liegt Ihre Implementierung aus (a)?
+	\lbreak  \lbreak
+	\\
+	(c)
+	Implementieren Sie die folgende Methode, indem Sie die in Teilaufgabe (a) implementierte Methode verwenden. Es soll der folgende Iterationsschritt der Vektoriteration mit der tridiagonalen Matrix $T$ berechnet werden.
+	\begin{align*}
+		w^{(k)} &:= T \cdot x^{(k)} \\
+		x^{(k+1)} &:= \frac{w^{(k)}}{||w^{(k)}||_2}
+	\end{align*}
+	\begin{lstlisting}
+		public static double[] computeNextEVecApproximation(int n, double[][] T, double[] xk) {
+		
+		
+		}
+	\end{lstlisting}
+	\lbreak
+	(d)
+	Der Rayleigh Quotient $\frac{x^T \cdot T \cdot x}{x^T \cdot x}$ für einen Eigenvektor $x$ und Matrix $T$ schätzt den dazugehörigen Eigenwert.
+	\n 
+	Implementieren Sie die folgende Methode, welche für einen normierten approximierten Eigenvektor der tridiagonalen Matrix $T$ den dazugehörigen Eigenwert mithilfe vom Rayleigh Quotient effizient annähert und zurückgibt.
+	\n 
+	\textbf{Hinweis:} Benutzen Sie erneut die Implementation aus Teilaufgabe (a).
+	\begin{lstlisting}
+		public static double computeEValApproximation(int n, double[][] T, double[] xApprox) {
+		
+			double eval;
+		
+		
+			return eval;
+		}
+	\end{lstlisting}
+	
+	
+\end{document}

@@ -1,0 +1,72 @@
+
+\documentclass[handout,xcolor=dvipsnames, aspectratio=169]{beamer}
+
+% Path from this folder to the repository root.
+\newcommand{\npbase}{../../}
+\input{\npbase gemeinsam/preamble/packages}
+\input{\npbase gemeinsam/preamble/commands}
+\input{\npbase gemeinsam/preamble/beamer}
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks = true,
+	linktoc = all,
+	linkcolor = blue,
+	urlcolor = blue,
+}
+
+
+\pgfplotsset{
+	% define a `cycle list' for marker
+	%cycle list name=black white,
+	cycle list/.define={my marks}{
+		every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=*\\
+		every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=square*\\
+		every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=triangle*\\
+		every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=diamond*\\
+	},
+}
+
+\title{\huge Numerisches Programmieren}
+\subtitle{Übungstrainer}
+\author{\npauthor{}}
+\date{Version vom: \today}
+\institute{\href{\npauthorurl}{\npauthorurl}}
+
+%{
+%}
+
+% - KOMPLET GENERAL ÜBERHOLEN! (sieht SCHRECKLICH aus, abstände mit vfill fehlt, textgröße eins kleiner....)
+% - Alle Kapitel füllen
+% - Markierungen für schwere aufgaben oder ähnliches einführen
+% - Lösungswege dazuschreiben?
+% - Matheumgebung immer zentriert!
+% - aufgabe bei Folie 104 (fixpunkt aufgabe 3) stimmt nicht
+% - aufgabe mit kondition von ln(x) stimmt nicht...
+% - formeln aus skript holen, formatierung mit kursiv aktualisieren
+% - tote links (generell die mal überarbeiten / entfernen)
+
+
+\begin{document}
+	
+	\maketitle
+	\input{kapitel/einleitung}
+	
+	\firsttoc
+	
+	\input{kapitel/zahlenbasen}
+	
+	\input{kapitel/kondition_stabilitaet}
+	
+	\input{kapitel/lgs}
+	
+	\input{kapitel/interpolation}
+	
+	\input{kapitel/quadratur}
+	
+	\input{kapitel/fourier}
+	
+	\input{kapitel/fixpunkte}
+	
+	
+\end{document}

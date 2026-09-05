@@ -1,0 +1,396 @@
+
+	\newpage
+	% =========================================================
+	\subsection{Orthogonale Matrizen} \label{chap:orthogonal}
+	% =========================================================
+	
+	\defi{
+		\n
+		Orthogonale Matrizen sind quadratische Matrizen mit orthogonalen Spalten der Länge Eins. Anders, orthogonale Matrizen sind solche, bei denen jede Zeilen- und Spaltenvektoren paarweise orthonormal zueinander (sprich das Skalarprodukt $= 0$ ist) sind.
+		\n
+		Im Folgenden beschreibt $\unitM$ immer die Einheitsmatrix.
+		\n
+		Für eine orthogonale Matrix $Q$ gilt: 
+		\begin{align}
+			Q\trans = Q\inv
+		\end{align}
+		Daraus wiederum folgt:
+		\begin{align}
+			Q\trans \cdot Q = \unitM
+		\end{align}
+		In der Tutorstunde beweisen wir auch, dass die Determinante jeder beliebigen orthogonalen Matrix $\pm 1$ ist und die Spektralnorm Eins beträgt.
+		In kurz:
+		\begin{align}
+			\det(Q) &= \pm 1 \\
+			\norm{Q}_2 &= 1
+		\end{align}
+	}
+	
+	\sbreak
+	\bsp {
+		\n
+		Als Beispiel wäre die Matrix: 
+		\begin{align*}
+			\frac{1}{5}
+			\begin{bmatrix}
+				3 & 4\\
+				-4 & 3
+			\end{bmatrix}
+		\end{align*}
+		\begin{align*}
+		\frac{1}{5}
+		\begin{bmatrix}
+		3 & -4 \\
+		4 & 3
+		\end{bmatrix} \cdot
+		\frac{1}{5}
+		\begin{bmatrix}
+		3 & 4\\
+		-4 & 3
+		\end{bmatrix} = 
+		\frac{1}{25}
+		\begin{bmatrix}
+		9+16 & 12-12\\
+		12-12 & 16+9
+		\end{bmatrix} = 
+		\begin{bmatrix}
+		1 & 0\\
+		0 & 1
+		\end{bmatrix} = \unitM
+		\end{align*}
+		Jetzt noch die Determinante überprüfen:
+		\begin{align*}
+		\det\l(\frac{1}{5}
+		\begin{bmatrix}
+		3 & 4\\
+		-4& 3
+		\end{bmatrix}\r) 
+		= \frac{1}{25} \cdot (9 + 16) = 1
+		\end{align*}
+	}
+	
+	\sbreak
+	\wichtig{ \n
+		Orthogonale Matrizen können unsere Kondition nie verändern. Wenn wir ja die Spektralnorm (siehe \refChapter{chap:spektralnorm}) als Maß unseres Fehlers betrachten, muss dies stimmen, da wir schon bewiesen haben, dass jegliche orthogonale Matrix normiert eins ist!
+	}
+
+
+	\newpage
+% =========================================================	
+	\subsection{QR-Zerlegung} \label{chap:qr-Zerlegung}
+% =========================================================
+		
+	\defi{\n 
+		Bei der LR Zerlegung trennten wir die Matrix $A$ in eine linke Dreiecksmatrix $L$ und in eine rechte Dreiecksmatrix $R$ auf ($A = L \cdot R$), um ein LGS mit derselben Matrix $A$ schneller zu lösen (siehe \refChapter{chap:lr_zerlegung}).
+		\n 
+		Wir fanden heraus, dass die Spektralnorm einer Matrix für uns ein Maß der stärksten Verzerrung ist und dass diese bei einer orthogonalen Matrix immer 1 ist, sprich, es gibt keine Verzerrung (siehe \refChapter{chap:spektralnorm}).
+		\n 
+		Also wäre es praktisch, die Matrix $A$ so zu zerlegen, dass wir mit einer orthogonalen Matrix rechnen, damit der Algorithmus stabiler wird.
+	}
+	 
+	\lbreak
+	\subsubsection{Givens-Rotation}
+	
+	\defi{
+		\n
+		Wir möchten nun die Matrix $A$ in eine orthogonale Matrix $Q$ und eine rechts obere Dreiecksmatrix $R$ auftrennen.
+		Damit reduziert sich das Lösen eines LGS auf eine einfache Rückwärtssubstitution: $A = QR$
+		\begin{align} 
+ 			Ax = b \sepArrow Q \cdot Rx = b \sepArrow Rx = Q\trans b 
+ 		\end{align} 
+		Das funktioniert, da ja $Q\inv = Q\trans$ gilt (siehe \refChapter{chap:orthogonal}).
+		\n
+		Die Matrix $Q$ wird hierbei durch eine Folge von "Drehungen" konstruiert. Jede Drehung (oder Rotation) entspricht hierbei der Eliminierung eines Eintrages unter der Diagonalen von $A$, ähnlich der konstruierten Matrizen bei der LR-Zerlegung. Für $2 \times 2$ Matrizen benötigt man also logischerweise nur eine einzige Drehung, da nur ein Eintrag unter der Diagonalen zu einer Null rotiert werden muss.
+		\n 
+		Ganz allgemein beschreibt eine Drehung im $\reals^2$ um den Winkel $\varphi$ folgende orthogonale Rotationsmatrix $G_\varphi$:
+		\n
+		Mit $c := \cos(\varphi)$ und $s := \sin(\varphi)$ : \quad $G_\varphi = 
+		\begin{bmatrix}
+			c & s \\
+			-s & c
+		\end{bmatrix}$
+		\n
+		Aus der Grafik (\refFigure{qr_rotation_img}) können wir auch erkennen, warum $c$ und $s$ ihre Werte haben (rechtwinkliges Dreieck, Sinus und Cosinus jeweils Gegenkathete bzw. Ankathete durch Hypotenuse). Auf unsere LGS Problematik angewandt filtert man also die nachfolgende Methode heraus:
+	}
+	
+	\newpage
+	\methode{
+		\n
+		Mit $(a,b)\trans$ als die erste Spalte der $2 \times 2$ Matrix $A$, 
+		\begin{align*} 
+	 		c = \frac{a}{\sqrt{a^2 + b^2}} \aae s = \frac{b}{\sqrt{a^2 + b^2}}
+	 	\end{align*}
+ 		\begin{align*}
+			\begin{bmatrix}
+				c & s\\ -s & c
+			\end{bmatrix} \cdot 
+			\nvector{
+				a\\b
+			} = 
+			\nvector{
+				r\\ 0
+			}
+		\end{align*}
+%	}
+%
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+					axis lines=middle,
+					yscale=0.9,
+					xlabel=$x$,
+					ylabel=$y$,
+					enlargelimits,
+					legend pos=outer north east,
+					grid=major,
+					ymin=-0.3,
+					xmax=5.8,
+					xmin=0,
+					xticklabels={,,},
+					yticklabels={,,},
+					]
+					\addplot[domain=3:5] {5 + (2/3)*x^1 - (1/3)*x^2} node[left]{};
+%						( 0, 0 )
+%						( 3, 4 )
+%					};
+%						( 0, 0 )
+%						( 5, 0 )
+%					};
+					\tikzLineUp{green,thick}{$a$}{3,0}{0,0}
+					\tikzFatLine{$b$}{3,0}{3,4}
+					\tikzLine{red,thick}{$r$}{0,0}{3,4}
+					\tikzPointLeft{$(a,b)\trans$}{3,4}
+					\tikzPointDown{$(r,0)\trans$}{5,0}
+					\legend{Rotation}%, Bevor Rotation, Nach Rotation}
+				\end{axis}
+			\end{tikzpicture}
+			\label{qr_rotation_img}
+			\caption{Beispiel einer Rotation}
+		\end{figure}
+		\noindent Jetzt müssen wir nur noch unser Wissen anwenden:
+		\begin{align*}
+			G_\varphi A = R
+		\end{align*}
+		Genau wie bei der LR-Zerlegung nennen wir die Rotationsmatrix jetzt einfach die inverse $Q$ Matrix, also $Q\inv$. Durch die Eigenschaft der Orthogonalität müssen wir das Inverse nicht ausrechnen, da das Inverse ja gleich der Transponierten ist.
+		\n 
+		Somit erhalten wir:
+		\begin{align*} 
+			Q\inv A &= R \\
+			A &= Q R \\
+			&\\
+			Q\inv &= G_\varphi \\
+			Q\trans &= G_\varphi \\
+			Q &= G_\varphi\trans
+		\end{align*}
+	}
+	 
+	\sbreak
+	\bsp{
+		\n 
+		Gegeben sei folgendes LGS:
+		\begin{align*}
+			Ax &= b \\
+			\begin{bmatrix}
+				2 & 3 \\
+				1 & 1
+			\end{bmatrix} \cdot 
+			\nvector{
+				x_0 \\ x_1
+			}
+			&=
+			\nvector{
+				2 \\ 2
+			}
+		\end{align*}
+		Damit die Matrix $A$ eine rechts obere Dreiecksmatrix ist, müssen wir die links untere Eins zu einer Null rotieren. Also den Vektor der ersten Spalte, $(2, 1)\trans$ rotieren zu $(r, 0)\trans$. Das $r$ müssen wir noch ausrechnen, indem wir die Rotation ausführen.
+		\n
+		Aus der ersten Spalte $a$ und $b$ auslesen: $a = 2 \aae b = 1$
+		\begin{align*} 
+ 			\sqrt{a^2 + b^2} = \sqrt{5} 
+ 		\end{align*}	
+ 		\begin{align*}
+ 			c = \frac{2}{\sqrt{5}} \aae s = \frac{1}{\sqrt{5}}
+		\end{align*}
+		\begin{align*}
+			G_\varphi \cdot A = 
+			\frac{1}{\sqrt{5}} \cdot
+			\begin{bmatrix}
+				2 & 1 \\
+				-1 & 2
+			\end{bmatrix} \cdot 
+			\begin{bmatrix}
+				2 & 3\\
+				1 & 1
+			\end{bmatrix} = \frac{1}{\sqrt{5}} \cdot 
+			\begin{bmatrix}
+				5 & 7 \\ 
+				0 & -1
+			\end{bmatrix}
+		\end{align*}
+		Jetzt haben wir eine rechts obere Dreiecksmatrix und müssen es noch lösen:
+		\begin{align*}
+			R &= 
+			\frac{1}{\sqrt{5}} \cdot
+			\begin{bmatrix}
+				5 & 7 \\ 
+				0 & -1
+			\end{bmatrix} \\
+			& \\
+			Rx &= Q\trans b = G_\varphi b\\
+			\frac{1}{\sqrt{5}} \cdot
+			\begin{bmatrix}
+			5 & 7 \\ 
+			0 & -1
+			\end{bmatrix} 
+			\cdot
+			\nvector{
+				x_0 \\ x_1
+			}
+			&=
+			\frac{1}{\sqrt{5}} \cdot
+			\begin{bmatrix}
+				2 & 1 \\
+				-1 & 2
+			\end{bmatrix} \cdot 
+			\nvector{
+				2 \\ 2
+			} 
+			\\
+			\begin{bmatrix}
+				5 & 7 \\ 
+				0 & -1
+			\end{bmatrix} 
+			\cdot
+			\nvector{
+				x_0 \\ x_1
+			}
+			&=
+			\nvector{
+				6 \\ 2
+			}
+		\end{align*}
+		Das können wir wie üblich (also wie bei LR sowie Gauß Elimination) lösen.
+	}
+	 
+	 \newpage
+	 \subsubsection{Weiterführung}
+	 \label{chap:qr3d}
+	 
+	 \defi{ \n 
+		 Diese Zerlegung ist natürlich auch für allgemeine $n \times n$ Matrizen gültig, für eine $3 \times 3$ Matrix $A$ würden drei Rotationsmatrizen benötigt werden. \\
+		 Die Positionen vom links oberen $c$ und dem $-s$ entspricht dabei der gleichen Position aus der Matrix $A$, wo man $a$ und $b$ abliest (im Folgenden ist dies als Index markiert). Das bedeutet nicht, dass sich die von dem anderen $c$ oder $s$ zahlentechnisch unterscheiden!
+		 \begin{align}
+			 G_{2,1} = 
+			 \begin{bmatrix}
+				 c_a & s & 0\\
+				 -s_b & c & 0\\
+				 0 & 0 & 1
+			 \end{bmatrix} \quad \Longrightarrow G_{2,1} \cdot A = A_{1}
+		 \end{align}
+		 \begin{align}
+			 G_{3,1} = 
+			 \begin{bmatrix}
+				 c_a & 0 & s\\
+				 0 & 1 & 0\\
+				 -s_b & 0 & c
+			 \end{bmatrix} \quad \Longrightarrow G_{3,1} \cdot A_1 = A_2
+		 \end{align}
+		 \begin{align}
+			 G_{3,2} = 
+			 \begin{bmatrix}
+				 1 & 0 & 0 \\
+				 0 & c_a & s\\
+				 0 & -s_b & c
+			 \end{bmatrix} \quad \Longrightarrow G_{3,2} \cdot A_2 = R
+		 \end{align}
+		 $G_{2,1}$ entspricht einer Rotation um die $z$-Achse, $G_{3,1}$ um $y$-Achse und $G_{3,2}$ dann um die $x$-Achse. Insgesamt kann man dann $Q$ berechnen mit:
+		 \begin{align} 
+		 	Q\trans &= G_{3,2} \cdot G_{3,1} \cdot G_{2,1} \\
+	 		Q &= G_{2,1}\trans \cdot G_{3,1}\trans \cdot G_{3,2}\trans
+	 	\end{align}
+		\begin{align} 
+	 		Rx = Q\trans \cdot b 
+	 	\end{align}
+	}
+	
+	\sbreak
+	\wichtig{
+		 \n
+		 Schaut bitte nach jeder Drehung, ob nicht vielleicht schon eine weitere Null erzeugt wurde. Damit erspart ihr euch Rotationen und die Rechnungen gehen viel schneller und einfacher!
+	}
+	 
+	 \newpage
+	 \bsp{\n 
+		Wir möchten gerne folgende Matrix in Q und R auftrennen:
+		\begin{align*}
+			A = 
+			\begin{bmatrix}
+				3 & 1 & 2\\
+				4 & 3 & 1 \\
+				3 & 0 & 2
+			\end{bmatrix}
+		\end{align*}
+		Erste Rotation:
+		\begin{align*} 
+ 			a = 3 \aae b = 4 
+ 		\end{align*}
+		\begin{align*} 
+ 			c = \frac{3}{\sqrt{3^2 + 4^2}} = \frac{3}{5}; \quad\quad s = \frac{4}{5} 
+ 		\end{align*}
+		$$G_{2,1} = \frac{1}{5} \cdot \begin{bmatrix}
+			3 & 4 & 0 \\
+			-4 & 3 & 0 \\
+			0 & 0 & 5
+		\end{bmatrix}$$
+		$$G_{2,1} \cdot A = \frac{1}{5} \cdot \begin{bmatrix}
+		3 & 4 & 0 \\
+		-4 & 3 & 0 \\
+		0 & 0 & 5
+		\end{bmatrix} \cdot \begin{bmatrix}
+		3 & 1 & 2\\
+		4 & 3 & 1 \\
+		3 & 0 & 2
+		\end{bmatrix} = \frac{1}{5} \cdot \begin{bmatrix}
+		25 & 15 & 10 \\
+		0 & 5 & -5 \\
+		15 & 0 & 10
+		\end{bmatrix} = A_1 = \begin{bmatrix}
+			5 & 3 & 2 \\
+			0 & 1 & -1 \\
+			3 & 0 & 2 
+		\end{bmatrix}$$ \n 
+		Zweite Rotation:
+		\begin{align*} 
+ 			a = 5 \aae b = 3 
+ 		\end{align*}
+		\begin{align*} 
+ 			c= \frac{5}{\sqrt{5^2 + 3^2}} \aae s = \frac{3}{\sqrt{25 + 9}} 
+ 		\end{align*}
+		$$G_{3,1} = \frac{1}{\sqrt{34}} \cdot 
+		\begin{bmatrix}
+			5 & 0 & 3\\
+			0 & \sqrt{34} & 0\\
+			-3 & 0 & 5
+		\end{bmatrix}$$
+		$$G_{3,1} \cdot A_1 = \frac{1}{\sqrt{34}} \cdot 
+		\begin{bmatrix}
+			5 & 0 & 3\\
+			0 & \sqrt{34} & 0\\
+			-3 & 0 & 5
+		\end{bmatrix} \cdot 
+		\begin{bmatrix}
+			5 & 3 & 2 \\
+			0 & 1 & -1 \\
+			3 & 0 & 2 
+		\end{bmatrix} = \frac{1}{\sqrt{34}}
+		\begin{bmatrix}
+			34 & 15 & 16 \\
+			0 & \sqrt{34} & -\sqrt{34} \\
+			0 & -9 & 4
+		\end{bmatrix}$$
+		\n
+		Die Zahlen sind jetzt ein bisschen arg hässlich geworden, aber hier würde man nur noch die dritte Rotation machen müssen (mit $G_{3,2}$) und man wäre fertig.
+		%Wenn ich Zeit habe, werde ich hier ein schöneres Beispiel anfertigen.
+	}
+	 

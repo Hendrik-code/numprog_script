@@ -1,0 +1,65 @@
+name: Release
+
+# The PDFs live here, not in the repository. Push a tag (for example
+# `git tag ss25 && git push origin ss25`) and every document is compiled from a
+# clean checkout and attached to a GitHub release.
+
+on:
+  push:
+    tags: ["*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to publish the PDFs under"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile every document
+        uses: xu-cheng/latex-action@v3
+        with:
+          # The action needs a root file, so point it at the complete script
+          # and let the script below do the full sweep in the same container.
+          root_file: dokumente/skript/numprog_skript.tex
+          working_directory: .
+          pre_compile: |
+            set -e
+            mkdir -p /tmp/pdfs
+            build() {   # build <dir> <base> <jobname> [pretex]
+              local dir=$1 base=$2 job=$3 pretex=${4:-}
+              local args="-pdf -interaction=nonstopmode -halt-on-error"
+              args="$args -file-line-error -jobname=$job"
+              [ -n "$pretex" ] && args="$args -usepretex=$pretex"
+              ( cd "$dir" && latexmk $args "$base.tex" )
+              cp "$dir/$job.pdf" "/tmp/pdfs/$(echo "${dir#./}/$job" | tr '/' '_').pdf"
+            }
+            grep -rl --include='*.tex' -F '\begin{document}' . \
+              | grep -v '^\./gemeinsam/' \
+              | while read -r doc; do
+                  dir=$(dirname "$doc"); base=$(basename "$doc" .tex)
+                  echo "=== $doc"
+                  build "$dir" "$base" "$base"
+                  if grep -q 'ifdefined.npprint' "$doc"; then
+                    build "$dir" "$base" "${base}_print" '\def\npprint{}'
+                  fi
+                done
+
+      - name: Collect PDFs
+        run: |
+          mkdir -p release
+          cp /tmp/pdfs/*.pdf release/
+          ls -la release
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          files: release/*.pdf
+          generate_release_notes: true

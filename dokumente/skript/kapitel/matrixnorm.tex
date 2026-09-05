@@ -1,0 +1,129 @@
+
+	\newpage
+% =========================================================	
+	\section{Matrixnorm} \label{chap:matrixnorm}
+% =========================================================
+
+	Eine Matrix kann den relativen Eingabefehler beeinflussen. Um Fehler bei Vektoren und Matrizen messen zu können, brauchen wir Normen.
+	
+	\sbreak
+	\subsection{Euklidische Norm} \label{chap:euklidischenorm}
+		
+		\defi{
+			\n
+			Die euklidische Norm wurde früher schon einmal beigebracht, deswegen nur eine kurze Wiederholung. Diese Norm gilt nur für Vektoren und entspricht der Länge eines Vektors:
+			\begin{align*} 
+		 		\norm{x}_2 = \sqrt{x_0^2+ \dots + x_n^2} 
+		 	\end{align*}
+			So wissen wir zum Beispiel, wenn wir mit einem Vektor der Länge eins normiert rechnen, eine Operation ausführen die die Länge nicht ändert und diese trotzdem nicht mehr 1 beträgt, dass sich ein Arithmetik Fehler eingeschlichen haben muss.
+		}
+	
+	\sbreak
+	\subsection{Spektralnorm} \label{chap:spektralnorm}
+		
+		\defi{
+			\n
+			Oder auch Matrix-Grenzen-Norm-2 genannt, beschreibt folgende Normierung für beliebige Matrizen:
+			\begin{align} 
+		 		\norm{A}_2 = \sup_{x \ne 0} \frac{\norm{Ax}_2}{\norm{x}_2} 
+		 	\end{align}
+		}
+	
+	\sbreak
+	\methode{Kleiner Trick:
+		\n
+		Das werden wir zwar nicht beweisen, aber folgende Gleichungen gelten:
+		\begin{align}
+			\norm{A}_2 = \sqrt{\lambda_{\max}(A\trans A)}
+		\end{align}
+		Für symmetrische Matrizen:
+		\begin{align}
+			\norm{A}_2 = \max_{i\in[n]} |\lambda_i|
+		\end{align}
+		\n Für Diagonalmatrizen:
+		\begin{align}
+		\norm{A}_2 = \max_{i\in[n]} |A_{i,i}|
+		\end{align}
+		Eigenwert der Inversen:
+		\begin{align}
+			\lambda_i(A) \ne 0 \quad \forall i \Longrightarrow \lambda_i(A\inv) = \frac{1}{\lambda_i}
+		\end{align}
+	}
+	
+%		Für eine Vertiefung eignet sich Wikipedia: \\
+%		}
+	
+	\sbreak
+	\subsection{Rechen Eigenschaften}
+	
+	\defi{
+		\n 
+		Mit Normierungen müssen wir natürlich auch rechnen können, deswegen hier eine schnelle Übersicht über alle Eigenschaften.	
+		\n
+		Mit Skalar $a$, Vektor $v$, Matrix $A$,$B$ und $X$,$Y$ als Vektor oder Matrix gilt
+		\begin{align*}
+			\norm{aX}_2 &= \norm{a} \cdot \norm{X}_2 \\
+			\norm{X+Y}_2 &\le \norm{X}_2 + \norm{Y}_2 \\
+			\norm{A \cdot B}_2 &\le \norm{A}_2 \cdot \norm{B}_2 \\
+			\norm{A \cdot v}_2 &\le \norm{A}_2 \cdot \norm{v}_2
+		\end{align*}
+	}
+
+
+	\newpage
+	\subsection{Kondition einer Matrix}
+	
+	\defi{
+		\n 
+		Mit der Einführung von Normen können wir nun auch noch die Kondition bzw. die Konditionszahl (siehe \refChapter{chap:kondition}) einer invertierbaren Matrix $A$ bestimmen.
+	}
+
+	\sbreak
+	\methode{
+		\n 
+		Die Kondition der Matrix $A$ bezüglich der euklidischen Norm ist gegeben durch
+		\begin{align}
+			\cond(A) = \norm{A\inv}_2 \cdot \norm{A}_2
+		\end{align}
+		Außerdem kann man die Kondition der Matrix $A$ berechnen, indem man den größten Singulärwert der Matrix durch den kleinsten teilt.
+		\n
+		\fat{Falls die Matrix symmetrisch positiv definit} ist, kann man obiges vereinfachen zu:
+		\begin{align}
+			\cond(A) = \abs{\frac{\lambda\umax(A)}{\lambda\umin(A)}}
+		\end{align}
+		wobei $\lambda$ hierbei Eigenwerte beschreiben. $\lambda\umax(A)$ ist also der größte Eigenwert der Matrix $A$, $\lambda\umin(A)$ der kleinste.
+	}
+
+
+	\newpage
+	\subsection{Kondition eines LGS}
+	
+	\defi{
+		\n
+		Ein LGS hat die Form $Ax = b$. Auch hiervon können wir die Kondition mithilfe der Normen bestimmen. Wir definieren $\tilde{x} := x + \delta x$
+		als eine gestörte bzw. Näherungslösung des LGS. $\tilde{b} := b + \delta b$ 
+		ist eine gestörte rechte Seite des LGS. %, während $\tilde{A}% := A + \delta A$ 
+		%$ eine verfälschte Matrix beschreibt. %Die $\delta$ Variablen sind jeweils die Änderungen zu den exakten Werten.
+	}
+
+	\sbreak
+	\methode{ Störung der rechten Seite
+		\n 
+		Sei die rechte Seite des LGS gestört, erhalten wir eine Näherungslösung:
+		\begin{align}
+			A\tilde{x} = \tilde{b}
+		\end{align}
+		Nun kann man die Fehler $e$ und $r$ beschreiben mit
+		\begin{align}
+			e &:= x - \tilde{x} \\
+			r &:= b - \tilde{b} = Ae
+		\end{align}
+		Dann gilt:
+		\begin{align}
+			\frel &= \frac{\norm{e}}{\norm{x}} \\
+			\frac{\norm{r}}{\norm{b} \cdot \cond(A)} & \le \frac{\norm{e}}{\norm{x}} \le \cond(A)\frac{\norm{r}}{\norm{b}}
+		\end{align}
+	}
+
+%		Sei die Matrix $A$ verfälscht, gilt:
+%	}

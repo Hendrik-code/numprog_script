@@ -1,0 +1,105 @@
+
+	\newpage
+	\section{Lineare Gleichungssysteme} \label{chap:LGS}
+
+
+	\defi{ \n
+		Mit linearen Gleichungssystemen muss man sich des Öfteren auseinandersetzen, da sie alleine schon als Teilproblem häufig auftreten.
+		Wann immer wir ein lineares Gleichungssystem (kurz LGS) haben, berechneten wir dessen Lösung bisher mithilfe des \fat{Gauß-Elminationsverfahrens}.
+		\n
+		Was war doch gleich ein LGS?
+		\n
+		Ein LGS haben wir immer dann, wenn wir mehrere Gleichungen mit Unbekannten haben und wissen möchten, welche Werte die einzelnen Unbekannten haben müssen/können, damit alle Gleichungen erfüllt sind
+		\n 
+		Allgemein beschreiben wir sie in der Form $Ax=b$, wobei $A$ eine Matrix und $x$ und $b$ Vektoren sind ($b$ wird auch manchmal "Ergebnisvektor" genannt).
+	}
+	
+	\sbreak
+	\bsp{
+		\begin{align*}
+			1x + 2y + 2z &= 3 &&(1)\\
+			2x + 1y - 2z &= 2 &&(2)\\
+			3x + 0y + 2z &= 6 &&(3)
+		\end{align*}
+		Zu lösen: \\Welche Werte müssen $x$, $y$ und $z$ haben, damit alle Gleichungen $(1)$ -- $(3)$ erfüllt sind?
+	}
+	
+	\lbreak
+	% =========================================================	
+	\subsection{Gauß-Elimination} \label{chap:gausselim}
+	% =========================================================
+	
+	\methode{
+		\n
+		Wir führen alle Gleichungen in eine Matrix-Schreibweise um und führen eine \fat{Vorwärtssubstitution} aus (das nennt man den Vorgang, die Matrix in eine rechts-obere Dreiecksmatrix zu bringen).
+		\n
+		In dieser Vorwärtssubstitution verwenden wir die typischen drei elementaren Zeilenoperationen:
+		\begin{enumerate}
+			\item Reihe + Reihe
+			\item Reihe multipliziert mit Skalar
+			\item Vertauschen von 2 Reihen
+		\end{enumerate}
+	}
+	
+	\newpage
+	\bsp { (die Zahlen aus vorherigem Beispiel)
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 2 & 2 & |&3 \\
+				2 & 1 & -2 & |&2 \\
+				3 & 0 & 2 & |&6
+			\end{bmatrix} = 
+			\begin{bmatrix}
+				1 & 2 & 2 & |&3\\
+				0 & -3 & -6 & |&-4\\
+				0 & -6 & -4 & |&-3
+			\end{bmatrix} = 
+			\begin{bmatrix}
+				1 & 2 & 2 & |&3\\
+				0 & -3 & -6 & |&-4\\
+				0 & 0 & 8 & |&5
+			\end{bmatrix}
+		\end{align*}
+		Ab diesem Zeitpunkt verwenden wir jetzt nur noch die \fat{Rückwärtssubstitution} um auf alle Variablenwerte zu schließen, indem wir uns von unten nach oben vorarbeiten.
+		\begin{align*}
+			8 \cdot z &= 5 \\
+			z &= \frac{5}{8} \\
+			&\\
+			-3 y - 6 z &= -4 \\
+			-3 y - 6 \cdot \frac{5}{8} &= -4 \\
+			-3 y &= -4 + \frac{30}{8} \\
+			-3 y &= \frac{-1}{4} \\
+			y &= \frac{1}{12} \\
+			& \\
+			1 x + 2 y + 2 z &= 3 \\
+			1 x + 2 \frac{1}{12} + 2 \frac{5}{8} &= 3 \\
+			x &= 3 - \frac{1}{6} - \frac{10}{8} \\
+			x &= \frac{19}{12}
+		\end{align*}
+		%$z = \nicefrac{5}{8}$, dann in zweite Zeile einsetzen, $y$ ausrechnen, etc\dots
+		Wir konnten die (in diesem Fall drei) Unbekannten $x$, $y$ und $z$ so bestimmen, dass sie alle Gleichungen erfüllen.
+	}
+	
+	\newpage
+	\subsection{Pivotisierung}
+	
+	\defi{ %\fat{Pivotisierung}
+		\n
+		Jetzt möchten wir dieses Verfahren einem Computer beibringen. Als \fat{Laufzeit} erhalten wir für Gauß (= Vorwärtssubst.) und Rückwärtssubst. zusammen $\bigO(n^3)$. %$\bigO(n^2)$ und für die Rückwärtssubst. $\bigO(n)$.
+		\n
+		Wir wissen schon aus vergangenen Tutorübungen, dass Zahlen von einem PC häufig nicht korrekt dargestellt werden (können) und deswegen gerundet werden müssen (siehe \refChapter{chap:rundung}).
+		\n
+		\noindent Was dagegen tun?
+		\n
+		Als Pivotelement wird das Element \fat{ganz links oben} in dem noch übrig gebliebenen Teil der Matrix genannt.
+		Ein betragsmäßig kleines Pivot führt zu einem instabileren Algorithmus, da die Faktoren beim Verrechnen von zwei Zeilen dann größer werden.
+		\n
+		Somit ist es immer besser, die Zeilen der Matrix so zu vertauschen, dass das betragsmäßig größte Element zum Pivot wird.
+		Wenn wir dies bei jeder Iteration (Spalte) machen, erhalten wir die maximale Stabilität.
+	}
+
+	\sbreak
+	\wichtig{ Kurze Überlegung: \n
+		 Wenn das Pivot 0 ist, keine Pivotisierung angewendet wurde und mindestens ein anderer Wert in der ersten Spalte ungleich 0 ist, kann der Algorithmus gar nicht weiterarbeiten! \n
+	 	Wer mir nicht glaubt, probiere mal, die zweite Zeile mit der ersten so zu verrechnen, dass eine neue 0 entsteht \Laughey.
+ 	}

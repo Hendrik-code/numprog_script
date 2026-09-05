@@ -1,0 +1,16 @@
+# Normalise line endings: everything is LF in the repository, checked out
+# with the platform's native endings.
+* text=auto eol=lf
+
+*.tex   text diff=tex
+*.md    text
+*.yml   text
+*.txt   text
+
+# Binary assets -- never diffed or line-ending converted.
+*.pdf   binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.pptx  binary
+*.odt   binary

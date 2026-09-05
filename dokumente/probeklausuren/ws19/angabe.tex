@@ -1,0 +1,308 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\newcommand{\npstyle}{plain}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \usepackage{tikz}
+ \usetikzlibrary{datavisualization}
+ \usetikzlibrary{datavisualization.formats.functions}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Wintersemester 2019/20}
+\author{\npauthor{}}
+\date{\today}
+\maketitle
+
+\noindent\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben oder Lösungen. \n Des Weiteren ist diese Klausur nur als ein ''Vorschlag'' von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Aufgaben sind vollkommen willkürlich.}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90 Minuten.
+	\item In dieser Klausur können Sie insgesamt 42 Punkte erreichen. Zum Bestehen werden voraussichtlich 17 Punkte benötigt.
+	\item Die einzelnen Teilaufgaben sind unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+%--------------------------------------------------------------
+\task{Zahlen \& Kondition [3 + 2.5 + 3 = 8.5 Pkt.]}
+%--------------------------------------------------------------
+
+Es soll folgende Darstellung für Gleitkommazahlen untersucht werden:
+\begin{itemize}
+	\item Die Basis ist $2$,
+	\item es gib kein Vorzeichenbit,
+	\item $3$ Bits werden für den Exponenten verwendet. Dieser ist als eine vorzeichenbehaftete Ganzzahl kodiert, das erste der drei Bits steht also für das Vorzeichen des Exponenten,
+	\item für die Mantisse wird ein Bit verwendet. Von einer Normalisierung mit führender Eins wird ausgegangen (diese muss nicht abgespeichert werden).
+\end{itemize}Sonderfälle werden nicht betrachtet.
+\lbreak
+\n
+(a) 
+Was ist die größte und kleinste Zahl, die mit obigen Format dargestellt werden kann?
+\n 
+Wie lautet die kleinste positive Ganzzahl $>0$, die nicht exakt darstellbar ist?
+\lbreak \lbreak 
+\\
+(b) 
+\begin{align*}
+f(x) = (2\exp(x) - 2 ) / 3
+\end{align*}
+Untersuchen Sie die Kondition von $f(x)$ für die Stelle $x=0$.
+\lbreak \lbreak 
+\\
+(c) 
+Viele Programmiersprachen verwenden denormalisierte Gleitkommazahlen, damit der Zahlenbereich von float vergrößert wird. Für den kleinsten Exponenten wird die Restriktion aufgehoben, dass vor den Mantissenbits eine 1 stehen muss.
+\n 
+Was die kleinste Zahl $>0$, die im Standard IEEE Float Format dargestellt werden kann?
+\n 
+Was ist die kleinste Zahl $>0$, welche im IEEE Format mit obiger Denormalisierung angegeben werden kann?
+
+%--------------------------------------------------------------
+\task{Interpolation \& Quadratur [3 + 2 + 1 + 1 + 1.5 = 8.5 Pkt.]}
+%--------------------------------------------------------------
+\begin{align*}
+\int_{0}^{2} f(x) dx \text{ mit } f(x) = \frac{(2x + 1)}{x}
+\end{align*}
+Die Funktion ist bei $x=0$ nicht definiert, deswegen können manche Standard-Quadraturverfahren mit Punkten an der Intervalluntergrenze nicht verwendet werden. Wir möchten ein neues Verfahren entwickeln mit den Punkten an den Positionen $x_0 = 0.5$ und $x_1 = 2$.
+\n 
+(a)
+Berechnen Sie das Interpolationspolynom $p(x)$ von $f$ mit den Punkten an den Positionen $x_0$ und $x_1$.
+\lbreak \lbreak
+\\
+(b)
+Nutzen Sie das Ergebnis aus (a), um mit der dazugehörigen Quadraturregel eine Annäherung für das obige Intergal zu erhalten.
+\lbreak \lbreak
+\\
+(c) 
+Zeichnen Sie die berechnete Fläche der Approximation grafisch in folgende Abbildung ein.
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	axis lines=left,
+	xlabel=$x$,
+	ylabel=$f(x)$,
+	grid=major,
+	enlargelimits,
+	%samples=100,
+	xtick={-1,-0.5,0,0.5,1,1.5,2},
+	ytick={-1,0,1,2,3,4,5,6,7},
+	%xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+	%xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+	ymax=5,
+	ymin=-1]
+	%[domain=0:1,legend pos=outer north east]
+	\addplot[domain=-0.5:2] {(2*x + 1) / x} node[left]{};
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Plot der Funktion $f$}
+\end{figure}
+\newpage
+\noindent(d) 
+Sie möchten nun die Gauß Quadratur mit der Trapezregel vergleichen. Bis zu welchem Grad können Polynome durch eine Gaußquadratur mit $n$ Stützstellen exakt integriert werden? Begründen Sie Ihre Antwort kurz.
+\lbreak \lbreak
+\\
+(e) 
+Ihre Approximation ist Ihnen nicht gut genug und sie wollen die Anzahl der Stützstellen verdoppeln. Was für ein Nachteil hat die Gauß-Qaudratur gegenüber der Trapezregel, wenn wir davon ausgehen, dass die Berechnung der Stützstellen $x_i$ und Gewichte $w_i$ keine Berechnungen benötigt?
+
+
+%--------------------------------------------------------------
+\task{  Differentialgleichungen [2 + 3 + 1 + 3 = 9 Pkt.]}
+%--------------------------------------------------------------
+
+\begin{align*}
+y'(t) &= f(t,y) = \frac{1}{2}(y(t) \cdot t)^2 \\ \\
+y(0) &= y_0 = 2
+\end{align*}
+\\
+(a)
+Nennen Sie die Berechnungsvorschrift des expliziten Eulerverfahrens mit diskreten Werten $y_k$ und Zeitschrittweite $\delta t$ für ein Anfangswertproblem.
+\n 
+Berechnen Sie zwei Schritte jenes Verfahrens mit obigen Anfangswertbedingungen und Schrittweite $\delta t = t_{k+1} - t_k = 1$, das Zeitintervall ist also in $[0;2]$.
+\lbreak \lbreak \lbreak \lbreak
+\\
+(b)
+Ein Mehrschrittverfahren zweiter Ordnung hat die Vorschrift:
+\begin{align*}
+y_{k+1} := y_k + \frac{\delta t}{2} \cdot \left( 4\cdot f(t_k, y_k) - 2\cdot f(t_{k-1}, y_{k-1}) \right)
+\end{align*}
+Führen Sie einen Schritt dieses Verfahrens mit Schrittweite $\delta t = 1$ und Anfangswert $y_0 = 2$ aus. Sie rechnen also $y_2$ aus, benötigen hierfür noch $y_1$. Nehmen Sie hierfür einfach ihre Approximation aus Teilaufgabe (a). Falls Sie Teilaufgabe (a) nicht lösen konnten, verwenden Sie $y_1=2$.
+\lbreak \lbreak \lbreak \lbreak
+\\
+(c)
+Wie verändert sich der globale Diskretisierungsfehler für das Mehrschrittverfahren aus Teilaufgabe (b) bei Halbierung der Schrittweite?
+
+\newpage
+\noindent(d)
+Im Folgenden ist eine Abbildung, bei der eine Funktion $f(x)$ zu sehen ist sowie die verschiedenen Iterationschritte drei verschiedener Verfahren.
+\n 
+Die drei genutzten Verfahren sind der explizite Euler, der implizite Euler sowie das Runge-Kutta Verfahren. Welche Farbe gehört zu welchem Verfahren? Geben Sie eine Begründung ein (Ausschlusskriterium ist hierbei nicht erlaubt)!
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}[scale=1.3]
+	\begin{axis}[
+	axis lines=left,
+	xlabel=$x$,
+	ylabel=$f(x)$,
+	grid=major,
+	enlargelimits,
+	%xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+	%xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+	%ymax=2,
+	%ymin=-0.5
+	legend pos=outer north east
+	]
+	%[domain=0:1,legend pos=outer north east]
+	\addplot[domain=0:3.5] {4 + 12*x - 12*x^2 + 2.5*x^3} node[left]{};
+	\addplot coordinates {
+		( 0, 4 )
+		( 0.5, 5.2 )
+		(  1,  3.6 )
+		(  1.5,  0.1 )
+		(  2,   -2.6 )
+		(  2.5,   -3.6 )
+		(  3,   3.4 )
+		(  3.5,   15 )
+	};
+	\addplot coordinates {
+		( 0, 4 )
+		( 0.5, 7.2 )
+		(  1,  6.5 )
+		(  1.5,  3.6 )
+		(  2,   0.23 )
+		(  2.5,   -1.95 )
+		(  3,   -0.34 )
+		(  3.5,   6 )
+	};
+	\addplot coordinates {
+		( 0, 4 )
+		( 0.5, 9.6 )
+		(  1,  10.8 )
+		(  1.5,  9 )
+		(  2,   6.5 )
+		(  2.5,   4 )
+		(  3,   3 )
+		(  3.5,   10 )
+	};
+	\legend{$f(x)$,rot, braun, schwarz}
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Die Lösungen der Iterationen drei verschiedener numerischer Verfahren.}
+\end{figure}
+	
+%--------------------------------------------------------------
+\task{  Fixpunktiteration [2 + 2 + 3 = 7 Pkt.]}
+%--------------------------------------------------------------
+
+Formel des Newton-Verfahrens zur Nullstellenberechung ist definiert als:
+\begin{align*}
+x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}
+\end{align*}
+Wir untersuchen:
+\begin{align*}
+f(x) = \frac{1}{2}x^2 - 2x + 2
+\end{align*}
+\\
+(a)
+Sie möchten das Newton-Verfahren für die Nullstellenbestimmung auf die obige Funktion anwenden, Ihnen fällt jedoch auf, dass das Newton Verfahren deutlich langsamer ist als Sie es gewohnt sind. Warum? Zeigen sie es anhand einer Rechnung.
+\lbreak \lbreak \lbreak \lbreak
+\\
+(b)
+Modifizieren Sie das Newton-Verfahren derart, dass die normale Konvergenzgeschwindigkeit erreicht wird.
+\n 
+Führen Sie dann einen Zeitschritt mit Startwert $x_0=1$ durch.
+
+\newpage
+(c)
+\begin{figure}[ht]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	width=0.85\textwidth,
+	height=0.9\textwidth,
+	axis lines=left,
+	xlabel=$x$,
+	ylabel=$g(x)$,
+	enlargelimits,
+	ymax = 2.5,
+	samples=60,
+	grid=major,
+	legend pos=outer north east
+	]
+	\addplot[domain=-2:3.5] {log10(0.5*x + 1) * 2} node[left]{};
+	%{0.7333333333333334*x^1-0.10666666666666667*x^2} node[left]{};
+	\legend{$g(x)$}
+	\end{axis}
+	\end{tikzpicture}
+	\caption{Plot der Funktion $g(x)$.}
+\end{figure}
+Bestimmen Sie in Abbildung 2 graphisch alle Fixpunkte von $g$ und markieren Sie diese.
+\n 
+Führen Sie (graphisch) zwei Schritte der Fixpunkt-Iteration für den Startwert $x_0=3$ in die Abbildung ein.
+\n 
+Bei welchen der Fixpunkte handelt es sich um anziehende und bei welchen um abstoßende Fixpunkte? Begründen Sie ihre Antwort anhand der Graphik.
+	
+%--------------------------------------------------------------
+\task{  Programmieraufgabe [2 + 7 = 9 Pkt.]}
+%--------------------------------------------------------------
+(a) 
+Was für Vorteile besitzt das Gauß-Seidel Verfahren gegenüber dem Jacobi Verfahren?
+\lbreak \lbreak
+\\
+(b)
+Folgendes Programmgerüst sei gegeben. Vervollständigen Sie dieses ohne unnötige Berechnungen oder Speicherallokationen. Bibliotheksfunkionen dürfen \fat{nicht} verwendet werden.
+\begin{lstlisting}
+import java.util.Arrays;
+public class CoolProgram {
+
+	public static void main(String[] args) 
+	{
+		// parse input (separately implemented)
+		double[][] A = parseA(args); 
+		double[] b = parseB(args);
+		double[] x = parseX(args);
+		int numIterations = parseN(args);
+		
+		// calculate solution with gaussSeidel()
+		
+		
+		System.out.println("Solution:\n" + Arrays.toString(x));
+	}
+	
+	private static double[] gaussSeidel(double[][] A, double[] b, double[] x) 
+	{
+		
+		//TODO: implement one step of the gauss-seidel method
+	
+	
+	}
+}
+\end{lstlisting}
+\end{document}

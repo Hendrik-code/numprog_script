@@ -1,0 +1,186 @@
+
+	\newpage
+% =========================================================	
+	\subsection{Wichtige Begriffe}
+% =========================================================
+	
+	\defi{
+		\fat{Lokaler Diskretisierungsfehler}
+		\n 
+		Ist der Fehler, den wir in einem Schritt haben, wenn man annimmt, dass der ursprüngliche Wert $y_k$ korrekt wäre (Quasi der Fehler von $y_{k+1}$ zu der exakten Lösung mit Anfangswert $y_k$). Also quasi wieviel Fehler durch das Schrittverfahren in einem beliebigen Schritt hinzukommen kann.
+		\n 
+		Als Beispiel gilt bei der Eulermethode für den lokalen Diskretisierungsfehler:
+		\begin{align}
+			\ell(\delta t) := \max_{a\le t \le b- \delta t} \left( \abs{\frac{y(t + \delta t) - y(t)}{\delta t} - f(t, y(t))} \right)
+		\end{align}
+		Eine nicht äquivalente, aber leichter (und damit häufiger genutzt) in der Praxis handhabbare Definition beschreibt den Fehler mit $y_k = y(t_k)$ als:
+		\begin{align}
+			\abs{y_{k+1} - y(t_{k+1})}
+		\end{align}
+	}
+	
+	\sbreak
+	\defi{ 
+		\fat{Globaler Diskretisierungsfehler} 
+		\n 
+		Ist der tatsächliche Fehler von einem $y_k$ zu der eigentlichen Lösung mit Anfangswert $y_0$. Also um wieviel unterscheidet sich die exakte Lösung an einer bestimmten Stelle zu der von einem Einschrittverfahren. Gibt also an, wie gut unser Verfahren am Ende ist und damit relevanter als der lokale Diskretisierungsfehler.
+		\n 
+		Mathematisch, mit Approximationen $y_k$ und analytischen Werten $y(t_k)$ gilt:
+		\begin{align}
+			e(\delta t) := \max_{k=0, \dots, N} \left( \abs{y_k - y(t_k)} \right)
+		\end{align}
+		Eine nicht äquivalente aber gebräuchliche Form des globalen Diskretisierungsfehlers schaut sich lediglich die Differenz am Ende des betrachteten Zeitintervalls an:
+		\begin{align}
+			\abs{y_n - y(t_n = b)}
+		\end{align}
+	}
+	
+	\sbreak
+	\defi{
+		\fat{Konsistenz} 
+		\n 
+		Ein Schrittverfahren ist konsistent, wenn der lokale Diskretisierungsfehler für kleine Zeitschrittweiten gegen 0 geht.
+		\begin{align}
+			\lim_{\delta t \rightarrow 0} \ell(\delta t) \rightarrow 0
+		\end{align}
+	}
+	
+	\sbreak
+	\defi{
+		\fat{Konvergenz}
+		\n 
+		besagt, dass der globale Diskretisierungsfehler bei kleinen Zeitschritten auch gegen 0 geht. Konvergenz (der stärkere Ausdruck) impliziert Konsistenz aber nicht umgekehrt. (Nur weil wir lokal immer kleinere Fehler machen heißt es nicht, dass das auch global stimmt).
+		\n 
+		Es gilt: \\
+		Konvergenz $\Longrightarrow$ Konsistenz
+	}
+	
+	\sbreak
+	\defi{
+		\fat{Stabilität} 
+		\n 
+		Stabil nennt man eine Lösung, welche gegenüber kleinen Störungen der Eingabe unempfindlich ist. Wenn sich kleine lokale Fehler nur zu kleinen globalen Fehlern aufsummieren, ist ein Verfahren stabil.
+		\n 
+		Es gilt: \\
+		Konsistenz $+$ Stabilität $\Longleftrightarrow$ Konvergenz
+	}
+	
+	\sbreak
+	\defi{ 
+		\fat{Steifheit}
+		\n 
+		Eine Differentialgleichung nennt man \fat{steif}, die zwar die Eigenschaft der Konsistenz und/oder Konvergenz aufweisen, diese jedoch nur für sehr kleine $\delta t$. 
+		\n 
+		Ein zu kleines $\delta t$ kann jedoch unpraktikabel sein, somit ist \fat{Steifheit} eine Problemeigenschaft.
+	}
+
+	\sbreak
+	\defi{
+		\n 
+		Wenn wir dieses Wissen auf unsere Verfahren anwenden, sehen wir folgendes: \\
+		Expliziter Euler ist Verfahren erster Ordnung, also gilt:
+		\begin{align*}
+			\ell(\delta t) = \bigO(\delta t), \quad e(\delta t) = \bigO(\delta t)
+		\end{align*}
+		Bei Heun wäre es halt $\bigO(\delta t^2)$ und Runge Kutta $\bigO(\delta t^4)$ jeweils. 
+		\n 
+		Alle drei Verfahren sind konsistent und konvergent!
+	}
+
+
+	\newpage
+	\subsection{Quadratur und AWP-Lösung}
+	
+	\sbreak
+	\defi{ 
+		\n 
+		Wie schon in \refChapter{chap:explizitSchrittverfahren} kurz erwähnt lässt sich eine Analogie zwischen Quadratur und Lösen von AWPs feststellen.
+		\n 
+		Um das zu veranschaulichen werden einmal die "dumme Rechtecksregel" in das explizite Euler Verfahren umgewandelt sowie die Trapezregel zum Heun-Verfahren.
+		\n 
+		Dafür muss man nur die Integralgrenzen mit den jeweiligen Zeitwerten $t_k$ ersetzen und das ganze schrittweise betrachten.
+	}
+
+	\sbreak
+	\bsp{
+		\n 
+		Die "dumme Rechtecksregel" ist einfach die normale Rechtecksregel, nur dass es den Punkt am linken Rand des Intervalls verwendet und nicht jenen in der Mitte.
+		\begin{align*}
+			\int_{a}^{b} f(t) \d{t} &\approx (b-a) \cdot f(a) \\
+			y_{k+1} - y_k &= (t_{k+1} - t_k) \cdot f(t_k, y_k) \\
+			y_{k+1} &= y_k + \delta t \cdot f(t_k, y_k)
+		\end{align*}
+	}
+
+	\sbreak
+	\bsp{
+		\n 
+		Die Trapezregel:
+		\begin{align*}
+		\int_{a}^{b} f(t) \d{t} &\approx (b-a) \cdot \frac{1}{2} \cdot (f(a) + f(b)) \\
+		y_{k+1} - y_k &= (t_{k+1} - t_k) \cdot \frac{1}{2} \cdot (f(t_k, y_k) + f(t_{k+1}, y_{k+1})) \\
+		y_{k+1} &= y_k + \delta t \cdot \frac{1}{2} \cdot (f(t_k, y_k) + f(t_{k+1}, y_{k+1}))
+		\end{align*}
+		Da wir $f(t_{k+1}, y_{k+1})$ nicht besitzen, müssen wir es mit explizitem Euler Verfahren annähern. Ergo erhalten wir:
+		\begin{align*}
+			y_{k+1} &= y_k + \delta t \cdot \frac{1}{2} \cdot (f(t_k, y_k) + f(t_{k+1}, y_k + \delta t \cdot f(t_k, y_k)))
+		\end{align*}
+		Das entspricht genau unserer Heun-Verfahren Definition \Winkey.
+	}
+% =========================================================
+	
+	\newpage
+	\subsection{Mehrschrittverfahren}
+	
+	\defi{ \n 
+		Es gibt nicht nur explizite und implizite Einschrittverfahren, sondern auch noch die Klasse der Mehrschrittverfahren.
+		\n 
+		Deren Grundidee ist es, die in früheren Schritten approximierten Werte für den nächsten Schritt mitzubenutzen. Also quasi nicht die Werte des letzten Schrittes nutzen, sondern nur oder auch von Schritten davor.
+	}
+	
+	\lbreak
+	\subsubsection{Mittelpunktsregel}
+	
+	\methode{ \n 
+		Formel zur Berechnung eines Schrittes mit der MPR (=Mittelpunktsregel)
+		\begin{align} 
+ 			y_{k+1} = y_{k-1} + 2\delta t \cdot f(t_k, y_k) 
+		\end{align}
+		Um damit starten zu können brauchen wir allerdings nicht nur einen Startwert $y_0$, sondern auch schon $y_1$. Das macht man in aller Regel mit einem explizitem Einschrittverfahren (z.B. Euler-Verfahren).
+	}
+	
+	\sbreak
+	\bsp{ \n
+		Gegeben sei:
+		\begin{align*}
+			f(t_k, y_k) = 2t_k \cdot y_k \quad;\quad y_0 = 1 \quad;\quad t_0 = 0 \quad;\quad \delta t = 1
+		\end{align*}
+		Wir berechen $y_1$ mithilfe von explizitem Euler-Schritt:
+		\begin{align*}
+			y_1 &= y_0 + \delta t \cdot f(t_0, y_0) \\
+				&= 1 + 1 \cdot (2 \cdot 0 \cdot 1) \\
+				&= 1
+		\end{align*}
+		Erster Schritt mit der Mittelpunktsregel:
+		\begin{align*}
+			y_2 &= y_0 + 2 \delta t \cdot f(t_1, y_1) \\
+				&= 1 + 2 \cdot (2 \cdot 1 \cdot 1) \\
+				&= 1 + 4 \\
+				&= 5
+		\end{align*}
+		\n
+		Zweiter Schritt mit der Mittelpunktsregel:
+		\begin{align*}
+			y_3 &= y_1 + 2 \delta t \cdot f(t_2, y_2) \\
+				&= 1 + 2 \cdot (2 \cdot 2 \cdot 5) \\
+				&= 1 + 40 \\
+				&= 41
+		\end{align*}
+	}
+	
+	\sbreak
+	\defi{ \n 
+		Wir klären in der Tutorstunde, warum dieses Verfahren instabil ist.
+	}
+
+	

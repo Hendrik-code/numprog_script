@@ -1,0 +1,300 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \usepackage{tikz}
+ \usetikzlibrary{datavisualization}
+ \usetikzlibrary{datavisualization.formats.functions}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Sommersemester 2018}
+\author{\npauthor{}}
+\date{Version vom: \today}
+\maketitle
+
+\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben oder Lösungen. \n Des Weiteren ist diese Klausur nur als ein ''Vorschlag'' von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Altklausuren (der von Sommersemester 2018 zum Beispiel) oder Aufgaben sind vollkommen willkürlich.}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90 Minuten
+	\item In dieser Klausur können Sie insgesamt 42 Punkte erreichen. \\Zum Bestehen werden 17 Punkte benötigt.
+	\item Die einzelnen Teilaufgaben sind unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+
+%--------------------------------------------------------------
+\task{Stabilität \& Kondition [2 + 2 + 3.5 = 7.5 Pkt.]}
+%--------------------------------------------------------------
+	
+	Es soll eine Darstellung für Gleitkommazahlen untersucht werden: Die Basis ist $2$, wir haben keine Bits für das Vorzeichen und $3$ Bits für den Exponenten. Der Exponent wird als vorzeichenbehaftete Ganzzahl kodiert, wobei das erste der drei Bits als Vorzeichenbit verwendet wird. Sonderzahlen werden nicht betrachtet. Für die Mantisse soll $1$ Bit verwendet werden, wobei von einer Normalisierung mit führender Eins ausgegangen wird, die nicht gespeichert wird.
+	\n
+	a) 
+	Bestimmen sie die größte und kleinste Zahl, die mit angegebenem Format für Gleitkommazahlen dargestellt werden können. 
+	\n
+	Wie groß ist die Maschinengenauigkeit?
+	\n 
+	Wie lautet die kleinste positive Ganzzahl, die nicht exakt darstellbar ist?
+	\lbreak \lbreak \lbreak \lbreak 
+	\\
+	b) 
+	\begin{align*}
+		f(x) = (\exp(x) - 1 ) / 5
+	\end{align*}
+	Untersuchen Sie die Kondition von $f(x)$ für die Stelle $x=0$.
+	\lbreak \lbreak \lbreak \lbreak 
+	\\
+	c)
+	\begin{align*}
+		f(x) = \frac{e^x - 1}{5}
+	\end{align*}
+	Die Funktion sei mit folgendem Java-Code implementiert worden:
+	\begin{lstlisting}
+		double f(double x) {
+			double erg = Math.exp(x) - 1;
+			return erg / 5;
+		}
+	\end{lstlisting}
+	Untersuchen Sie die Stabilität dieser Implementierung mit Hilfe der Epsilontik.
+	\fat{Hinweis:} Die Auswertung der Exponentialfunktion erzeugt nur einen Fehler.
+	\lbreak \lbreak \lbreak \lbreak 
+	\\
+	d)
+	Gegeben sei:
+	\begin{align*}
+		\rd(f)(x) = f(x) + \epsilon_2 \cdot f(x) + \epsilon_1 \cdot e^x
+	\end{align*}
+	Betrachten Sie den relativen Fehler an der Stelle $x=0$. Wie sieht es mit der Stabilität aus?
+	
+
+%--------------------------------------------------------------
+\task{Interpolation [4 + 3 = 7 Pkt.]}
+%--------------------------------------------------------------
+	\begin{align*}
+		f(x) = 3\cdot \frac{x + 2}{x - 2}
+	\end{align*}
+	a)
+	Stellen Sie das Interpolationspolynom $p(x)$ vom Grad 2 mithilfe von Lagrange-Polynomen auf, indem Sie die Funktion $f$ an den Stellen $x_0 = -1$, $x_1 = 0$ und $x_2 = 1$ auswerten.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Der \fat{maximale} bei der Interpolation gemachte Fehler soll an der Stelle $\hat{x} = 0.5$ abgeschätzt werden.
+	\n 
+	Nutzen Sie hierfür als Formel $D^{n+1} f(\xi)$, $\xi \in [-1, 1]$ und die folgenden gegebenen Ableitungen:
+	\begin{align*}
+		D^1f(x) &= \frac{-12}{(x-2)^2} \\
+		D^2f(x) &= \frac{24}{(x-2)^3} \\
+		D^3f(x) &= \frac{-72}{(x-2)^4} \\
+		D^4f(x) &= \frac{288}{(x-2)^5} \\
+		D^5f(x) &= \frac{-1440}{(x-2)^6} \\
+	\end{align*}
+
+
+%--------------------------------------------------------------
+\task{  Quadratur [3 + 3 = 6 Pkt.]}
+%--------------------------------------------------------------
+
+	\begin{align*}
+		f(x) = \frac{1}{3}x^3 + 2x^2 +x - 1
+	\end{align*}
+	Das Integral $I(f) = \int_{a}^{b}f(x)\d{x}$ soll mit $[a,b] = [-1,1]$ approximiert werden.
+	\n
+	(a)
+	Geben Sie die allgemeine Formel der Trapez-Summe $Q_{TS}(f,h)$ an und berechnen Sie mit jener eine Approximation für $I(f)$ mit $n=4$.
+	\n 
+	Zeichen Sie in unten stehender Abbildung genau die Fläche ein, die von der Trapez-Summe berechnet wird.
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				axis lines=left,
+				xlabel=$x$,
+				ylabel=$f(x)$,
+				enlargelimits,
+				grid=major,
+				%ymax=2,
+				%ymin=-0.5
+				legend pos=outer north east
+				]
+				%[domain=0:1,legend pos=outer north east]
+				\addplot[domain=-1:1] {(1/3)*x^3 + 2*x^2 + x - 1} node[left]{};
+				\legend{$f(x)$}
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Plot der Funktion $f(x)$.}
+	\end{figure}
+	\lbreak \lbreak \lbreak
+	\\
+	(b)
+	Berechnen Sie nun mithilfe der Simpson-Regel (oder auch Kepler-Regel oder Fass-Regel) $Q_{S}(f)$ die numerische Approximation von $I(f)$. Die Formel lautet:
+	\begin{align*}
+		Q_{S} = \frac{b - a}{6} \cdot \left( f(a) + 4\cdot f\left( \frac{a + b}{2} \right) + f(b) \right)
+	\end{align*}
+	Bestimmen Sie danach die exakte analytische Lösung und vergleichen Sie sie mit dem Ergebnis der Simpson-Regel. Was stellen Sie fest und warum?
+
+	
+%--------------------------------------------------------------
+\task{  Lineare Ausgleichsrechnung [2 + 5 + 1 = 8 Pkt.]}
+%--------------------------------------------------------------
+	
+	\begin{align*}
+		y(t) = a + b \cdot t + c \cdot \cos\left( \frac{\pi}{2} \cdot t \right)
+	\end{align*}
+	\\
+	$a,b,c \in \Re$ sind unbekannte Konstanten. Man möchte $y(t)$ für den Zeitpunkt $t = 6$ approximieren.
+	\n 
+	Gegeben seien folgende Testergebnisse:
+	\begin{tabular}{c|cccc}
+		$t_i$ & $-1$ & 0 & 1 & 2 \\ \midrule
+		$y_i$ & 1 & 6 & 1 & 2
+	\end{tabular}
+	\n
+	(a)
+	Stellen Sie $y(t)$ mit den gegebenen Testergebnissen als ein überbestimmtes lineares Gleichungssystem mit Unbekannten $a, b$ und $c$ auf.
+	\n 
+	\fat{Hinweis:} 
+	\begin{tabular}{c|ccccc}
+		$x$ & $-\pi$ & $-0.5\pi$ & 0 & $0.5\pi$ & $\pi$ \\ \midrule
+		$\cos(x)$ & $-1$ & 0 & 1 & 0 & $-1$
+	\end{tabular}
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Lösen Sie das LGS aus a) mithilfe der zugehörigen Normalengleichung. Wie lautet die Vorhersage für den Zeitpunkt $t=6$?
+	\n 
+	Falls Sie a) nicht lösen konnten, dürfen Sie alternativ mit dem \fat{falschen} überbestimmten System
+	\begin{align*}
+		\begin{pmatrix}
+			1 & -1 & -2 \\
+			1 & 0 & -1 \\
+			1 & 1 & 0 \\
+			1 & 0 & 1
+		\end{pmatrix} \cdot 
+		\begin{pmatrix}
+			a \\ b \\ c
+		\end{pmatrix} =
+		\begin{pmatrix}
+			-3 \\ -2 \\ 5 \\ 2
+		\end{pmatrix}
+	\end{align*}
+	arbeiten.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c)
+	In der Praxis würde man ein solches lineares Ausgleichproblem eher mithilfe der QR-Zerlegung lösen. Nennen Sie \fat{einen} Vorteil gegenüber der Variante aus b) und beschreiben Sie \fat{kurz} eine problematische Eigenschaft der Normalengleichung.
+
+
+%--------------------------------------------------------------
+\task{  Fixpunktiteration [2.5 + 1 + 3 = 6.5 Pkt.]}
+%--------------------------------------------------------------
+	
+	Formel des Newton-Verfahrens zur Nullstellenberechung ist definiert als:
+	\begin{align*}
+		x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}
+	\end{align*}
+	(a)
+	Leiten Sie das Newton-Verfahren mithilfe der Taylorreihe her. Die Taylorreihe von $f$, die um $a$ entwickelt wird ist definiert als:
+	\begin{align*}
+		\tilde{f}(x,a) = \sum_{n=0}^{\infty} \frac{f^n(a)}{n!} \cdot (x-a)^n
+	\end{align*}
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Wenn man das Newton-Verfahren als Fixpunktiteration betrachte, wie lautet die Iterationsfunktion $\Phi(x)$ für das Newton-Verfahren?
+	
+	\newpage
+	(c)
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+			    width=0.85\textwidth,
+				height=0.9\textwidth,
+				axis lines=left,
+				xlabel=$x$,
+				ylabel=$g(x)$,
+				enlargelimits,
+				ymax = 2.5,
+				samples=60,
+				grid=major,
+				legend pos=outer north east
+				]
+				\addplot[domain=-2:3.5] {log10(0.5*x + 1) * 2} node[left]{};
+				%{0.7333333333333334*x^1-0.10666666666666667*x^2} node[left]{};
+				\legend{$g(x)$}
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Plot der Funktion $g(x)$.}
+	\end{figure}
+	Bestimmen Sie in Abbildung 2 graphisch alle Fixpunkte von $g$ und markieren Sie diese.
+	\n 
+	Führen Sie (graphisch) zwei Schritte der Fixpunkt-Iteration für den Startwert $x_0=3$ in die Abbildung ein.
+	\n 
+	Bei welchen der Fixpunkte handelt es sich um anziehende und bei welchen um abstoßende Fixpunkte? Begründen Sie ihre Antwort anhand der Graphik.
+
+
+%--------------------------------------------------------------
+\task{  Programmieraufgabe [2 + 5 = 7 Pkt.]}
+%--------------------------------------------------------------
+	(a) 
+	Was für Vorteile besitzt das Gauß-Seidel Verfahren gegenüber dem Jacobi Verfahren?
+	\lbreak \lbreak
+	\\
+	(b)
+	Folgendes Programmgerüst sei gegeben. Vervollständigen Sie dieses ohne unnötige Berechnungen oder Speicherallokationen. Bibliotheksfunkionen dürfen \fat{nicht} verwendet werden.
+	\begin{lstlisting}
+	import java.util.Arrays;
+	public class CoolProgram {
+			
+		public static void main(String[] args) 
+		{
+			// parse input (separately implemented)
+			double[][] A = parseA(args); 
+			double[] b = parseB(args);
+			double[] x = parseX(args);
+			int numIterations = parseN(args);
+				
+			// calculate solution with gaussSeidel()
+				
+				
+			System.out.println("Solution:\n" + Arrays.toString(x));
+		}
+			
+		private static double[] gaussSeidel(double[][] A, double[] b, double[] x) 
+		{
+			
+			//TODO: implement one step of the gauss-seidel method
+			
+			
+		}
+	}
+	\end{lstlisting}
+\end{document}

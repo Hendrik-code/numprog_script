@@ -1,0 +1,127 @@
+
+
+\Bsec{Fourier-Transformation}{
+		
+		\begin{itemize}
+			\item Wdh. Komplexe Zahlen
+			\item DFT vs. IDFT
+			\item TBD: Schnelle inverse Fourier Transformation
+			\item Verständnis/Trick Fragen
+		\end{itemize}
+		}{}
+		
+%----------------------------------------------------------------------------------
+\bsubsec{Wdh. Komplexe Zahlen}{
+		
+		$$z = x + iy$$
+		$$x = Re(z); y = Im(z)$$
+		$$i = \sqrt{-1}$$
+		$$\compl{z} = z - iy$$
+		Euler Formel: $$e^{i \cdot m} = cos(m) + i \cdot sin(m)$$
+		
+	}
+	\btask{ 
+		
+		\begin{enumerate}
+			\item Berechne $(2 + i3) + (1 - i2)$. Wie groß ist der Imaginärteil?
+			\item Was ist $e^{i \cdot 2\pi} * 2$
+			\item Berechne den Betrag von $4 + i3$!
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item $= 3 + i$. $Im(3 + i) = 1$ (und nicht $1i$!!)
+			\item $= 2$ (Imaginärteil wird zu 0)
+			\item $\abs{4 + i3} = 5$
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bsubsec{DFT vs. IDFT}{
+		
+		Diskrete Fourier Transformation:
+		$$\begin{bmatrix}
+		c_0 \\ c_1 \\ ... \\ c_{n-1}
+		\end{bmatrix} = c = M_{DFT, n} \cdot v = \frac{1}{n}
+		\begin{bmatrix}
+		1 & 1 & 1 & ... & 1 \\
+		1 & \compl{\omega}^1 & \compl{\omega}^2 & ... & \compl{\omega}^{(n-1)}\\
+		... & ... & ... & ... & ...\\
+		1 & \compl{\omega}^{n-1} & \compl{\omega}^{2 \cdot (n-1)} & ... & \compl{\omega}^{(n-1)(n-1)}
+		\end{bmatrix} \cdot 
+		\begin{bmatrix}
+		v_0 \\ v_1 \\ ... \\ v_{n-1}
+		\end{bmatrix}$$ \n 
+		Das Inverse: 
+		$$\begin{bmatrix}
+		v_0 \\ v_1 \\ ... \\ v_{n-1}
+		\end{bmatrix} = c = M_{IDFT, n} \cdot c = 
+		\begin{bmatrix}
+		1 & 1 & 1 & ... & 1 \\
+		1 & \omega^1 & \omega^2 & ... & \omega^{(n-1)}\\
+		... & ... & ... & ... & ...\\
+		1 & \omega^{n-1} & \omega^{2 \cdot (n-1)} & ... & \omega^{(n-1)(n-1)}
+		\end{bmatrix} \cdot 
+		\begin{bmatrix}
+		c_0 \\ c_1 \\ ... \\ c_{n-1}
+		\end{bmatrix}$$
+	}
+	\btask{
+		
+		\begin{enumerate}
+			\item $DFT((0, 1)^T)$?
+			\item $DFT((1, 1, 1, 0)^T)$?
+			\item $DFT((1, 0, 3, 0)^T)$?
+			\item $IDFT((0, 1, 0, 0)^T)$?
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item $DFT((0, 1)^T) =$ $$\frac{1}{2} \cdot (1, -1)^T$$
+			\item $DFT((1, 1, 1, 0)^T) =$ $$\frac{1}{4} \cdot (3, -i, 1, i)^T$$
+			\item $DFT((1, 0, 3, 0)^T) = $ $$\frac{1}{4} \cdot (4, -2, 4, -2)^T$$
+			\item $IDFT((0, 1, 0, 0)^T) = $ $$(1, i, -1, -i)^T$$
+		\end{enumerate}
+	}
+
+%----------------------------------------------------------------------------------
+\bsubsec{Schnelle inverse Fourier Transformation}{
+		
+		Viel zuuu nervig, hier gibt es noch nichts zu sehen!
+	}
+	%\btask{
+	%	
+	%	TBD
+	%	\begin{enumerate}
+	%		\item TBD
+	%	\end{enumerate}
+	%	
+	%}
+	%\bsol{
+	%	
+	%	\begin{enumerate}
+	%		\item TBD
+	%	\end{enumerate}
+	%}
+%----------------------------------------------------------------------------------
+\bquestion{
+	}
+	\btask{
+		
+		Beantworte folgende (Trick-)Fragen möglichst genau:
+		\begin{enumerate}
+			\item Was bedeutet es mathematisch, dass $DFT$ und $IDFT$ Umkehroperationen sind?
+			\item Auf was für einem Prinzip beruht die Fourier-Transformation?
+		\end{enumerate}
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item Es gilt: $IDFT(DFT(v)) = v$
+			\item Interpolation mit Basisfunktionen
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------

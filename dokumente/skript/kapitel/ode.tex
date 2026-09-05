@@ -1,0 +1,466 @@
+
+	\newpage
+% =========================================================	
+	\section{Differentialgleichungen}
+% =========================================================
+	
+	\sbreak
+	\defi{
+		\n 
+		Differentialgleichungen, ernsthaft? Man weiß häufig nur, dass diese kompliziert, schwer zu lösen und nervig sind. Da dies (meiner Meinung nach) nicht stimmt, zeige ich dies folgendermaßen:
+		\n 
+		Eine "gewöhnliche Differentialgleichung" ist eine Gleichung, die eine Funktion durch ihre Ableitung beschreibt:
+		\begin{align} 
+ 			y'(t) = \varphi(y,t) 
+ 		\end{align}
+		Ein Beispiel wäre eine Sonnenblume, die proportional zu ihrer momentanen Größe wächst:
+		\begin{align*} 
+ 			y'(t) = 2y(t) 
+		\end{align*}
+		Die Lösung eines solchen Systems ist eine Funktion $y(t)$. In diesem Falle würde es die Größe der Blume in Abhängigkeit zu einem Zeitpunkt $t$ angeben.
+		\n 
+		Doch wie löst man ein solches ODE? ("ordinary differential equation")
+	}
+	
+	\lbreak
+	\subsection{Separation der Variablen}
+	
+	\methode{
+		\n 
+		Gegeben ist eine Differentialgleichung der Form
+		\begin{align*} 
+ 			y'(t) = \varphi(y,t) 
+ 		\end{align*}
+		Methodik:
+		\begin{enumerate}
+			\item In Leibniz-Notation schreiben
+			\item Separieren
+			\item Integrieren
+			\item Integrale lösen
+			\item Nach y auflösen
+		\end{enumerate}
+	}
+
+	\newpage
+	\bsp{
+		\n 
+		Mit obiger Methode ergibt sich für unser Beispiel folgende Rechnung:
+		\begin{align*} 
+ 			y'(t) = 2y(t) 
+ 		\end{align*}
+		In Leibniz Notation schreiben:
+		\begin{align*}
+ 			\frac{\d y}{\d t} = 2y 
+ 		\end{align*}
+		Separieren der Variablen:
+		\begin{align*} 
+ 			\frac{\d y}{2y} = \d t 
+ 		\end{align*}
+		Integrieren:
+		\begin{align*} 
+ 			\int_{y_0}^{y}\frac{1}{2\eta}\d\eta = \int_{t_0}^{t}\d\tau 
+ 		\end{align*}
+		Lösen und nach y(t) auflösen:
+		\begin{align*} 
+ 			\frac{1}{2}\l(\ln\abs{y} - \ln\abs{y_0}\r) &= t - t_0 \\
+ 			\abs{\frac{y(t)}{y_0}} &= e^{2(t - t_0)} \\
+			y(t) &= \pm y_0 \cdot e^{2(t - t_0)} 
+ 		\end{align*}
+		Dies nennt man die allgemeine Lösung des ODEs, da die Funktion für alle $y_0$ und alle $t_0$ die Differentialgleichung erfüllt.
+	}
+
+	\sbreak
+	\subsection{Verkürzte Version}
+	
+	\methode{ \n 
+		Folgende umgeschriebene Variante ist ein Versuch, die Separation der Variablen schöner darzustellen:\\
+		Gegeben ist eine Differentialgleichung der Form
+		\begin{align} 
+ 			y'(t) = f(t) \cdot g(y(t)) 
+ 		\end{align}
+		Man stellt folgende Gleichung auf:
+		\begin{align} 
+ 			\int_{y_0}^{y}\frac{1}{g(y(\eta))}\d\eta = \int_{t_0}^{t} f(\tau)\d\tau 
+ 		\end{align}
+		Nun löst man die entstandene Gleichung nach $y(t)$ auf und ist fertig.
+	}
+
+	\newpage
+	\bsp{\n 
+		Obiges Beispiel: 
+		\begin{align*} 
+ 			y'(t) = 2y(t) 
+ 		\end{align*}
+		Nach der Methodik ist $f(t) = 2$ und $g(y(t)) = y(t)$ \\
+		Gleichung aufstellen:
+		\begin{align*} 
+ 			\int_{y_0}^{y}\frac{1}{\eta}\d\eta &= \int_{t_0}^{t}2 \d\tau \\
+			(\ln\abs{y} - \ln\abs{y_0}) &= 2 \cdot (t - t_0) \\
+			y(t) &= \pm y_0 \cdot e^{2(t - t_0)} 
+ 		\end{align*}
+	}
+
+	\sbreak
+	\defi{\n 
+		$y_0$ und $t_0$ sind sogenannte Anfangsbedingungen. 
+		\n
+		Wenn man sie gegeben hat, löst man ein sogenanntes \fat{AWP (=Anfangswertproblem)}. Hierzu muss man die allgemeine Lösung des ODEs in die spezifische übertragen, bei der man schlichtweg $y_0$ und $t_0$ einsetzt. \\
+		Solche Anfangsbedingungen könnten z.B. $t \ge 0$ und $y(0) = 1$ sein.
+		\n 
+		$t_0$ beschreibt den niedrigsten, noch gültigen Wert für $t$. Da $t$ meist die Zeit beschreibt, ist es logisch, dass diese z.B. bei dem Wachstum einer Blume nicht im negativen anfängt.
+		\n 
+		Außerdem beschreibt $y_0$ den Wert am Startzeitpunkt $t_0$:
+		\begin{align} 
+ 			y(t_0)=y_0 
+ 		\end{align}
+	}
+
+	\newpage
+	\bsp{\n 
+		Obiges Beispiel, obige Anfangsbedigungen, also: \\
+		ODE:
+		\begin{align*} 
+ 			y'(t) = 2y(t) 
+ 		\end{align*}
+		Allgemeine, also Lösung des ODE:
+		\begin{align*} 
+ 			y(t) = \pm y_0 \cdot e^{2(t - t_0)} 
+ 		\end{align*}
+		Anfangsbedingungen:
+		\begin{align*} 
+ 			t \ge 0 &\longrightarrow t_0 = 0 \\
+			y(0) = 1 &\longrightarrow y_0 = 1 
+ 		\end{align*}
+		Spezifische, also Lösung des AWP:
+		\begin{align*} 
+ 			y(t) &= 1 \cdot e^{2t} \\
+ 				&= e^{2t}
+ 		\end{align*}
+	}
+
+	\sbreak
+	\subsection{Kleiner Trick}
+	\label{chap:ode_trick}
+	
+	\methode{\n 
+		Wenn ihr ein ODE habt, welches nicht von $t$ abhängig ist, sprich in folgender Form ist:
+		\begin{align} 
+ 			y'(t) = a \cdot y(t) \aae a\in \Re 
+ 		\end{align}
+		Dann ist die Lösung des ODEs \fat{immer}:
+		\begin{align} 
+ 			y(t) = y_0 \cdot e^{a \cdot (t-t_0)} 
+ 		\end{align}
+	}
+
+	\newpage
+	\vertief{ \n 
+		Für die Interessierten hier der Beweis für \ref{chap:ode_trick}:
+		\begin{align*} 
+ 			y'(t) = a \cdot y(t) 
+ 		\end{align*}
+		Mit obiger verkürzter Variante der Separation der Variablen:
+		\begin{align*} 
+ 			\int_{y_0}^{y}\frac{1}{y(\eta)} \d\eta &= \int_{t_0}^{t}a \cdot \d\tau \\
+			\ln\abs{y} - \ln \abs{y_0} &= a \cdot \int_{t_0}^{t} \d\tau = a \cdot (t - t_0) \\
+			\ln \l(\abs{\frac{y}{y_0}} \r) &= a \cdot (t - t_0) \\ \\
+			y(t) &= y_0 \cdot e^{a \cdot (t-t_0)} 
+ 		\end{align*}
+	}
+
+	\newpage
+	\subsection{Kondition eines AWPs}
+	
+	\defi{\n
+		Um die Kondition eines Anfangswertproblems zu untersuchen, betrachten wir die Relation von einem Eingabe- und Ausgabefehlers. Bei einem AWP wäre der Eingabewert der Startwert $y_0$, während die Ausgabe die Funktion $y(t)$ entspricht.
+	}
+
+	\sbreak
+	\bsp{\n
+		Gegeben sei das exakte Ergebnis eines AWPs:
+		\begin{align*}
+			y(t) = y_0 \cdot e^{4t}
+		\end{align*}
+		mit $y_0 = 3$.
+		Dann definieren wir uns eine verfälschte Eingabe $y_\epsilon = y_0 + \epsilon$. Dadurch wird die nun verfälschte Ausgabe zu:
+		\begin{align*}
+			y_\epsilon(t) &= y_\epsilon \cdot e^{4t} \\
+				&= (y_0 + \epsilon) \cdot e^{4t} \\
+				&= y_0 \cdot e^{4t} + \epsilon \cdot e^{4t}\\
+				&= y(t) + \epsilon  \cdot e^{4t}\\
+		\end{align*}
+		Der Ausgabefehler an sich ist der Teil, der die korrekte Lösung verfälscht. Diese untersuchen wir dann für $t$ geht gegen unendlich.
+		\begin{align*}
+			\lim\limits_{t\rightarrow\infty}\l( \epsilon  \cdot e^{4t} \r) = \infty
+		\end{align*}
+		Das untersuchte AWP ist also schlecht konditioniert.
+	}
+
+	\newpage
+	\subsection{(Explizite) Einschrittverfahren}
+	
+	\defi{
+		\n 
+		Einschrittverfahren bieten die Möglichkeit, ODEs schrittweise anzunähern.
+		Im Folgenden sei $\delta t$ immer unsere Schrittweite, also in wie große (oder grobe) Stücke wir (die Zeit) $t$ unterteilen.
+		\n 
+		Bevor wir uns drei explizite Verfahren anschauen, wäre es wichtig, die grafische Darstellung eines ODE zu verstehen:
+	}
+
+	\lbreak
+	\subsubsection{Richtungsfelder}
+	
+	\defi{
+		\n 
+		Richtungsfelder bieten die Möglichkeit, das ODE graphisch anschaulich darzustellen. Hierfür stellen wir lediglich ein Graph mit $x$ und $y(t)$ als Achsen auf. Punkte dieses Graphen stellen jeweils Werte der Ableitung da. Dafür ziehen wir bei jedem Punkt eine kleine Linie, welche die Steigung widerspiegelt. \\
+		Also wenn unser ODE $y'(t) = x^2 + y$ wäre, würden folgende Punkte folgende Steigungen haben: \\
+		$P(0, 1) \imp 0^2 + 1 = 1$ hätte die Steigung 1. \\
+		$Q(1, 2) \imp 1^2 + 2 = 3$ hätte die Steigung 3. \\
+		$R(2, 0) \imp 2^2 + 0 = 4$ hätte die Steigung 4 und so weiter und so fort.
+		\n 
+		Zeichnet man genug dieser kleinen Linien in den Graphen kann man einen "Strom" erkennen, der auf die Lösung des ODEs vermuten lässt.
+%		Hier ist ein gutes Video, dass dies schön mit Bildern erklärt:\\
+%	}
+%%
+%					axis lines=middle,
+%					xlabel=$t$,
+%					ylabel=$y(t)$,
+%					enlargelimits,
+%					legend pos=outer north east,
+%					%ymin=-0.3,
+%					%xmax=5.8,
+%					%xticklabels={,,},
+%					%yticklabels={,,},
+%					]
+%					%\tikzPointUp{$f(1)$}{1,0}
+%					%\tikzPointDown{$f(2)$}{2,2}
+%%					
+%					%\tikzDeriveLine{2}{0}{4}%{0.5}
+%					%\tikzDeriveLine{3}{0}{6}%{0.5}
+%					%\tikzDeriveLine{4}{0}{8}%{0.5}
+%%
+		\n 
+		Wenn man jetzt (informell) einem Strom mit einem Stift folgt, zeichnet man eine mögliche Stammfunktion ein, welche das ODE erfüllt. Bedenke ja, dass man bei Stammfunktionen immer den konstanten Offset $c$ hat, der beliebig sein kann. Und deswegen gibt es unendlich viele Pfeile im Richtungsfeld, denen man folgen kann und die trotzdem eine Lösung bilden.
+		\n 
+		Wenn man beispielsweise von der Funktion 
+		\begin{align*} 
+ 			y'(t) = 2t 
+ 		\end{align*} 
+ 		das Richtungsfeld einzeichnen würde, könnte man ganz viele, vertikal verschobene Parabeln erkennen. Logisch, das Integral von $y'(t)$ ist:
+		\begin{align*} 
+ 			y(t) = t^2 + c 
+ 		\end{align*}
+		Und genau dieses Prinzip nutzen wir jetzt für Schrittverfahren, die nichts anderes tun als Ableitungen (die Linien im Richtungsfeld) in Punkten zu nutzen, um einen Schritt auszurechnen (grafisch könnte man sagen, sie laufen den Pfeilen hinterher).
+	}
+
+	\sbreak
+	\defi{
+		\n 
+		Für den Rest des Kapitels beschreibt $f(t_k, y_k)$ die Funktion, welche zu diskreten Zeitpunkten $t_k$ und Werte $y_k$ die Ableitung berechnet. Im Grunde ist es also nichts anderes als die rechte Seite des ODEs.
+		\n 
+		1. Beispiel:
+		\begin{align*}
+			y_0'(t) &= 2 y(t) \\
+			f_0(t_k, y_k) &= 2 y_k \\
+		\end{align*}
+		2. Beispiel:
+		\begin{align*}
+			y_1'(t) &= 4t \cdot 2y(t) \\
+			f_1(t_k, y_k) &= 4 t_k \cdot 2 y_k
+		\end{align*}
+	}
+
+
+	\newpage
+	\subsubsection[Explizites Euler-Verfahren]{Explizites Euler-Verfahren (1. Ordnung)} \label{chap:explizitSchrittverfahren}
+	
+	\methode{
+		\n 
+		Bei diesem Verfahren wird die Steigung im aktuellen Punkt $t_k$ der Iteration zur Berechnung der nächsten Annäherung genutzt.
+		\begin{align} 
+ 			t_k = t_0 + k \cdot \delta t 
+ 		\end{align}
+		\begin{align} 
+ 			y_{k+1} = y_k + \delta t \cdot f(t_k, y_k) 
+ 		\end{align}
+	}
+
+	\sbreak
+	\subsubsection[Heun-Verfahren]{Heun-Verfahren (2. Ordnung)}
+	
+	\methode{
+		\n 
+		Bei diesem Verfahren wird die Steigung in zwei Punkten (analog zur Trapezregel aus der Quadratur) der Iteration zur Berechnung der nächsten Annäherung genutzt.
+		\begin{align} 
+ 			t_k = t_0 + k \cdot \delta t 
+ 		\end{align}
+		\begin{align} 
+ 			y_{k+1} = y_k + \frac{\delta t}{2} \cdot \l(f(t_k, y_k) + f(t_{k+1}, y_k + \delta t \cdot f(t_k, y_k))\r) 
+ 		\end{align}
+	}
+
+	\sbreak
+	\subsubsection[Runge-Kutta Verfahren]{Runge-Kutta Verfahren (4. Ordnung)}
+	
+	\methode{
+		\n 
+		Hier wird analog zur Simpsonregel aus der Quadratur noch mehr Punkte für die Iteration genutzt.
+		\begin{align} 
+ 			t_k = t_0 + k \cdot \delta t 
+ 		\end{align}
+		\begin{align} 
+ 			T_1 &= f(t_k, y_k) \\
+			T_2 &= f \l(t_k + \frac{\delta t}{2}, y_k + \frac{\delta t}{2} T_1 \r) \\
+ 			T_3 &= f \l(t_k + \frac{\delta t}{2}, y_k + \frac{\delta t}{2} T_2 \r) \\
+ 			T_4 &= f \l(t_{k+1}, y_k + \delta t \cdot T_3 \r) 
+ 		\end{align}
+		\begin{align} 
+ 			y_{k+1} = y_k + \frac{\delta t}{6} \cdot (T_1 + 2T_2 + 2T_3 + T_4) 
+ 		\end{align}
+	}
+	
+	\newpage
+	\bsp{
+		\n 
+		Euler-Verfahren: \\
+		Wir haben die Startwerte $y_0 = 1 \aae t_0 = 0$, außerdem ist $\delta t = 1$ und unser ODE:
+		\begin{align*} 
+ 			y'(t) = 2y(t) 
+ 		\end{align*}
+		Unsere Funktion ist also 
+		\begin{align*} 
+ 			f(t_k, y_k) = 2y_k 
+ 		\end{align*}
+		1. Schritt:
+		\begin{align*} 
+ 			t_1 &= t_0 + k \cdot \delta t = 0 + 1 \cdot 1 = 1 \\
+ 			y_1 &= y_0 + \delta t \cdot 2y_0 = 1 + 1 \cdot 2 \cdot 1 = 3 
+ 		\end{align*}
+		2. Schritt:
+		\begin{align*} 
+ 			t_2 &= t_0 + k \cdot \delta t = 0 + 2 \cdot 1 = 2 \\
+			y_2 &= y_1 + \delta t \cdot 2y_1 = 3 + 1 \cdot 2 \cdot 3 = 9 
+ 		\end{align*}
+		Und so weiter, und so fort \dots
+	}
+
+%				axis lines=middle,
+%				xlabel=$x$,
+%				ylabel=$y$,
+%				enlargelimits,
+%				grid=major,
+%				%xticklabels={,,},
+%				%yticklabels={,,},
+%				%ymax=2,
+%				%ymin=-0.5,
+%				legend pos=outer north east,
+%				]
+%					( 0.0, 1.0 )
+%					( 1.0, 1.0 )
+%					( 2.0, 2)
+%					( 3.0, 6)
+%				};
+%					( 0.0, 1.0 )
+%					( 0.5, 1.0 )
+%					( 1.0, 1.25)
+%					( 0.0, 1.0)
+%				};
+
+
+	\lbreak 
+	\subsection{Diskretisierungsordnung}
+
+	\defi{\n 
+		Solche Schrittverfahren haben immer eine Diskretisierungsordnung $p$ (die ich bei den Verfahren oben schon dazugeschrieben habe). Diese gibt im Grunde die Genauigkeit des Verfahrens an. Mit einer Schrittweite von $\delta t$ liegt der globale Diskretisierungsfehler eines Verfahrens in 
+		\begin{align} 
+ 			\bigO(\delta t^p) 
+ 		\end{align}
+		Das bedeutet zum Beispiel auch, dass wenn man die Schrittweite bei einem Verfahren zweiter Ordnung halbieren würde, sich der Fehler vierteln würde.
+	}
+
+	\newpage
+	\defi{ \fat{Problem:}
+		\n 
+		Damit explizite Verfahren für uns genau genug werden, müsste man eine möglichst kleine Schrittweite wählen. Damit wiederum explodiert aber unser Rechenaufwand für den gleichen Bereich. Außerdem würden wir dann eine kleine Zahl mit "normal" großen Zahlen verrechnen was wiederum an unserer Maschinengenauigkeit nagt.
+		\n 
+		Aus diesem Grunde schauen wir uns noch ein Beispiel eines \fat{impliziten} Einschrittverfahrens an.
+	}
+
+	\lbreak
+	\subsection[Implizites Euler-Verfahren]{Implizites Euler-Verfahren (1. Ordnung)}
+	
+	\defi{
+		\n 
+		Die Idee vom impliziten Euler Verfahren ist es, die Steigung im nächsten Schritt zu antizipieren und damit in der aktuellen Iteration zu rechnen.
+		\n 
+		Implizite Verfahren haben in der Regel eine wesentlich bessere Stabilität, da man meist größere Zeitschritte wählen kann als bei expliziten Verfahren. Jedoch muss man auch ein Gleichungssystem in jedem Iterationsschritt lösen, da auch auf der rechten Seite der Gleichung ein $y_{k+1}$ steht.
+	}
+
+	\sbreak
+	\methode{
+		\n 
+		Wir wenden folgende Formel iterativ an:
+		\begin{align} 
+ 			y_{k+1} = y_k + \delta t \cdot f(t_{k+1}, y_{k+1}) 
+ 		\end{align}
+		Tipp: Wenn man das umformt, kann es sein, dass man auf ein Nullstellen Problem kommt (p-q Formel bzw. Mitternachtsformel lässt grüßen).
+		\begin{align} 
+ 			0 = y_k + \delta t \cdot f(t_{k+1}, y_{k+1}) - y_{k+1} 
+ 		\end{align}
+	}
+
+
+	\newpage
+	\bsp{
+		\n 
+		Gegeben sei:
+		\begin{align*}
+			y_0 = -1 \quad\quad \delta t = 1 \quad\quad t_0 = 0 \quad\quad y(t) < 0
+		\end{align*}
+		mit der Funktion (schon aus dem ODE ausgelesen):
+		\begin{align*}
+			f(t_k, y_k) = 2 \cdot t_k \cdot y_k^2
+		\end{align*}
+		1. Iteration:
+		\begin{align*}
+			y_{k+1} &= y_k + \delta t \cdot f(t_{k+1}, y_{k+1})  \\
+			y_1 &= y_0 + \delta t \cdot 2 \cdot t_1 \cdot y_1^2 \\
+			y_1 &= -1 + 1 \cdot 2 \cdot y_1^2 \\
+			0 &= 2 y_1^2 - y_1 - 1
+		\end{align*}
+		Mit P-Q Formel erhält man die Lösungen $y_{1,1} = 1$ und $y_{1,2} = -\frac{1}{2}$. Da wir aber oben gegeben haben, dass $y(t) < 0$ gilt, kann $1$ nicht die richtige Lösung sein. Also haben wir $y_1 = -\frac{1}{2}$.
+		\n 
+		2. Iteration:
+		\begin{align*}
+			y_{k+1} &= y_k + \delta t \cdot f(t_{k+1}, y_{k+1})  \\
+			y_2 &= y_1 + \delta t \cdot 2 \cdot t_2 \cdot y_2^2 \\
+			y_2 &= -\frac{1}{2} + 1 \cdot 2 \cdot 2 \cdot y_2^2 \\
+			0 &= -\frac{1}{2} + 4 \cdot y_2^2 - y_2 \\
+			0 &= y_2^2 - \frac{1}{4}y_2 -\frac{1}{8}
+		\end{align*}		
+		P-Q Formel nutzen:
+		\begin{align*}
+			y_{2_{1,2}} &= \frac{1}{8} \pm \sqrt{\frac{1}{64} + \frac{1}{8}}
+		\end{align*}
+		Die Lösungen davon sind $0.5$ und $-0.25$. Auch hier können wir mit gegebener Bedingung schließen, dass $y_2 = -0.25$ sein muss.
+%		Gegeben sei:
+%			y_0 = 0 \quad\quad \delta t = 1 \quad\quad t_0 = 0
+%		mit der Funktion (schon aus dem ODE ausgelesen):
+%			f(t_k, y_k) = t_k \cdot y_k^2
+%		1. Iteration:
+%			y_{k+1} &= y_k + \delta t \cdot f(t_{k+1}, y_{k+1})  \\
+%			y_1 &= y_0 + \delta t \cdot t_1 \cdot y_1^2 \\
+%			y_1 &= 0 + 1 \cdot 1 \cdot y_1^2 \\
+%			0 &= y_1^2 - y_1
+%		Man sieht schnell, dass es die einzige Lösung $y_1 = 1$ sein muss.
+%		2. Iteration:
+%			y_{k+1} &= y_k + \delta t \cdot f(t_{k+1}, y_{k+1})  \\
+%			y_2 &= y_1 + \delta t \cdot t_2 \cdot y_2^2 \\
+%			y_2 &= 1 + 1 \cdot 2 \cdot y_2^2 \\
+%			0 &= 1 + 2 \cdot y_1^2 - y_1 \\
+%			0 &= \frac{1}{2} + y_1^2 - \frac{1}{2}y_1
+%		P-Q Formel nutzen:
+%			x_{1,2} &= \frac{1}{4} \pm \sqrt{\frac{1}{8} - \frac{1}{2}}
+%		Ups, wir landen bald im komplexen Bereich. Naja, gute Beispielzahlen finden ist gar nicht so einfach \Laughey.
+	}
+

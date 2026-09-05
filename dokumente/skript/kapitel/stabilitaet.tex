@@ -1,0 +1,134 @@
+
+% =========================================================
+	\newpage
+	\section{Stabilität}	
+	
+	
+	\defi{
+		\n
+		Ein Verfahren heißt "stabil", wenn Rundungen von Zwischenergebnissen keine große Abweichung der Endergebnisse zur Folge hat; ansonsten spricht man von einem "instabilen" Algorithmus. \n	
+		Bei der Stabilitäts Untersuchung geht es darum, die Fehlerverstärkung innerhalb eines Berechnungsverfahrens zu analysieren. Instabil kann nur eine Verkettung von Operationen sein, einzelne sind immer stabil!
+		\n	
+		Weil viele damit Schwierigkeiten haben sind hier nochmal knapp die Erläuterung von Stabilität \& Kondition:
+		\begin{itemize}
+			\item \fat{Kondition}
+			\begin{itemize}
+				\item Ist eine Eigenschaft eines Problems.
+				\item Sagt aus, wie groß sich ein Eingabefehler auf die Ausgabe auswirkt.
+				\item Quasi $f(\rd(x)) - f(x)$.
+			\end{itemize} 
+			\item \fat{Stabilität}
+			\begin{itemize}
+				\item Ist eine Eigenschaft eines Algorithmus.
+				\item Sagt aus, ob sich der relative Fehler durch Rundungen stark verschlechtert oder nicht.
+				\item Quasi $\rd(f(x)) - f(x)$.
+			\end{itemize}			
+		\end{itemize}
+		Um die Stabilität zu untersuchen verwenden wir Epsilontik.
+	}
+
+% =========================================================	
+	\sbreak
+	
+	\defi{ \fat{Epsilontik}
+		\n	
+		Wir haben ja schon gelernt, dass das Ergebnis einer (auch sehr einfachen) Operation, die ich jetzt allgemein "op" nenne, nicht mehr als Maschinenzahl exakt darstellbar sein kann und dadurch gerundet werden muss (siehe \refChapters{chap:absorption}{chap:auslöschung}). \n	
+		Außerdem haben wir gelernt, dass bei Rundungen immer ein relativer Fehler entsteht. Für diesen Fehler $\epsilon$ gilt immer $\abs{\epsilon} \le \maxError$. Dieses $\maxError$ ist hierbei die maximale Fehlergrenze und entspricht der Maschinengenauigkeit der Darstellung (siehe \refChapter{chap:maschinengenauigkeit}).
+		\begin{align} 
+ 			\frel = \abs{\frac{\rd(x) - x}{x}} \le \maxError. 
+ 		\end{align}
+		 Das heißt aber auch, dass es immer ein $\epsilon \in \reals$ geben muss, damit: $\rd(x) = (1 + \epsilon) \cdot x;$ mit $-\maxError \le \epsilon \le \maxError$ \n	
+		Diese Eigenschaft verwenden wir bei der Epsilontik. Wir untersuchen den relativen Endergebnisfehler:
+		\begin{align} 
+ 			\abs{\frac{\rd(f)(x) - f(x)}{f(x)}} 
+ 		\end{align}
+		Dabei gelten noch folgende Regeln: \\
+		Mit "op" als exakte Operation erzeugt jede Operation "op$_\text{M}$" einen Fehler $\epsilon_i \le \maxError$:
+		\begin{align}
+			(a \text{ op}_\text{M } b) = \rdM(a \text{ op } b) = (a \text{ op } b) \cdot (1 + \epsilon_i) &&\text{ mit } \abs{\epsilon_i} \le \maxError
+		\end{align}
+	 	Außerdem lassen wir Fehler höherer Ordnung weg, da wir davon ausgehen, dass unsere Fehler $\epsilon_i$ sehr klein sind und somit $\epsilon_i \cdot \epsilon_j =0 \quad \forall i,j$. Die Werte werden einfach zu klein werden, um Relevanz zu haben. Eine sehr kleine Zahl multipliziert mit einer sehr kleinen Zahl wird nur noch kleiner.
+	}
+
+	\lbreak
+	\bsp{
+		\begin{itemize}
+			\item $f(x) = x$
+				\begin{align*} 
+ 					\rd(f)(x) = x 
+				 \end{align*}
+				Wir haben keine Operationen, also findet auch keine Erzeugung eines relativen Fehlers statt.
+				Das ist logischerweise stabil. 
+				\sbreak
+			\item $g(x) = x^2$
+				\n
+				Wir haben eine Operation, nämlich die Potenz und dadurch wird ein Fehler $\epsilon$ erzeugt:
+				\begin{align*} 
+				 	\rd(g)(x) = x^2 \cdot (1 + \epsilon) = g(x) + g(x) \cdot \epsilon 
+				 \end{align*}
+				Endergebnisfehler:
+				\begin{align*} 
+	 				\abs{\frac{\rd(g)(x) - g(x)}{g(x)}} = \abs{\frac{g(x) + g(x) \cdot \epsilon -  g(x)}{g(x)}} = \abs{\epsilon} 
+				 \end{align*}
+				Als Endergebnisfehler kommt nur der Operationsfehler heraus, die Funktion ist offensichtlich stabil.
+				\sbreak
+			\item $h(x) = e^x$
+				\n 
+				e$^x$ soll hierbei auch nur einen relativen Fehler $\le \maxError$ erzeugen (kann in Klausuren anders definiert sein!).
+				\begin{align*} 
+ 					\rd(h)(x) = e^x \cdot (1 + \epsilon) = h(x) + h(x) \cdot \epsilon 
+ 				\end{align*}
+				Danach ist die Rechnung wie bei Beispiel 2. Es ist stabil.
+				\newpage
+			\item $i(x) = \frac{x + 2}{a}$ \quad (mit $a \in \reals$)
+				\begin{align*} 
+					 \rd(i)(x) = \frac{(x + 2) \cdot (1 + \epsilon_1)}{a} \cdot (1 + \epsilon_2) &= \frac{(x + 2)}{a} \cdot (1 + \epsilon_1 + \epsilon_2) \\
+					 &= i(x) + i(x) \cdot (\epsilon_1 + \epsilon_2) 
+				 \end{align*}
+				Endergebnisfehler: 
+				\begin{align*} 
+	 				\abs{\frac{\rd(i)(x) - i(x)}{i(x)}} = \abs{\frac{i(x) + i(x) \cdot (\epsilon_1 + \epsilon_2) - i(x)}{i(x)}} = \abs{\epsilon_1 + \epsilon_2} 
+	 			\end{align*}
+				Diese Funktion ist offensichtlich auch stabil.
+%					&= \l(\sqrt{x+1} + \sqrt{\epsilon_1 \cdot (x+1)}\r) + \epsilon_2 \cdot \l(\sqrt{x+1} + \sqrt{\epsilon_1 \cdot (x+1)}\r) \\
+%					&= \l(j(x) + \sqrt{\epsilon_1} \cdot j(x)\r) + \epsilon_2 \cdot \l(j(x) + \sqrt{\epsilon_1} \cdot j(x) \r) \\
+%					&= j(x) + \sqrt{\epsilon_1} \cdot j(x) + \epsilon_2 \cdot j(x) + \sqrt{\epsilon_1} \cdot \epsilon_2 \cdot j(x)
+%				Fehler höherer Ordnung dürfen wir weglassen, also
+%					&= j(x) \cdot \l(1 + \sqrt{\epsilon_1} + \epsilon_2 \r)
+%				Endergebnisfehler: 
+%				Diese Funktion ist offensichtlich auch stabil.
+				\sbreak
+			\item $j(x) = x^{(x + 1)}$
+				\begin{align*} 
+					\rd(j)(x) &= x^{(x + 1) \cdot (1 + \epsilon_1)} \cdot (1 + \epsilon_2) \\
+							&= x^{(x + 1)} \cdot x^{(x + 1) \cdot \epsilon_1} \cdot (1 + \epsilon_2) \\
+							&= \l(x^{(x+1)} + \epsilon_2 x^{(x+1)} \r) \cdot x^{(x + 1) \cdot \epsilon_1} \\
+							&= \l(j(x) + \epsilon_2 j(x) \r) \cdot j(x)^{\epsilon_1} \\
+							&= j(x)^{(\epsilon_1 + 1)} + \epsilon_2 j(x)^{(\epsilon_1 + 1)}
+							%&= \l(j(x) \cdot (1 + \epsilon_2) \cdot j(x)^{\epsilon_1} \r)
+				\end{align*}
+				Endergebnisfehler: 
+				\begin{align*} 
+					\abs{\frac{\rd(j)(x) - j(x)}{j(x)}} = \abs{\frac{j(x)^{(\epsilon_1 + 1)} + \epsilon_2 j(x)^{(\epsilon_1 + 1)} - j(x)}{j(x)}} = \abs{j(x)^{\epsilon_1} + \epsilon_2 j(x)^{\epsilon_1} - 1}.
+				\end{align*}
+				Nicht triviales Beispiel. Wir untersuchen (für dieses Beispiel) $x \rightarrow \infty$: 
+				\begin{align*} 
+					\lim_{x \rightarrow \infty}\abs{j(x)^{\epsilon_1} + \epsilon_2 j(x)^{\epsilon_1} - 1} &= \\
+					\text{Da gilt: } \lim_{x \rightarrow \infty}\abs{j(x)} &= \lim_{x \rightarrow \infty}\abs{x^{(x + 1)}} = \infty \\
+					\lim_{x \rightarrow \infty}\abs{j(x)^{\epsilon_1} + \epsilon_2 j(x)^{\epsilon_1} - 1} &= \infty
+				\end{align*}
+				Scheinbar ist diese Funktion sehr deutlich instabil für $x \rightarrow \infty$.
+		\end{itemize}
+	}
+
+	\newpage
+	\wichtig{
+		\n
+		Ein Algorithmus kann z.B. \fat{instabil sein trotz guter Kondition} und auch andersherum, also stabil trotz schlechter Kondition!
+		\n
+		In letzterem Falle ist die Eigenschaft der Stabilität in Anbetracht der schlechten Kondition wertlos!
+		Was hilft uns eine kleine Abweichung der Endergebnisse (Stabilität), wenn wir schon "vorher" einen hohen Störungsfaktor zwischen Eingabe und Ausgabedaten haben (Kondition)?
+		\n
+		Auch andersherum (gute Kondition, schlechte Stabilität) klingt sinnlos. Hier ist aber wichtig zu wissen, dass man Stabilität durch Umstellen des Algorithmus oder Operationen eventuell retten kann. Bei schlechter Kondition geht das nicht (außer vielleicht Vorkonditionierung).
+	}
+% =========================================================

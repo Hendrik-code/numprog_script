@@ -1,0 +1,361 @@
+	
+
+	\newpage
+% =========================================================	
+	\section{Eigenwertproblem}
+% =========================================================
+	
+	\sbreak
+	\defi{
+		\n 
+		Eigenwerte kennt man vermutlich noch aus DS und Lineare Algebra. Wir wiederholen diese kurz und beschäftigen uns mit iterativen Verfahren, welche diese Art von Problem lösen.
+		\n
+		Wir haben eine Matrix $A$, einen Vektor $v$ und einen Skalar $\lambda$ und
+		\begin{align} 
+ 			Av = \lambda v 
+ 		\end{align}
+		$v$ bezeichnet man hierbei als einen Eigenvektor und $\lambda$ einen Eigenwert von $A$.
+		\n 
+		Formell bezeichnet ein Eigenvektor einer Abbildung ein vom Nullvektor verschiedener Vektor, dessen Richtung durch die Abbildung nicht verändert wird. Ein solcher Eigenvektor wird durch die Abbildung lediglich skaliert. Dieser Faktor ist der Eigenwert.
+		\n 
+		Ein typisches Beispiel wäre die Scherabbildung.%: \url{https://de.wikipedia.org/wiki/Scherung_(Geometrie)}
+	}
+
+	\sbreak
+	\methode{ \n 
+		Wie rechnet man pauschal einen Eigenvektor und -wert aus? \\
+		Gegeben sei eine Matrix $A$:
+		\begin{align} 
+ 			\det(A - \lambda_i \unitM) = 0 
+ 		\end{align}
+		Mit $\unitM$ als Einheitsmatrix, löse obige Gleichung, um auf alle Eigenwerte zu schließen. Mithilfe obiger Ausgangsbedingung
+		\begin{align*} 
+ 			Av = \lambda v 
+ 		\end{align*}
+		leiten wir folgende Beziehung ab, um die Eigenvektoren auszurechnen:
+		\begin{align} 
+ 			(A - \lambda_i \unitM)\cdot v_i = 0 
+ 		\end{align}
+		%Diese Gleichung können wir mithilfe von Gauß-Elimination lösen, da sie einem LGS entspricht. Beim Ausrechnen eines Eigenvektors haben wir immer \fat{einen Freiheitsgrad}, sprich es entsteht immer eine Nullzeile beim Gauß-Verfahren. Das liegt daran, dass wir nur an der Richtung des Eigenvektors interessiert sind, nicht dessen Länge. %was wiederum bedeutet, dass wir einmalig pro Ausrechnen eines Eigenvektors einen Eintrag beliebig wählen können und dann alle anderen Komponenten im Abhängigkeit dazu.
+	}
+
+	\newpage
+	\defi{
+		\n 
+		Die Gleichung zum Ausrechnen des Eigenvektors können wir mithilfe von Gauß-Elimination lösen, da sie einem LGS entspricht. Beim Ausrechnen eines Eigenvektors haben wir immer \fat{einen Freiheitsgrad}, es entsteht immer eine Nullzeile beim Gauß-Verfahren. Das liegt daran, dass wir nur an der Richtung des Eigenvektors interessiert sind, nicht dessen Länge.
+		\n 
+		Wir können also (wie immer bei Freiheitsgraden), sobald wir bei der Nullzeile sind, einen Wert des Vektors festlegen und alle anderen anhand des festgelegten berechnen. Es gibt also im Prinzip unendlich viele Lösungen, aber jeder Lösungsvektor ist nur ein Vielfaches eines anderen Lösungsvektors.
+		\n 
+		In der Praxis würde man den Vektor so bestimmen, dass die Norm Eins beträgt.
+	}
+
+	\sbreak
+	\bsp{ Eigenwerte: 
+		\begin{align*}
+			A &= 
+			\begin{bmatrix}
+				1 & 0  \\
+				2 & 2 
+			\end{bmatrix} \\
+			\text{charakteristisches Polynom} := (A &- \lambda \unitM) = 
+			\begin{bmatrix}
+				1 - \lambda & 0 \\
+				2 & 2 - \lambda
+			\end{bmatrix} \\
+ 			\det(A - \lambda \unitM) &= (1 - \lambda) \cdot (2 - \lambda) \\
+			0 &= 2 - \lambda - 2\lambda + \lambda^2 \\
+			0 &= 2 - 3\lambda + \lambda^2
+ 		\end{align*}
+		P-Q Formel bzw. Mitternachtsformel\dots
+		\begin{align*} 
+ 			\lambda_1 &= 1 \\
+			\lambda_2 &= 2 
+ 		\end{align*}
+	}
+
+	\newpage
+	\bsp{ Eigenvektoren:
+		\n 
+		Obiges Beispiel weitergeführt, wir möchten die Eigenvektoren zu obigem $A$ erhalten.
+		\begin{align*} 
+ 			(A-\lambda_i \unitM)\; v_i = 0 
+ 		\end{align*}
+		Für beliebigen Eigenwert umgesetzt:
+		\begin{align*}
+			\begin{bmatrix}
+				1 - \lambda_i & 0 & | & 0  \\
+				2 & 2 - \lambda_i & | & 0
+			\end{bmatrix}
+		\end{align*}
+		Für $\lambda_1 = 1$ eingesetzt:
+		\begin{align*}
+			\begin{bmatrix}
+				0 & 0 & | & 0  \\
+				2 & 1 & | & 0
+			\end{bmatrix}
+		\end{align*}
+		Hier sehen wir den einen Freiheitsgrad. Wir setzen (beispielsweise) die zweite Komponente auf $1$. Es ergibt sich der Lösungsvektor und damit Eigenvektor des ersten Eigenwertes von $A$:
+		\begin{align*} 
+ 			v_1 = 
+ 			\nvector{
+	 			\nicefrac{-1}{2} \\
+	 			1
+ 			}
+ 		\end{align*}
+	}
+
+
+	\sbreak
+	\subsection{Kondition}
+	
+	\methode{
+		\n 
+		Um die Kondition eines Eigenwert- und Eigenvektorproblems zu bestimmen gehen wir davon aus, dass die Einträge der Matrix $A$ einen fehlerhaften Offset von $\epsilon$ besitzen. Wie sonst auch immer rechnen wir den Algorithmus einfach mit beliebigem, nicht festem Fehler $\epsilon$ aus und schauen uns an, wie stark sich der Fehler auf die Ausgabe auswirkt.
+	}
+
+	%	TBD
+	%}
+
+
+	\newpage
+	\subsection{Rayleigh Quotient}
+	
+	\defi{
+		\n 
+		Der Rayleigh Quotient ist eine Möglichkeit, einen Eigenwert einer Matrix $A$ mit gegebenem Eigenvektor $v$ "einfach" auszurechnen.
+		\\
+		Herleitung:
+		\begin{align*} 
+ 			A \cdot v &= \lambda v \\
+			v\trans \cdot A \cdot v &= \lambda \cdot v\trans \cdot v \\
+			\lambda &= \frac{v\trans\cdot A \cdot v}{v\trans \cdot v} 
+ 		\end{align*}
+	}
+
+	\sbreak
+	\methode{
+		\n 
+		Sei $v \in \Re^n$ ein Eigenvektor einer Matrix $A \in \reals^{n \times n}$. Der Eigenwert $\lambda$ zu diesem Eigenvektor $v$ der Matrix $A$ kann wie folgt berechnet werden:
+		\begin{align} 
+ 			\lambda = \frac{v\trans\cdot A \cdot v}{v\trans \cdot v} 
+		\end{align}
+	}
+
+	\sbreak
+	\bsp{
+		\n 
+		Obiges Beispiel:
+		\begin{align*}
+			A = 
+			\begin{bmatrix}
+				1 & 0  \\
+				2 & 2 
+			\end{bmatrix} 
+			\quad \quad
+			v_1 = 
+			\nvector{
+				\nicefrac{-1}{2} \\
+				1
+			}
+		\end{align*}
+		Rayleigh Quotient nutzen, um auf den Eigenwert zu schließen:
+		\begin{align*}
+			\lambda &= 
+				\frac{
+					\nvector{
+						-\frac{1}{2} & 1
+					} 
+					\cdot 
+					\begin{bmatrix}
+						1 & 0  \\
+						2 & 2 
+					\end{bmatrix}
+					\cdot 
+					\nvector{
+						\nicefrac{-1}{2} \\
+						1
+					}
+				}{ % frac
+					\nvector{
+						-\frac{1}{2} & 1
+					} 
+					\cdot
+					\nvector{
+						\nicefrac{-1}{2} \\
+						1
+					}
+				} \\
+			&= \frac{
+					\nvector{
+						1.5 & 2
+					}
+					\cdot 
+					\nvector{
+						\nicefrac{-1}{2} \\
+						1
+					}
+				}{ % frac
+					\nicefrac{5}{4}
+				} \\
+			&= \frac{\l(\nicefrac{-3}{4} + 2 \r) \cdot 4}{5} \\
+			&= \frac{1}{4} \cdot 4 = 1
+			%&= 1
+		\end{align*}
+		Stimmt, wie die vorherigen Beispielboxen zeigen \Laughey.
+	}
+
+
+	\newpage
+	\subsection{Vektor-/Poweriteration}
+	
+	\sbreak
+	\defi{ \n 
+		Die sogenannte Poweriteration ist ein Verfahren, welches Eigenwerte annähern kann. Um genau zu sein, wirft man in diesen Algorithmus die Matrix $A$ und einen Startvektor $x_0$. Dieser $x$-Vektor wird sich mit jeder Iteration dem Eigenvektor für den betragsmäßig größten Eigenwert von $A$ annähern.
+	}
+
+	\lbreak
+	\subsubsection{Direct Power Iteration}
+	
+	\methode{\n 
+		Die Iterationsvorschrift der Power-Iteration:
+		\begin{align} 
+ 			x_{k+1} = \frac{A \cdot x_k}{\norm{A \cdot x_k}} 
+ 		\end{align}
+		Der untere Teil des Bruchstrichs bedeutet einfach nur, dass nach jedem Schritt der Vektor wieder normalisiert wird.
+	}
+
+	\sbreak
+	\defi{ \n 
+		Das Verfahren hat aus dem Grund seinen Namen, weil man das ganze auch rekursiv formulieren kann. Dann wäre es:
+		\begin{align}
+		x_{k+1} = A^k \cdot x_0
+		\end{align}
+		Dann würde man erst danach normalisieren. Die Normalisierung in jedem Schritt (siehe iterative Formel) macht man eh nur aus Stabilitätsgründen, da ansonsten die Zahlen immer größer werden was bei unserer Arithmetik tendenziell zu größeren Fehlern führt.
+		\n 
+		Da man auch am Eigenwert interessiert ist, nutzt man den Rayleigh Quotient um aus einer Power Iteration Approximation eines Eigenvektors den zugehörigen Eigenwert zu erhalten.
+		\begin{align} 
+			\lambda_{k+1} = \frac{x_{k}\trans\cdot A \cdot x_{k}}{x_{k}\trans \cdot x_{k}} 
+		\end{align}
+	}
+
+	\newpage
+	\subsubsection{Shifted Power Iteration}
+	
+	\defi{ \n 
+		Man kann aber auch noch einen sogenannten \fat{Shift} $\mu$ einbauen. Mittels Shift kann die Matrix so manipuliert werden, dass die Eigenwerte um den Shift verschoben werden. Dadurch kann man erreichen, dass nun andere Eigenwerte der maximale Eigenwert sind und das Verfahren konvergiert gegen den entsprechend anderen Eigenwert. \n
+		Dieser Shift verschiebt im Grunde alle Eigenwerte um denselben Betrag nach unten. Also die Eigenwerte $\lambda_1 = 3$ und $\lambda_2 = 4$ mit einem Shift von $\mu = 4$ würden zu $-1$ und $0$ werden. Mit diesem Shift würde die Power Iteration zu ersterem Eigenwert konvergieren, da dieser mit dem Shift der \fat{betragsmäßig} größte ist.
+	}
+
+	\sbreak
+	\methode{ \fat{Shifted Power Iteration}
+		\begin{align} 
+ 			x_{k+1} = \frac{(A - \mu \cdot \unitM) \cdot x_k}{\norm{(A - \mu \cdot \unitM) \cdot x_k}} 
+ 		\end{align}
+		Im Grunde genommen ist dieser Shift also ein konstanter Offset aller Diagonaleinträge von $A$ jeder Iteration.
+	}
+
+	\sbreak
+	\defi{ \n 
+		Wenn wir einen Shift haben müssen wir das beim Ausrechnen des Eigenwertes berücksichtigen und dessen Auswirkung rückwirkend mitberechnen. Wir müssen dann die Formel für den Rayleigh Quotient wie folgt anpassen:
+		\begin{align} 
+		\lambda_{k+1} = \frac{x_{k}\trans\cdot (A - \mu \cdot \unitM) \cdot x_{k}}{x_{k}\trans \cdot x_{k}} + \mu
+		\end{align}
+	}
+
+	\sbreak
+	\wichtig{\n 
+		Wenn zwei Eigenwerte durch den Shift \fat{betragsmäßig} am größten sind, konvergiert die Power Iteration gar nicht mehr!
+	}
+
+
+	\newpage
+	\bsp{\n
+		Wir führen eine Power-Iteration über die folgende Matrix $A$ durch.
+		\begin{align*}
+			A = \nmatrix{2 & 2 \\ 4 & 0}
+		\end{align*}
+		Als Startvektor sei $x_0 = \nvector{1 \\ 0}$ gegeben.
+		\n
+		Zwei Schritte mit einem Shift $\mu = 0$:
+		\begin{align*}
+			x_1 &= A \cdot x_0 \\
+				&= \nmatrix{2 & 2 \\ 4 & 0} \cdot \nvector{1 \\ 0} \\
+				&= \nvector{2 \\ 4} \\
+				&\\
+			x_2 &= A \cdot x_1 \\
+				&= \nmatrix{2 & 2 \\ 4 & 0} \cdot \nvector{2 \\ 4} \\
+				&= \nvector{12 \\ 8}
+		\end{align*}
+		Dies würde sich (normiert) dem Vektor $(1, 1)\trans$ annähern, welche der Eigenvektor zu dem Eigenwert $\lambda_2 = 4$ ist, welcher der betragsmäßig größte von $A$ ist.
+		\n
+		Zwei Schritte mit einem Shift $\mu = 2$:
+		\begin{align*}
+		(A - \mu \unitM) &= \nmatrix{2-2 & 2 \\ 4 & 0-2} \\
+		x_1 &= \nmatrix{0 & 2 \\ 4 & -2} \cdot \nvector{1 \\ 0} \\
+			&= \nvector{0 \\ 4} \\
+			&\\
+		x_2 &= \nmatrix{0 & 2 \\ 4 & -2} \cdot \nvector{0 \\ 4} \\
+			&= \nvector{8 \\ -8}
+		\end{align*}
+	}
+	
+	\newpage
+	\subsubsection{Konvergenzrate}
+	
+	\defi{\n 
+		Die \fat{Konvergenzrate} der direkten Power Iteration sagt aus, wie schnell sich der Algorithmus der exakten Lösung annähert. Sie ist definiert als:
+		\begin{align} 
+ 			q = \abs{\frac{\lambda_2 - \mu}{\lambda_1 - \mu}} \qquad \in [0, 1]
+ 		\end{align}
+		Dabei ist $\lambda_2$ der betragsmäßig zweitgrößte und $\lambda_1$ der größte Eigenwert von $A$, den Shift jeweils schon einberechnet (verwirrend? Guck dir unten das Beispiel an!). 
+		\n
+		Die Eigenvektoren konvergieren linear (also quasi $\epsilon_{k+1} = \epsilon_{k} \cdot q$; mit $\epsilon$ als den Fehler) und die Eigenwerte quadratisch mit diesem Faktor. 
+		Aus diesem Grund ist das direkte Verfahren schlecht geeignet, wenn man viele Eigenwerte nahe dem maximalen Eigenwert hat. $q$ geht hierbei gegen 1. Die Konvergenzrate liegt immer zwischen $1$ und $0$, wobei $0$ Perfektion wäre, aka es konvergiert mit einem Schritt auf die analytisch korrekte Lösung.
+	}
+
+	\sbreak
+	\bsp{\n
+		Man hätte zwei Eigenwerte $3$ und $12$ und einen Shift von $\mu = 2$. Dadurch wäre der betragsmäßig größte Eigenwert $12-2$ und der zweitgrößte $3-2$ (mit dem Shift angegeben). Wir erhalten:
+		\begin{align*}
+			q = \abs{\frac{3 - 2}{12 - 2}} = \frac{1}{10}
+		\end{align*}
+		Das würde im Grunde also bedeuten, dass jede Power Iteration eine Dezimalstelle genauer wird.
+		\n
+		Nehmen wir nun $\mu = 6$. Wir erhalten:
+		\begin{align*}
+			q = \abs{\frac{3 - 6}{12 - 6}} = \frac{3}{6} = \frac{1}{3}
+		\end{align*}
+		Obwohl mit beiden Shifts die Power Iteration zu demselben Eigenwert konvergiert, hat der Shift einen Einfluss auf die Konvergenzgeschwindigkeit!
+		\n
+		Wählen wir dagegen $\mu > 7.5$, also beispielsweise $\mu = 10$, wird $3$ zum betragsmäßig größtem Eigenwert. Wir erhalten:
+		\begin{align*}
+			q = \abs{\frac{12 - 10}{3 - 10}} = \frac{2}{7}
+		\end{align*}
+	}
+
+	\newpage
+	\subsubsection{Inverse Power Iteration}
+	
+	\defi{ \n 
+		Natürlich gibt es dieses Verfahren noch invertiert. Hierbei konvergiert das Verfahren gegen den Eigenvektor des betragsmäßig \fat{kleinsten} Eigenwertes von $A$.
+	}
+
+	\sbreak
+	\methode{\n 
+		Mit
+		\begin{align} 
+ 			B = (A - \mu \cdot \unitM)\inv
+ 		\end{align}
+		ergibt sich die Iterationsvorschrift:
+		\begin{align} 
+ 			x_{k+1} = \frac{B \cdot x_k}{\norm{B \cdot x_k}} 
+ 		\end{align}
+	}
+
+	\sbreak
+	\defi{ \n 
+		Im obigen Methodenblock ist die Inverse Power-Iteration direkt mit Shift $\mu$ eingebaut worden, welcher analog zur nicht inversen Variante funktioniert. \\
+		Damit lassen sich dann ein paar nette Tricks machen. Möchte man den betragsmäßig kleinsten Eigenwert haben, lässt man die Inverse mit einem Shift von $\mu = 0$ laufen. Weiß man z.B., dass man drei Eigenwerte hat und den mittleren haben will, kann man die Inverse Power Iteration mit einem Shift von $0.5 \cdot (\lambda_1 + \lambda_2)$ laufen lassen. 
+		Durch das Benötigen der Inverse einer Matrix ist diese Methode aber laufzeit-technisch aufwändiger.
+	}
+	

@@ -1,0 +1,394 @@
+	 
+	 \newpage
+ % =========================================================
+	 \subsection{LR-Zerlegung} \label{chap:lr_zerlegung}
+ % =========================================================
+	
+	\defi{ \n	
+		Der LR-Zerlegungs Algorithmus soll eine bessere Variante sein, ein System der Form $Ax = b$ auszurechnen. Dazu trennt es die Matrix in zwei andere Matrizen $L$ und $R$ auf, die weitere Berechnungen einfacher gestalten lassen sollen.
+		\n
+		Was ist $L$, was ist $R$?
+		\n
+		Man schaue sich die Gauß Zeilenoperationen an einem allgemeinen Beispiel genauer an:
+		\begin{align*}
+			\begin{bmatrix}
+				a & d & g\\
+				b & e & h\\
+				c & f & i
+			\end{bmatrix} \Longrightarrow
+			\begin{bmatrix}
+				a & d & g\\
+				0 & e - \frac{d \cdot b}{a} & h - \frac{g \cdot  b}{a}\\
+				c & f & i
+			\end{bmatrix} \Longrightarrow \dots
+		\end{align*}
+		Nun ist die Idee, die Umformung jedes Schrittes nicht als Zeilenoperation umzusetzen, sondern eine Matrix zu finden, die multipliziert mit $A$ dasselbe Ergebnis liefert.
+%	}
+%	
+		\n	
+		Obigen Umformungsschritt kann man auch folgendermaßen schreiben:
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				-\frac{b}{a} & 1 & 0\\
+				0 & 0 & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				a & d & g\\
+				b & e & h\\
+				c & f & i
+			\end{bmatrix} = 
+			\begin{bmatrix}
+			a & d & g\\
+			0 & e - \frac{d \cdot b}{a} & h - \frac{g \cdot  b}{a}\\
+			c & f & i
+			\end{bmatrix}
+		\end{align*}
+		Wenn man mehrere Beispiele aufschreiben würde, kann man sehen, dass alle konstruierten Matrizen ähnlich der obigen ist. Wichtige Werte wie bei dem Beispiel das $-\frac{b}{a}$ stehen immer im links unteren Bereich der Matrix und die Diagonaleinträge sind immer Einsen.
+%	}
+%	
+		\n 
+		Die Idee der LR-Zerlegung ist es jetzt, alle diese konstruierten Matrizen aufeinander zu multiplizieren; wir nennen sie die inverse $L$ Matrix, also $L\inv$. Nun beschreibt $R$ die Matrix, die man bekommt, wenn man eine reguläre Vorwärtssubstitution ausführen würde, also eine rechts obere Dreiecksmatrix (wie wenn man Gauß Elimination anwenden würde).
+		Nochmal in kurz: 
+		\begin{align} 
+			L\inv \cdot A = R \sepArrow A = L \cdot R
+		\end{align}
+		Zusammengefasst ist $L$ eine links untere Dreiecksmatrix mit Einsen auf der Diagonalen und $R$ eine rechts obere Dreiecksmatrix.
+		\n
+		Nochmal zur Klarstellung: $A = L \cdot R$. Daher auch der Name LR-Zerlegung. Im Englischen spricht man von der LU-Zerlegung, da dort nicht links und rechts namensgebend war, sondern die untere (lower) $L$ und die obere (upper) $U$ Dreiecksmatrix. Es ist aber genau dasselbe!
+	}
+	
+	\sbreak
+	\methode{ Zerlegung der Matrix in $L$ und $R$: \n
+		Herleitungen sind toll, bringen uns aber auch nicht viel weiter, wenn wir nicht wissen, wie man $L$ und $R$ überhaupt ausrechnet.
+		\n
+		Es gibt mehrere Methoden, die Matrix zu zerlegen und $L$ und $R$ zu finden. Ich stelle euch jetzt meinen persönlichen Favoriten vor (das bedeutet nicht, dass es für euch unbedingt die beste Methode ist!).
+		\n
+		Schreiben wir auf, was wir über die Matrizen wissen:
+		\begin{align}
+			\begin{bmatrix}
+			& & \\
+			& A& \\
+			& & 
+			\end{bmatrix} = 
+			\begin{bmatrix}
+			1 & 0 & 0\\
+			& 1 & 0\\
+			&   & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+			&&&\\
+			0&&\\
+			0&0&
+			\end{bmatrix}
+		\end{align}
+		Diese Gleichung lässt sich lösen, da $A$ bekannt ist und wir mittels Matrixmultiplikation auf die Werte in $L$ und $R$ schließen können.
+	}
+	
+	\sbreak
+	\bsp{ \n Achtung, sehr lang!
+		\begin{align*}
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix}
+			 = 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				& 1 & 0\\
+				&   & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				  &	  &\\
+				0 &   &\\
+				0 & 0 &
+			\end{bmatrix}
+		\end{align*}
+		Schauen wir uns den ersten Wert an:
+		\begin{align*}
+			\begin{bmatrix}
+				\green{1}& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				\green{1} & \green{0} & \green{0}\\
+				& 1 & 0\\
+				&   & 1
+			\end{bmatrix} 
+			\cdot
+			\begin{bmatrix}
+				\green{x}&&&\\
+				\green{0}&&\\
+				\green{0}&0&
+			\end{bmatrix} \\
+	 		1\cdot x + 0\cdot0 &+ 0\cdot0 = 1 \quad \Longrightarrow x = 1 \\
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				& 1 & 0\\
+				&   & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				\red{1}&&&\\
+				0&&\\
+				0&0&
+			\end{bmatrix}
+		\end{align*}
+		%$$ \sbreak
+		Alle weiteren Schritte analog (etwas schneller)
+		\begin{align*}
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				\red{2}& 1 & 0\\
+				&   & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				1 & &&\\
+				0 & &\\
+				0 & 0&
+			\end{bmatrix} \\
+			\text{weil } x\cdot 1 + 1\cdot0 &+ 0\cdot0 = 2 \quad \Longrightarrow x = 2
+		\end{align*}
+		\n 
+		\begin{align*}
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				&  & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				1& \red{2}&& \\
+				0 & &\\
+				0 & 0 &
+			\end{bmatrix} \\
+			\text{weil } 1\cdot x + 0 &+ 0\cdot 0 = 2 \quad \Longrightarrow x = 2 \\
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				&  & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				1& 2& \\
+				0 & \red{-3}&\\
+				0 & 0 &
+			\end{bmatrix} \\
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				\red{3}&  & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				1& 2& \\
+				0 & -3&\\
+				0 & 0 &
+			\end{bmatrix} \\
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				3& \red{2} & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				1& 2& \\
+				0 & -3&\\
+				0 & 0 &
+			\end{bmatrix} \\
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				3& 2 & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				1& 2& \red{2}\\
+				0 & -3&\\
+				0 & 0 &
+			\end{bmatrix} \\
+			\begin{bmatrix}
+				1& 2& 2\\
+				2& 1& -2\\
+				3& 0& 2 
+			\end{bmatrix} &= 
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				3& 2 & 1
+			\end{bmatrix} \cdot
+			\begin{bmatrix}
+				1& 2& 2\\
+				0 & -3& \red{-6}\\
+				0 & 0 & \red{8}
+			\end{bmatrix}
+		\end{align*}
+		\n
+		Somit ergibt sich:
+		\begin{align*}
+			L =
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				3& 2 & 1
+			\end{bmatrix} \quad \quad
+			R = 
+			\begin{bmatrix}
+				1& 2& 2\\
+				0 & -3& -6\\
+				0 & 0 & 8
+			\end{bmatrix}
+		\end{align*}
+	}
+	
+	\sbreak
+	\defi{	\fat{Vorwärts- und Rückwärtssubst.}
+		\n 
+		Wenn wir jetzt die Vorwärts- und Rückwärtssubst. noch modifizieren, erhalten wir ein Verfahren, welches ein beliebiges LGS lösen kann.
+		\n 
+		Also vom Prinzip: 
+		\begin{align*} 
+			Ax &= b \\
+			A &= L \cdot R \\
+			\sepArrow LRx &= b 
+		\end{align*} 
+		Substituieren wir $Rx$ mit $y$, erhalten wir nachfolgende Methode.
+	}
+
+	\sbreak
+	\methode{
+		\n
+		LR-Zerlegungs-Verfahren zum Lösen eines LGS der Form $Ax = b$:
+		\begin{enumerate}
+			\item Zerlegung der Matrix: 
+				\begin{align}
+					A = L \cdot R
+				\end{align}
+			\item Vorwärtssubstitution: 
+				\begin{align}
+					Ly = b
+				\end{align}
+			\item Rückwärtssubstitution: 
+				\begin{align}
+					Rx = y
+				\end{align}
+		\end{enumerate}
+	}
+
+	\sbreak
+	\bsp{
+		\n 
+		Lösen wir vorheriges Beispiel zuende. Wir nehmen als $b$ dasselbe wie beim Gauß-Beispiel:
+		\begin{align*}
+			L =
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				3& 2 & 1
+			\end{bmatrix} \quad \quad
+			R = 
+			\begin{bmatrix}
+				1& 2& 2\\
+				0 & -3& -6\\
+				0 & 0 & 8
+			\end{bmatrix} \quad \quad 
+			b = 
+			\nvector{
+				3 \\ 2 \\ 6
+			}
+		\end{align*}
+		Vorwärtssubstitution, also $Ly = b$:
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 0 & 0\\
+				2& 1 & 0\\
+				3& 2 & 1
+			\end{bmatrix} \cdot
+			\nvector{
+				y_0 \\ y_1 \\ y_2
+			}
+			= 
+			\nvector{
+				3 \\ 2 \\ 6
+			}
+		\end{align*}
+		Lösen, indem wir nacheinander von oben nach unten einsetzen:
+		\begin{align*}
+			1 y_0 &= 3 \\
+			& \\
+			2 y_0 + 1 y_1 &= 2 \\
+			y_1 &= -4 \\
+			& \\
+			3 y_0 + 2 y_1 + y_2 &= 6 \\
+			9 + -8 + y_2 &= 6 \\
+			y_2 &= 5
+		\end{align*}
+		\n
+		Rückwärtssubstitution, also $Rx = y$:
+		\begin{align*}
+			\begin{bmatrix}
+				1& 2& 2\\
+				0 & -3& -6\\
+				0 & 0 & 8
+			\end{bmatrix}
+			\cdot 
+			\nvector{
+				x_0 \\ x_1 \\ x_2
+			}
+			= 
+			\nvector{
+				3 \\ -4 \\ 5
+			}
+		\end{align*}
+		Jetzt haben wir wieder genau dasselbe System wie nach Gauß, die Lösung ist logischerweise dieselbe (siehe \refChapter{chap:gausselim}).
+	}
+
+	\sbreak
+	\defi{
+		\n
+		Vorwärts und Rückwärtssubstitution aus dem Algorithmus sind dann auszurechnende LGSe mit der schönen Eigenschaft, dass man sie verhältnismäßig einfach ausrechnen kann (wegen den Dreiecksmatrizen).
+		\n 
+		Man kann jetzt sehr schnell sehen, warum das so effizient sein kann.
+		Denn egal was $b$ in der Gleichung ist, die Zerlegung für $A$ bleibt dieselbe und muss nach dem ersten Mal nicht mehr ausgerechnet werden.
+		\n 
+		So liegt der Aufwand bei der Berechnung mit Zerlegung in $\bigO(n^3)$, ohne Berechnung der Zerlegung (wenn wir sie schon haben) nur in $\bigO(n^2)$ und damit schneller als Gauß-Elimination.
+	}
+	
+	
+	\sbreak
+	\wichtig{
+		\n
+		Die LR-Zerlegung ist eine schöne Anwendung, wenn wir mit derselben Matrix $A$ viele LGS der Form $Ax = b$ lösen müssen!
+	}
+

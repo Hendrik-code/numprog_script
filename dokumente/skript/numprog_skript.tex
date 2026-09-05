@@ -1,0 +1,43 @@
+% ===========================================================================
+%  Das komplette Skript -- eine Quelle, zwei Ausgaben.
+%
+%      latexmk -pdf numprog_skript.tex
+%          Bildschirmfassung: farbige Infoboxen, klickbare Links, einseitig.
+%
+%      latexmk -pdf -usepretex -pretex='\def\npprint{}' \
+%              -jobname=numprog_skript_print numprog_skript.tex
+%          Druckfassung: Graustufen, zweiseitig mit Bundsteg, ohne Titelseite.
+%
+%  ./build.sh baut beide Varianten automatisch; der Unterschied zwischen ihnen
+%  steckt vollstaendig in den drei \ifdefined\npprint unten.
+% ===========================================================================
+
+\ifdefined\npprint
+	\documentclass[a4paper, twoside=semi]{scrartcl}
+\else
+	\documentclass{scrartcl}
+\fi
+
+% Pfad von hier zur Repository-Wurzel und gewuenschtes Layout
+% (siehe gemeinsam/preamble/preamble.tex).
+\newcommand{\npbase}{../../}
+\ifdefined\npprint
+	\newcommand{\npstyle}{print}
+\fi
+\input{\npbase gemeinsam/preamble/preamble}
+
+\ifdefined\npprint
+	\usepackage[outer=2.2cm, inner=4.0cm, twoside]{geometry}
+\else
+	\usepackage[left=3.1cm, right=3.1cm]{geometry}
+\fi
+
+\begin{document}
+	% Die Druckfassung geht in den Skriptenverkauf und bekommt dort ein eigenes
+	% Deckblatt, deshalb faengt sie direkt mit dem Inhaltsverzeichnis an.
+	\ifdefined\npprint\else
+		\input{\npbase gemeinsam/titelseiten/skript}
+		\newpage
+	\fi
+	\input{inhalt}
+\end{document}

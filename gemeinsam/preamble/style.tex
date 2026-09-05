@@ -1,0 +1,61 @@
+% ===========================================================================
+%  Page style: running head and foot, link colours, pgfplots defaults.
+%
+%  Loaded by preamble.tex -- do not \input it directly.  It relies on
+%  the packages from packages.tex and on the \ifnpprint switch that
+%  preamble.tex derives from \npstyle.
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+% Running head and foot
+% ---------------------------------------------------------------------------
+\ifnpfancy
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+\ifnpprint
+    % Print version: two-sided, page number on the outer edge, author in the
+    % footer (there are no clickable links on paper).
+    \fancyhead[LE,RO]{\slshape\leftmark}
+    \fancyfoot[CE,CO]{\npauthor{} -- \npauthorurl}
+    \fancyfoot[LE,RO]{\textbf{\thepage}}
+\else
+    % Screen version: author link on the left, current section centred, and a
+    % "back to the table of contents" link in the footer.
+    \fancyhead[L]{\href{\npauthorurl}{\npauthor}}
+    \fancyhead[C]{\leftmark}
+    \fancyfoot[C]{\textbf{\thepage}}
+    \fancyfoot[R]{\hyperlink{page.2}{To the Table of Contents}}
+\fi
+\fi
+
+% ---------------------------------------------------------------------------
+% Hyperlinks
+% ---------------------------------------------------------------------------
+\hypersetup{
+    colorlinks = true,
+    linktoc    = all,
+}
+\ifnpprint
+    \hypersetup{linkcolor = black, urlcolor = black}
+\else
+    \hypersetup{linkcolor = blue,  urlcolor = blue}
+\fi
+
+% ---------------------------------------------------------------------------
+% pgfplots: the marker cycle used by the plots in the script
+% ---------------------------------------------------------------------------
+\ifnpprint
+    \pgfplotsset{cycle list name=black white}
+\else
+    \pgfplotsset{
+        cycle list/.define={my marks}{
+            every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=*\
+            every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=square*\
+            every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=triangle*\
+            every mark/.append style={solid,fill=\pgfkeysvalueof{/pgfplots/mark list fill}},mark=diamond*\
+        },
+    }
+\fi

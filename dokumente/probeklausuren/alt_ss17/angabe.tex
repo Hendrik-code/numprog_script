@@ -1,0 +1,225 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \usepackage{tikz}
+ \usetikzlibrary{datavisualization}
+ \usetikzlibrary{datavisualization.formats.functions}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Sommersemester 2017}
+\author{\npauthor{}}
+\date{Version vom: \today}
+\maketitle
+
+\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben oder Lösungen. \n Des Weiteren ist diese Klausur nur als ein ''Vorschlag'' von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Altklausuren (der von Sommersemester 2017 zum Beispiel) oder Aufgaben sind vollkommen willkürlich.}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90 Minuten
+	\item In dieser Klausur können Sie insgesamt 42 Punkte erreichen. \\Zum Bestehen werden 17 Punkte benötigt.
+	\item Die einzelnen Teilaufgaben sind unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+
+%--------------------------------------------------------------
+\task{Gleitkommazahlen \& Kondition [4 + 3 = 7 Pkt.]}
+%--------------------------------------------------------------
+	a) 
+	Schreiben sie $x = \frac{1}{7}$ als binäre IEEE floating point number um. Schreiben sie alle 32 Bits auf und markieren sie die einzelne Teile.
+	\n
+	Hinweis: IEEE Format verwendet 1 Bit für das Vorzeichen, 8 für den Exponenten und 23 Bits für die Mantisse. 
+	\lbreak \lbreak \lbreak \lbreak \lbreak
+	\\
+%	b) 
+%	Codeausschnitt:
+%		float i, end;
+%		end = 1024 * 1024 * 1024;
+%		for (i = 0; i < end; i++) {
+%			doAwesomeStuff(i);
+%		}
+%	Wenn man obigen Code ausführt passiert etwas unerwartetes: Das Programm läuft länger als erwartet und Sie müssen es abbrechen.
+
+%--------------------------------------------------------------
+\task{Matrixkondition, Ausgleichsproblem [11 Pkt.]}
+%--------------------------------------------------------------
+	a)
+	Wir haben eine \fat{symmetrische positiv definite} Matrix $A \in \reals^{n \times n}$ und die Eigenwerte $\lambda_k$ für $k=1, \dots, n$. 
+	\n 
+	Außerdem soll gelten: $0 < \lambda_1 < \lambda_2 < \dots < \lambda_n$.
+	\n 
+	Berechnen Sie die Kondition von A. \\
+	\textbf{Hinweis:} Die Kondition einer Matrix wird berechnet mit $\cond(A) = \abs{A} \cdot \abs{A\inv}$. Weiterhin gilt (bei symmetrisch positiv definiten Matrizen): $\abs{A} = \max(\lambda_1, \lambda_2, \dots, \lambda_n)$. Eigenwerte von $A\inv$ sind die Kehrbrüche der Eigenwerte von $A$.
+	\n
+	Berechnen Sie außerdem die Kondition der Matrix $B= A^TA$. Geben Sie diese in Abhängigkeit zu der Kondition von $A$ an.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Ein überbestimmtes LGS mit Matrixkondition $10^8$ soll gelöst werden. Die Eingaben sind auf Maschinengenauigkeit genau (Eingabefehler also bei $10^{-15})$ und die Ergebnisse sollen eine Genauigkeit von mindestens $10^{-5}$ haben.
+	\n 
+	Das Ergebnis aus vorheriger Teilaufgabe einbeziehend: Welches der Verfahren QR-Zerlegung und Normalengleichung können Sie zur Lösung dieses Problems verwenden und warum?
+	\n 
+	\textbf{Hinweis:} Es ist annehmbar, dass die Kondition für eine überbestimmte Matrix ähnliche wie die einer quadratischen symmetrischen und positiv definiten Matrix ist.
+	\lbreak \lbreak \lbreak
+	\\
+	(c) 
+	Geben Sie die Lösung des überbestimmten LGS mittels QR-Zerlegung an:
+	\begin{align*}
+		\begin{bmatrix}
+			3 & 6\\
+			0 & 10\\
+			4 & 8
+		\end{bmatrix} \cdot
+		\begin{pmatrix}
+			x_1 \\
+			x_2 
+		\end{pmatrix} = 
+		\begin{pmatrix}
+			5 \\ 5 \\ 5
+		\end{pmatrix}
+	\end{align*}
+
+
+%--------------------------------------------------------------
+\task{  Quadratur [2 + 3 + 3 + 1 Pkt.]}
+%--------------------------------------------------------------
+
+	\begin{align*}
+	f(x) = x^5 + 12 \cdot x^2
+	\end{align*}
+	Wir möchten die Funktion $f(x)$ im Intervall $[a, b] = [-1, 1]$ numerisch integrieren, sprich eine Annäherung für das Integral finden.
+	
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				axis lines=left,
+				xlabel=$x$,
+				ylabel=$y$,
+				grid=major,
+				enlargelimits]
+			\addplot[domain=-2:2] {x^5+12*x^2} node[left]{$f(x)$};
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Plot der Funktion $f$}
+	\end{figure}
+	\noindent(a)
+	Berechnen Sie das Integral $I(f)$ analytisch.
+	\lbreak \lbreak \lbreak
+	\\
+	(b)
+	Berechnen Sie die Trapezsumme $Q_{TS}(f;h)$ für $N=2$.
+	\n 
+	Markieren Sie die berechnete Fläche auch grafisch in obige Abbildung.
+	\lbreak \lbreak \lbreak
+	\\
+	(c)
+	Berechnen Sie die Lösung der Annäherung mithilfe der Gaußquadratur $Q_G(f;3)$ mit $3$ Punkten. Gegeben sei:
+	$x_0 = -\sqrt{\frac{3}{5}}, x_1 = 0, x_2 = \sqrt{\frac{3}{5}}$ und für die Gewichtungen $w_0 = \frac{5}{9}, w_1 = \frac{8}{9}, w_2 = \frac{5}{9}$. \\
+	Was beobachten Sie? Warum?
+	\lbreak \lbreak \lbreak
+	\\
+	(d)
+	Ihre Approximation ist Ihnen in der Regel aber nicht gut genug und Sie wollen die Anzahl der Stützstellen verdoppeln. Was für ein Nachteil hat die Gauß-Quadratur gegenüber der Trapezregel wenn wir davon ausgehen, dass die Berechnung der Stützstellen $x_i$ und Gewicht $w_i$ keine Berechnungen benötigt?
+
+	
+%--------------------------------------------------------------
+\task{  Fixpunktiteration [2 + 4 + 2 Pkt.]}
+%--------------------------------------------------------------
+	
+	\begin{align*}
+		f(x) = x^2 - 2x + 1
+	\end{align*}
+	\\
+	(a)
+	Sie möchten das Newton-Verfahren für die Nullstellenbestimmung auf die obige Funktion anwenden, Ihnen fällt jedoch auf, dass das Newton Verfahren deutlich langsamer ist als Sie es gewohnt sind. Warum?
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Zeigen Sie für das Newton-Verfahren, dass die 3 Bedingungen des Banach'schem Fixpunktsatzes gelten. Verwenden Sie hierfür die Gleichung, die man erhält, wenn man $f(x)$ in das Newton-Verfahren einsetzt und das Intervall $I=[0;2]$.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c)
+	Modifizieren Sie das Newton-Verfahren derart, dass die normale Konvergenzgeschwindigkeit erreicht wird.
+	\n 
+	Führen Sie dann einen Zeitschritt mit Startwert $x_0=0$ durch.
+
+
+%%--------------------------------------------------------------
+%\task{  Differentialgleichungen [X + X Pkte]}
+%%--------------------------------------------------------------
+%	
+%	Erklärung
+%	(a)
+%	Aufgabenstellung
+%	\lbreak \lbreak \lbreak \lbreak
+%	\\
+%	(b)
+%	Aufgabenstellung
+%	
+
+
+%--------------------------------------------------------------
+\task{  Programmieraufgabe [7 Pkt.]}
+%--------------------------------------------------------------
+
+	Es soll Polynominterpolation mit Aitken-Neville umgesetzt werden.
+	\n 
+	Hier kommt dann eine Menge Erklärung, Dreiecksschema und die Kombinationsformel. Schaut das einfach in meinem Skript nach.
+	\n 
+	Implementieren Sie die Methode getInterpolation, welche den Wert mit dem Schema von Aitken-Neville an der Stelle interpolationsPunkt berechnet und dabei alle übergebenen Stützstellen verwendet.
+	
+	\begin{lstlisting}
+		public static double getInterpolation(double interpolationsPunkt, double[] stuetzstellen, double[] werteAnStuetzstellen) {
+		
+			int n = stuetzstellen.length;
+			double[][] p = new double[n][n];
+			
+			// Implementieren Sie diese Methode
+			prepareAitkenNeville(werteAnStuetzstellen, n, p);
+			return runAitkenNeville(interpolationsPunkt, stuetzstellen, n, p);
+		}
+		
+		// Setzt Startwerte fuer k=0
+		private static void prepareAitkenNeville(double[] werteAnStuetzstellen, int n, double[][] p) {
+		
+		
+		}
+		
+		// Berechnet mit Aitken Neville die Interpolation
+		private static double runAitkenNeville(double interpolationsPunkt, double[] stuetzstellen, int n, double[][] p) {
+		
+		
+		}
+	\end{lstlisting}
+
+\end{document}

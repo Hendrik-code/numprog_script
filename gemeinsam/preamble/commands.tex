@@ -1,0 +1,795 @@
+% ===========================================================================
+%  Document macros shared by all article-style documents.
+%
+%  Loaded last by preamble.tex, so every package and the \ifnpprint
+%  switch are already available here.
+%
+%  The macros you will actually use while writing content:
+%
+%      \defi{...}     green  "Erklärung"  box   -- a definition / explanation
+%      \methode{...}  blue   "Vorgehen"   box   -- a recipe, step by step
+%      \bsp{...}      orange "Beispiel"   box   -- a worked example
+%      \wichtig{...}  red    "Wichtig"    box   -- something not to forget
+%      \vertief{...}  brown  "Vertiefung" box   -- optional deeper background
+%
+%      \pic{f}        \picS{f}{width}     \picC{f}{width}{caption}
+%                     include gemeinsam/bilder/f, relative to \linewidth
+%
+%      \n \sbreak \lbreak     vertical space,  \fat{...}  bold,  \qu{...} quotes
+%
+%  In the print variant (\npstyle = print) every box is black and \red / \green
+%  / ... fall back to bold text, so nothing depends on colour being visible.
+% ===========================================================================
+
+\newcommand{\qu}[1]{\enquote{#1}}
+
+% ---------------------------------------------------------------------------
+% Where the images live.  Documents that sit deeper in the tree only have to
+% set \npbase; the picture macros follow automatically.
+% ---------------------------------------------------------------------------
+\providecommand{\nppicdir}{\npbase gemeinsam/bilder/}
+
+% ===========================================================================
+% Info boxes
+% ===========================================================================
+
+\definecolor{lightgray}{gray}{0.95}
+\definecolor{middlegray}{gray}{0.75}
+\definecolor{darkgreen}{rgb}{0, 0.5, 0}
+
+% A vertical coloured bar down the left margin of a block of text.
+\newenvironment{MyLeftBar}[1]{%
+	\def\FrameCommand##1{\textcolor{#1}{\vrule width 2pt} \hspace{9pt}##1}%
+	\MakeFramed {\advance\hsize-\width \FrameRestore}}%
+{\endMakeFramed}
+
+\newenvironment{LeftBar}[1]{%
+	\def\FrameCommand##1{\textcolor{#1}{\vrule width 2pt} \hspace{9pt}##1}%
+	\MakeFramed {\advance\hsize-\width \FrameRestore}}%
+{\endMakeFramed}
+
+\newenvironment{InfoBox}[3]{
+	\begin{LeftBar}{#2}\hspace{-25pt}\colorbox{#2}{\textbf{\textcolor{white}{#1}}}{\indent{}#3\vspace{0.5em}\\noindent}}{\end{LeftBar}}
+
+% notebox{colour}{label}{body} -- the coloured bar with a title tag.
+% NOTE: this used to be called \note, which clashes with beamer's \note and
+% broke every presentation that loaded this file.
+\newcommand*{\notebox}[3]{%
+	\begin{MyLeftBar}{#1}\begin{samepage}%
+		\hspace{-25pt}\colorbox{#1}{\textbf{\textcolor{white}{#2}}}{\indent #3}%
+	\end{samepage}\end{MyLeftBar}}
+
+% The five box flavours.  \npboxcolor picks the accent colour, or black when
+% the document is built for grayscale printing.
+\ifnpprint
+	\newcommand*{\npboxcolor}[1]{black}
+\else
+	\newcommand*{\npboxcolor}[1]{#1}
+\fi
+
+\newcommand*{\methode}[1]{\notebox{\npboxcolor{blue}}{Vorgehen}{\hspace{1em} #1}}
+\newcommand*{\bsp}[1]{\notebox{\npboxcolor{orange}}{Beispiel}{\hspace{1em} #1}}
+\newcommand*{\wichtig}[1]{\notebox{\npboxcolor{red}}{Wichtig}{\hspace{1em} #1}}
+\newcommand*{\defi}[1]{\notebox{\npboxcolor{darkgreen}}{Erklärung}{\hspace{1em} #1}}
+\newcommand*{\vertief}[1]{\notebox{\npboxcolor{brown}}{Vertiefung}{\hspace{1em} #1}}
+
+% ===========================================================================
+
+
+% =========================================================
+%\green{Defintion}
+%\red{Wichtig}
+%\orange{Beispiel(e)}
+%\blue{Erklärung/Methodik und im Anderen Aufgaben}
+
+% =========================================================
+% Ref Commands
+% =========================================================
+
+% References:
+\newcommand{\refFigure}[1]{\hyperref[#1]{Figur \ref{#1}}}
+\newcommand{\refTable}[1]{\hyperref[#1]{Tabelle \ref{#1}}}
+\newcommand{\refChapter}[1]{\hyperref[#1]{Kapitel \ref{#1}}}
+\newcommand{\refEquation}[1]{\hyperref[#1]{Gleichung \ref{#1}}}
+
+% multiple refs:
+\newcommand{\refChapters}[2]{\hyperref[#1]{Kapitel \ref{#1}} \hyperref[#2]{und \ref{#2}}}
+
+
+% =========================================================
+% Text Commands
+% =========================================================
+
+\newcommand{\lingform}[1]{{\it{#1}}}		% linguistic form
+\newcommand{\scare}[1]{`#1'} 
+\newcommand{\code}[1]{{\tt{#1}}}
+
+\newcommand{\marK}[2]{\fcolorbox{#1}{white}{#2}}
+
+% Inline highlighting.  In the print variant colour carries no information,
+% so every one of these degrades to bold text instead of a grey smudge.
+\ifnpprint
+	\def\red#1{\textbf{#1}}
+	\def\blue#1{\textbf{#1}}
+	\def\orange#1{\textbf{#1}}
+	\def\green#1{\textbf{#1}}
+	\def\gray#1{#1}
+	\def\lightgray#1{#1}
+	\def\black#1{#1}
+\else
+	\def\red#1{\textcolor{red!90!black}{#1}}
+	\def\blue#1{\textcolor{blue!75!black}{#1}}
+	\def\orange#1{\textcolor{orange!95!black}{#1}}
+	\def\green#1{\textcolor{green!50!black}{#1}}
+	\def\gray#1{\textcolor{gray!90!black}{#1}}
+	\def\lightgray#1{\textcolor{lightgray!90!black}{#1}}
+	\def\black#1{\textcolor{black}{#1}}
+\fi
+
+\renewcommand{\Re}{\mathbb{R}}
+
+\renewcommand*{\thefootnote}{*}
+
+\def\checkc{\text{\textcolor{green!50!black}{\ding{51}}}}
+\def\checkx{\text{\textcolor{red}{\ding{55}}}}
+
+\newcommand{\fat}[1]{\textbf{#1}}
+\newcommand{\ftitle}[2]{\huge #2{#1}\vspace{.5in}\normalsize}
+
+\newcommand{\sbreak}{\vspace{0.1in}}
+\newcommand{\lbreak}{\vspace{0.3in}}
+
+\newcommand{\noted}{\sbreak \\}
+\newcommand{\n}{\sbreak \\}
+
+\newcommand{\itemf}{\vfill \item}
+
+\newcommand{\task}[1]{\newpage \section{#1}}
+\newcommand{\sol}[1]{\green{#1}}
+
+% Add another entry
+\newcommand{\aae}{; \hspace{0.25cm} }
+
+% Standard picture
+\newcommand{\pic}[1]{
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=0.45\linewidth]{\nppicdir #1}
+	\end{figure}
+}
+\newcommand{\picS}[2]{
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=#2\linewidth]{\nppicdir #1}
+	\end{figure}
+}
+\newcommand{\picC}[3]{
+	\begin{figure}[htbp]
+		\centering
+		\includegraphics[width=#2\linewidth]{\nppicdir #1}
+		\caption{#3}
+	\end{figure}
+}
+
+% =========================================================
+% Table commands:
+% =========================================================
+
+\newcommand{\greyMidRule}{\arrayrulecolor{black!30}\midrule}
+
+% =========================================================
+% Specific math variables:
+% =========================================================
+
+\newcommand{\fabs}{f_{\text{abs}}}
+\newcommand{\frel}{f_{\text{rel}}}
+
+\newcommand{\maxError}{\epsilon_{\text{Ma}}}
+
+\newcommand{\mddots}{\reflectbox{$\ddots$}}
+
+
+\newcommand{\umax}{_\text{max}}
+\newcommand{\umin}{_\text{min}}
+
+% =========================================================
+% Math Commands
+% =========================================================
+
+% Should be renamed or removed
+\newcommand{\st}[1]{^{(#1)}}
+
+% vertical line in the middle:
+\newcommand{\separator}[1]{\; #1 \;}
+\newcommand{\sep}{\separator{|}}
+\newcommand{\sepArrow}{\separator{\Longleftrightarrow}}
+
+% BigO
+\newcommand{\bigO}{\mathcal{O}} % Big-O notation
+
+% Norm with double |
+
+% Matrix Transpose and inverted
+\newcommand{\trans}{^{\mathrm{\mathsmaller T}}}
+\newcommand{\inv}{^{\mathrm{\mathsmaller{\text{-}1}}}}
+\newcommand{\unitM}{\mathbb{1}}
+
+
+% informal descriptions:
+\newcommand{\uleftDown}{_\text{linksUnten}}
+\newcommand{\uleftUp}{_\text{linksOben}}
+\newcommand{\uleft}{_\text{links}}
+\newcommand{\uleftDiagonal}{_\text{ganzLinksUnten}}
+\newcommand{\uleftUpDiagonal}{_\text{ganzLinksOben}}
+
+% Soll sein
+\newcommand{\shouldEq}{ \stackrel{!}{=} }
+
+% Formelnamen:
+\newcommand{\QT}{Q_{\text{T}}}
+\newcommand{\QTS}{Q_{\text{TS}}}
+\newcommand{\QS}{Q_{\text{S}}}
+\newcommand{\QSS}{Q_{\text{SS}}}
+\newcommand{\RTS}{R_{\text{TS}}}
+\newcommand{\RSS}{R_{\text{SS}}}
+%--------------------------
+
+% correct strange spacing around delimiters
+\renewcommand{\l}{\mathopen{}\mathclose\bgroup\left}
+\renewcommand{\r}{\aftergroup\egroup\right}
+
+% norms
+\newcommand{\norm}[1]{\l\lVert #1 \r\rVert}
+\newcommand{\pnorm}[2]{\norm{#1}_{#2}}
+
+% column vectors		(z.B. \colvec{3}{x_1}{\vdots}{x_n})
+\newcount\colveccount
+\newcommand*\colvec[1]{
+	\global\colveccount#1
+	\begin{pmatrix}
+		\colvecnext
+	}
+	\def\colvecnext#1{
+		#1
+		\global\advance\colveccount-1
+		\ifnum\colveccount>0
+		\\
+		\expandafter\colvecnext
+		\else
+	\end{pmatrix}
+	\fi
+}
+
+\newcommand{\nvector}[1]{
+	\begin{pmatrix}
+		#1
+	\end{pmatrix}
+}
+
+\newcommand{\nmatrix}[1]{
+	\begin{bmatrix}
+		#1
+	\end{bmatrix}
+}
+
+% congruence modulo n
+\def\congr#1{\equiv_{#1}}
+\def\ncongr#1{\not \equiv_{#1}}
+
+\def\dann#1#2{
+	\begin{array}{lll}
+		#1 & \Longrightarrow & #2
+	\end{array}
+}
+
+\def\gdw#1#2{
+	\begin{array}{lll}
+		#1 & \Longleftrightarrow & #2
+	\end{array}
+}
+
+\def\defgdw#1#2{
+	\begin{array}{lll}
+		#1 & :\Longleftrightarrow & #2
+	\end{array}
+}
+
+\def\nLongrightarrow{\centernot \Longrightarrow}
+\def\nLongleftrightarrow{\centernot \Longleftrightarrow}
+\def\nforall{\centernot \forall}
+\def\nexists{\centernot \exists}
+\def\nsqsubseteq{\centernot \sqsubseteq}
+\def\nsubset{\centernot \subset}
+\def\nequiv{\centernot \equiv}
+
+\def\symdif{\triangle}
+\def\imp{\rightarrow}
+\def\bik{\leftrightarrow}
+\def\xor{\oplus}
+\def\nand{\, \bar{\land}\,}
+\def\nor{\,\bar{\lor}\,}
+
+
+\def\iv#1{\overset{\text{I.V.}}{#1}}
+
+% equivalence relations
+\newcommand{\quotientset}[2]{{{#1}/{#2}}}			% curly brackets around #1 and #2 because of some spacing problems
+\renewcommand{\index}[2]{\card{\quotientset{#1}{#2}}}
+
+% discrete intervals (with or without zero)
+\newcommand{\di}[2]{\set{#1,\ldots,#2}}				% {a,...,b}
+\newcommand{\dizero}[1]{\sb{#1}_0}					% [n]_0 = {0,...,n}
+\newcommand{\dione}[1]{\sb{#1}}						% [n] = {1,...,n}
+
+% cardinality
+\newcommand{\card}[1]{\l|#1\r|}
+\newcommand{\cardalt}[2]{
+	\ifthenelse{#1 = 1}{\operatorname{card}\(#2\)}{
+		\ifthenelse{#1 = 2}{\#\(#2\)}{
+			\ifthenelse{#1 = 3}{n\(#2\)}{
+				\ifthenelse{#1 = 4}{\overline{\overline{#2}}}{
+					\text{TODO: Command not defined!}
+				}
+			}
+		}
+	}
+}
+
+% matrix/vector entries
+\newcommand{\mentry}[3]{#1_{#2 #3}}
+
+% word length
+\newcommand{\wordlength}[1]{\l|#1\r|}
+\newcommand{\length}[1]{\l|#1\r|}
+
+% number of characters in word
+\newcommand{\numchar}[2]{\l|#2\r|_{#1}}
+\newcommand{\numcharalt}[3]{
+	\ifthenelse{#1 = 1}{\#_{#2}\rb{#3}}{
+		\text{TODO: Command not defined!}
+	}
+}
+
+% complement set
+\newcommand{\compl}[1]{\overline{#1}}
+
+% power set
+\newcommand{\powersetempty}[0]{\mathcal{P}}
+\newcommand{\powerset}[1]{\powersetempty\l(#1\r)}
+\newcommand{\powersetalt}[2]{
+	\ifthenelse{#1 = 1}{P\(#2\)}{
+		\ifthenelse{#1 = 2}{\mathbb{P}\(#2\)}{
+			\ifthenelse{#1 = 3}{\wp\(#2\)}{
+				\ifthenelse{#1 = 4}{2^{#2}}{
+					\text{TODO: Command not defined!}
+				}
+			}
+		}
+	}
+}
+
+% sets
+\newcommand{\set}[1]{\left\{#1\right\}}
+\newcommand{\suchthat}[0]{\, \middle| \,}
+\newcommand{\suchthatalt}[1]{
+	\ifthenelse{#1 = 1}{:}{
+		\ifthenelse{#1 = 2}{\, ;}{
+			\text{TODO: Command not defined!}
+		}
+	}
+}
+
+% number sets
+\newcommand{\booleans}[0]{\mathbb{B}}			% Perhaps call it \binaries and defined it as \residuals{2} instead.
+\newcommand{\naturals}[0]{\mathbb{N}}
+\newcommand{\wholes}[0]{\mathbb{N}_0}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\rationals}[0]{\mathbb{Q}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\complexes}[0]{\mathbb{C}}
+\newcommand{\residuals}[1]{\mathbb{Z}_{#1}}
+\newcommand{\primes}[0]{\mathbb{P}}
+
+% multisets
+\newcommand{\multiset}[1]{\left\{\!\left\vert #1 \right\vert\!\right\}}
+\newcommand{\multisetalt}[2]{
+	\ifthenelse{#1 = 1}{\set{#2}}{
+		\text{TODO: Command not defined!}
+	}
+}
+
+% concatenation
+\newcommand{\concat}[0]{\circ}
+\newcommand{\concatalt}[2]{
+	\ifthenelse{#1 = 1}{}{
+		\ifthenelse{#1 = 2}{\parallel}{
+			\text{TODO: Command not defined!}
+		}
+	}
+}
+
+% continous intervals (o = open, c = closed, i = infinity)
+\newcommand{\cc}[2]{\l[#1,#2\r]}
+\newcommand{\co}[2]{\l[#1,#2\r)}
+\newcommand{\ci}[1]{\l[#1,\infty\r]}
+\newcommand{\oc}[2]{\l(#1,#2\r]}
+\newcommand{\oo}[2]{\l(#1,#2\r)}
+\newcommand{\oi}[1]{\l(#1,\infty\r)}
+\newcommand{\ic}[1]{\l(-\infty,#1\r]}
+\newcommand{\io}[1]{\l(-\infty,#1\r]}
+\newcommand{\ii}[0]{\l(-\infty,\infty\r)}
+
+% Fourier
+\newcommand{\fourier}[3]{\mathcal{F}_{#1,#2}\l(#3\r)}
+\newcommand{\Pveca}[1]{P_{\vec{a}}\l(#1\r)}
+
+% falling and rising factorials
+\newcommand{\fallfac}[2]{#1^{\underline{#2}}}
+\newcommand{\risefac}[2]{#1^{\overline{#2}}}
+
+% binomial coefficient
+\newcommand{\bin}[2]{\binom{#1}{#2}}
+
+% stirling numbers
+\newcommand{\stirlf}[2]{\genfrac{[}{]}{0pt}{}{#1}{#2}}
+\newcommand{\stirls}[2]{\genfrac{\{}{\}}{0pt}{}{#1}{#2}}
+
+% sequences
+\newcommand{\seq}[3]{
+	\ifthenelse{#3 = 0}{(#1_#2)_{#2 \in \wholes}}{
+		\ifthenelse{#3 = 1}{(#1_#2)_{#2 \in \naturals}}{
+			(#1_#2)_{#2 \geq #3}
+		}
+	}
+}
+
+% series
+\newcommand{\ser}[3]{
+	\sum_{#1=#2}^{\infty} #3
+}
+
+% general series
+\newcommand{\genser}[1]{
+	\ser{k}{1}{#1_k}
+}
+
+% zero set
+\newcommand{\zeroset}[1]{\preimage{#1}{0}}		% set of all roots of a function #1
+
+% preimage
+\newcommand{\preimage}[2]{#1^{-1}\l(#2\r)}		% set of all x suchthat #1(x) = #2
+
+% brackets (round, square, curly, angled)
+\renewcommand{\(}[0]{\l(}						% \(...\) was defined for $...$ as \[...\] for $$...$$
+\renewcommand{\)}[0]{\r)}
+\newcommand{\rb}[1]{\l(#1\r)}
+\renewcommand{\sb}[1]{\l[#1\r]}
+\newcommand{\cb}[1]{\l\{#1\r\}}
+\newcommand{\ab}[1]{\l\langle#1\r\rangle}
+
+% generating set
+\newcommand{\generatingset}[1]{\ab{#1}}
+
+% floor and ceiling
+\newcommand{\ceil}[1]{\l\lceil#1\r\rceil}
+\newcommand{\floor}[1]{\l\lfloor#1\r\rfloor}
+
+
+% absolute value
+\newcommand{\abs}[1]{\l|#1\r|}
+
+% integrals
+\newcommand{\integral}[4]{\int_{#1}^{#2} #3 \ \mathrm{d}#4}
+\newcommand{\antiderivative}[2]{\integral{}{}{#1}{#2}}
+\renewcommand{\d}[1]{\ \mathrm{d}#1}
+
+% logarithms
+\newcommand{\ld}[0]{\operatorname{ld}}
+\newcommand{\lb}[0]{\operatorname{lb}}
+
+% signum function
+\newcommand{\sgn}[0]{\operatorname{sgn}}
+
+% fixed set
+\newcommand{\fix}[0]{\operatorname{fix}}		% fix(f) = {x|f(x) = x}
+
+% closures
+\newcommand{\refl}[0]{\operatorname{ref}}
+\newcommand{\symm}[0]{\operatorname{sym}}
+
+% sets of functions
+\newcommand{\inj}[0]{\operatorname{inj}}
+\newcommand{\surj}[0]{\operatorname{surj}}
+\newcommand{\bij}[0]{\operatorname{bij}}
+
+% fields
+\newcommand{\charac}[0]{\operatorname{char}}
+\newcommand{\GF}[0]{\operatorname{GF}}
+
+% least common multiple and greatest common divisor
+\newcommand{\ggT}[0]{\operatorname{ggT}}
+\newcommand{\kgV}[0]{\operatorname{kgV}}
+
+% average
+\newcommand{\avg}[0]{\operatorname{avg}}
+
+% order
+\newcommand{\ord}[0]{\operatorname{ord}}
+
+% ----------
+% round 
+\newcommand{\rd}[0]{\operatorname{rd}}
+\newcommand{\rdM}[0]{\operatorname{rd_M}}
+
+% condition value
+\newcommand{\cond}[0]{\operatorname{cond}}
+
+% complex numbers
+\newcommand{\realPart}{\operatorname{Re}}
+\newcommand{\imaginaryPart}{\operatorname{Im}}
+
+% Fourier transformation
+\newcommand{\DFT}{\operatorname{DFT}}
+\newcommand{\IDFT}{\operatorname{IDFT}}
+\newcommand{\FFT}{\operatorname{FFT}}
+\newcommand{\BFO}{\operatorname{BFO}}
+
+% diagonal entries of a matrix
+\newcommand{\diag}{\operatorname{diag}}
+% --------
+
+% sequent calculus
+\newcommand{\FL}[0]{\operatorname{FL}}
+\newcommand{\Nat}[0]{\operatorname{Nat}}
+
+% true and false
+\newcommand{\false}[0]{\operatorname{false}}
+\newcommand{\true}[0]{\operatorname{true}}
+
+% probability function (alone, with argument, with index, conditional)
+
+\newcommand{\Pempty}[0]{\operatorname{Pr}}		% avoid \Pr, since \Pr_A looks bad in display math mode!
+\renewcommand{\P}[1]{\Pempty\sb{#1}}
+\newcommand{\Palt}[2]{
+	\ifthenelse{#1 = 1}{P\rb{#1}}{
+		\ifthenelse{#1 = 2}{\mathbb{P}\rb{#1}}{
+			\text{TODO: Command not defined!}
+		}
+	}
+}
+\newcommand{\Pindex}[2]{\Pempty_{#1}\sb{#2}}
+\newcommand{\Pcond}[2]{\P{#1 \middle| #2}}
+\newcommand{\Pcondalt}[3]{
+	\ifthenelse{#1 = 1}{\Pindex{#3}{#2}}{
+		\text{TODO: Command not defined!}
+	}
+}
+
+% probability density function
+\newcommand{\pdf}[1]{f_{#1}}
+\newcommand{\pdfcond}[3]{\pdf{\left.#1 \middle| #2\right.}\rb{#3}}		% f_{#1|#2}(#3)
+\newcommand{\pdfcondalt}[4]{
+	\ifthenelse{#1 = 1}{\pdf{#2}\rb{\left.#4 \middle| #3\right.}}{
+		\text{TODO: Command not defined!}
+	}
+}
+
+% cumulative distribution function
+\newcommand{\cdf}[1]{F_{#1}}
+\newcommand{\cdfcond}[3]{\cdf{\left.#1 \middle| #2\right.}\rb{#3}}		% F _{#1|#2}(#3)
+\newcommand{\cdfcondalt}[4]{
+	\ifthenelse{#1 = 1}{\cdf{#2}\rb{\left.#4 \middle| #3\right.}}{
+		\text{TODO: Command not defined!}
+	}
+}
+
+% expected value
+\newcommand{\Eempty}[0]{\mathbb{E}}
+\newcommand{\E}[1]{\Eempty\sb{#1}}
+\newcommand{\Eindex}[2]{\Eempty_{#1}\sb{#2}}
+\newcommand{\Econd}[2]{\Eempty\sb{#1 \middle| #2}}	% E[#1|#2]
+
+% variance
+\newcommand{\Varempty}[0]{\operatorname{Var}}
+\newcommand{\Var}[1]{\Varempty\sb{#1}}
+\newcommand{\Varindex}[2]{\Varempty_{#1}\sb{#2}}
+\newcommand{\Varcond}[2]{\Varempty\sb{#1 \middle| #2}}	% Var[#1|#2]
+
+\newcommand{\MSE}[0]{\operatorname{MSE}}
+\newcommand{\Bias}[0]{\operatorname{Bias}}
+
+% probability distributions
+\newcommand{\Ber}[0]{\operatorname{Ber}}
+\newcommand{\Bin}[0]{\operatorname{Bin}}
+\newcommand{\Poi}[0]{\operatorname{Poi}}
+\newcommand{\Geo}[0]{\operatorname{Geo}}
+\newcommand{\NegBin}[0]{\operatorname{NegBin}}
+\newcommand{\Hyp}[0]{\operatorname{Hyp}}
+\newcommand{\NegHyp}[0]{\operatorname{NegHyp}}
+\newcommand{\Nor}[0]{\operatorname{\mathcal{N}}}
+\newcommand{\Exp}[0]{\operatorname{Exp}}
+\newcommand{\Erl}[0]{\operatorname{Erl}}
+\newcommand{\ConUni}[0]{\operatorname{Uni}}
+\newcommand{\DisUni}[0]{\operatorname{Uni}}
+\newcommand{\Uni}[0]{\operatorname{Uni}}					% TODO: cambiar por \UniDis y \UniCon
+
+% relations
+\newcommand{\id}[1]{\operatorname{id}_{#1}}					% Identitätsrelation
+\newcommand{\all}[1]{#1 \times #1}							% Allrelation
+
+% =========================================================
+% TikZ Commands
+% =========================================================
+
+\newcommand{\tikzPoint}[3]{
+	\node[label={#1:{#2}},circle,fill,inner sep=2pt] at (axis cs:#3) {};
+}
+\newcommand{\tikzPointLeft}[2]{
+	\tikzPoint{180}{#1}{#2}
+}
+\newcommand{\tikzPointRight}[2]{
+	\tikzPoint{0}{#1}{#2}
+}
+\newcommand{\tikzPointUp}[2]{
+	\tikzPoint{90}{#1}{#2}
+}
+\newcommand{\tikzPointDown}[2]{
+	\tikzPoint{270}{#1}{#2}
+}
+\newcommand{\tikzPointUL}[2]{
+	\tikzPoint{135}{#1}{#2}
+}
+\newcommand{\tikzPointUR}[2]{
+	\tikzPoint{45}{#1}{#2}
+}
+\newcommand{\tikzPointDL}[2]{
+	\tikzPoint{225}{#1}{#2}
+}
+\newcommand{\tikzPointDR}[2]{
+	\tikzPoint{315}{#1}{#2}
+}
+
+%[red, very thick, |-] (0,0) -- (22,0);
+\def \tikzPattern{on 1pt off 3pt on 3pt off 3pt}%dash pattern=on 1pt off 3pt on 3pt off 3pt}
+
+\newcommand{\tikzLineDotted}[3]{
+	\draw[gray, dotted] (axis cs:#2) -- node[left]{#1} (axis cs:#3);
+}
+\newcommand{\tikzLine}[4]{
+	\draw[#1] (axis cs:#3) -- node[left]{#2} (axis cs:#4);
+}
+\newcommand{\tikzLineUp}[4]{
+	\draw[#1] (axis cs:#3) -- node[above]{#2} (axis cs:#4);
+}
+\newcommand{\tikzNormalLine}[3]{
+	\tikzLine{black, thick}{#1}{#2}{#3}
+}
+\newcommand{\tikzFatLine}[3]{
+	\tikzLine{blue, very thick}{#1}{#2}{#3}
+}
+\newcommand{\tikzFatterLine}[3]{
+	\tikzLine{blue, line width=0.65mm}{#1}{#2}{#3}
+}
+\newcommand{\tikzMegaFatLine}[3]{
+	\tikzLine{blue, line width=0.95mm}{#1}{#2}{#3}
+}
+
+%	% #1 = position x
+%	% #2 = position y
+%	%\def \scaler{0.5}%#4
+%	}%
+%	%\tikzLine{blue}{}{(#1 - 0.5), (#2 - (0.5*#3)}{(#1 + 0.5), (#2 + (0.5*#3)}%
+%}%
+
+\newcommand{\tikzArrow}[3]{
+	\draw[very thick, ->] (axis cs:#2) -- node[above]{#1} (axis cs:#3);
+}
+% Angles:
+% 0 -> right, 90 = up, 270 = down, 180
+\newcommand{\tikzCircle}[3]{
+	\draw(axis cs:#2) circle[#1, radius=#3];
+}
+
+\newcommand{\tikzTrigonometric}{
+	xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+	xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+}
+
+
+\newcommand{\tikzFigure}[2]{
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+			#1
+		\end{tikzpicture}
+		\caption{#2}
+	\end{figure}
+}
+\newcommand{\tikzFigureStandard}[4]{
+	\tikzFigure{
+		\begin{axis}[
+			axis lines=left,
+			xlabel=$x$,
+			ylabel=$y$,
+			enlargelimits,
+			%xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+			%xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+			%ymax=2,
+			%ymin=-0.5]
+			%[domain=0:1,legend pos=outer north east]
+			\addplot[domain=#1:#2] {#3} node[left]{};
+%				( 0, 4 / pi )
+%				( pi, 0 )
+%				( 0, 0)
+%				( 0, 4 / pi)
+%			};
+		\end{axis}
+	}{#4}
+}
+
+\newcommand{\annotation}[4]{	% color, position, annotation, word
+	\tikz[remember picture,baseline=(word.base)]{
+		\node [inner sep=0cm, outer sep=0.1cm, text depth=.25ex, text height=1.5ex] (word) {#4};
+	}
+	\tikz[overlay,remember picture]{
+		\footnotesize
+		\def\scalefactor{0.625};
+		\IfEqCase{#2}{
+			{n}{\path (word)+(0,\scalefactor) node [above,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.south) to (word);
+			}
+			{ne}{\path (word)+(\scalefactor,\scalefactor) node [above right,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.south west) to [bend right=30](word);
+			}
+			{e}{\path (word)+(\scalefactor,0) node [right,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.west) to (word);
+			}
+			{se}{\path (word)+(\scalefactor,-\scalefactor) node [below right,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.north west) to [bend left=30] (word);
+			}
+			{s}{\path (word)+(0,-\scalefactor) node [below,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.north) to (word);
+			}
+			{sw}{\path (word)+(-\scalefactor,-\scalefactor) node [below left,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.north east) to [bend right=30] (word);
+			}
+			{w}{\path (word)+(-\scalefactor,0) node [left,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.east) to (word);
+			}
+			{nw}{\path (word)+(-\scalefactor,\scalefactor) node [above left,align=center,#1] (annotation) {#3};
+				\draw [->,align=center,#1] (annotation.south east) to [bend left=30] (word);
+			}
+		}[\PackageError{annotation}{Undefined option to annotation: #3}{Try integer from the set [12].}]
+	}
+}
+
+% convex paths in TikZ
+\newcommand{\convexpath}[2]{
+	[   
+	create hullcoords/.code={
+		\global\edef\namelist{#1}
+		\foreach [count=\counter] \nodename in \namelist {
+			\global\edef\numberofnodes{\counter}
+			\coordinate (hullcoord\counter) at (\nodename);
+		}
+		\coordinate (hullcoord0) at (hullcoord\numberofnodes);
+		\pgfmathtruncatemacro\lastnumber{\numberofnodes+1}
+		\coordinate (hullcoord\lastnumber) at (hullcoord1);
+	},
+	create hullcoords
+	]
+	($(hullcoord1)!#2!-90:(hullcoord0)$)
+	\foreach [
+	evaluate=\currentnode as \previousnode using \currentnode-1,
+	evaluate=\currentnode as \nextnode using \currentnode+1
+	] \currentnode in {1,...,\numberofnodes} {
+		let \p1 = ($(hullcoord\currentnode) - (hullcoord\previousnode)$),
+		\n1 = {atan2(\x1,\y1) + 90},
+		\p2 = ($(hullcoord\nextnode) - (hullcoord\currentnode)$),
+		\n2 = {atan2(\x2,\y2) + 90},
+		\n{delta} = {Mod(\n2-\n1,360) - 360}
+		in 
+		{arc [start angle=\n1, delta angle=\n{delta}, radius=#2]}
+		-- ($(hullcoord\nextnode)!#2!-90:(hullcoord\currentnode)$) 
+	}
+}

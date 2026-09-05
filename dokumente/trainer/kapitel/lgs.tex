@@ -1,0 +1,268 @@
+
+
+\Bsec{Lineare Gleichungssysteme}{
+		
+		\begin{itemize}
+			\itemf Gauß-Elimination
+			\itemf LR-Zerlegung
+			\itemf QR-Zerlegung
+			\itemf Lineares Ausgleichsproblem
+			\itemf Kombinations Aufgaben und Verständnisfragen
+		\end{itemize}% \sbreak
+%		Noch nicht vorbereitet auf dieses Kapitel? Dann 
+		}% {}
+		
+%----------------------------------------------------------------------------------
+\bsubsec{Gauß-Elimination}{
+%		
+%		Man möchte ein Problem der Form $Ax = b$ lösen.
+%		
+%	}
+%		
+		Löse folgende LGS mithilfe von Gauß-Elimination:
+		
+		\begin{enumerate}
+			\itemf 
+			$\begin{bmatrix}
+				3 & 0 & 1 & 0 & | & 1\\
+				0 & 3 & 2 & 1 & | & 4\\
+				1 & 0 & 1 & 0 & | & 2\\
+				0 & 1 & 0 & 1 & | & 2
+			\end{bmatrix}$
+			\itemf 
+			$\begin{bmatrix}
+				1 & 2 & | & 2\\
+				a & 4 & | & b\\
+				3 & 5 & | & 5
+			\end{bmatrix}$ ($a$ und $b$ sind Variablen)
+			\itemf
+			$\begin{bmatrix}
+				2 & 5 & 2 & | & 1\\
+				1 & 4 & 2 & | & 2
+			\end{bmatrix}$
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf $x =(-0.5; -1.5; 2.5; 3.5)\trans$
+			\itemf Keine Lösung
+			\itemf Überbestimmtes LGS $\Rightarrow$ Für uns so nicht lösbar!
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bsubsec{LR-Zerlegung}{
+%		
+%		$$\begin{bmatrix}
+%		& & \\
+%		& A& \\
+%		& & 
+%		1 & 0 & 0\\
+%		& 1 & 0\\
+%		&   & 1
+%		&&&\\
+%		0&&\\
+%		0&0&
+%		$$
+%	}
+%		
+		Löse folgende LGS mithilfe von LR-Zerlegung:
+		
+		\begin{enumerate}
+			\itemf $Ax = b$ mit $A = 
+			\begin{bmatrix}
+			2 & 0 & 1 & 0\\
+			0 & 2 & 2 & 1\\
+			1 & 0 & 1 & 0\\
+			0 & 1 & 0 & 1
+			\end{bmatrix};\quad b = 
+			\begin{bmatrix}
+				1 \\ 4 \\ 2 \\ 2
+			\end{bmatrix}$
+			\itemf $Az = c$ mit $c =
+			\begin{bmatrix}
+				0 \\ 2 \\ 4 \\ 4
+			\end{bmatrix}$
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf $x = (-1; -4; 3; 6)\trans$ mit L = 
+			$\begin{bmatrix}
+				1 & 0 & 0 & 0 \\
+				0 & 1 & 0 & 0 \\
+				0.5 & 0 & 1 & 0 \\
+				0 & 0.5 & -2 & 1
+			\end{bmatrix}$ und R = 
+			$\begin{bmatrix}
+				2 & 0 & 1 & 0 \\
+				0 & 2 & 2 & 1 \\
+				0 & 0 & 0.5 & 0 \\
+				0 & 0 & 0 & 0.5
+			\end{bmatrix}$
+			\itemf $z = (-4; -18; 8; 22)\trans$ mit obigen L und R
+		\end{enumerate}
+	}
+
+%----------------------------------------------------------------------------------
+\bsubsec{QR-Zerlegung}{
+%		
+%		Mit $(a,b)^T$ als die erste Spalte der 2x2 Matrix A, $$c = \frac{a}{\sqrt{a^2 + b^2}}, s = \frac{b}{\sqrt{a^2 + b^2}}$$
+%		$$G_\varphi = \begin{bmatrix}
+%		c & s\\ -s & c
+%		$$\begin{bmatrix}
+%		c & s\\ -s & c
+%		a\\b
+%		r\\ 0
+%		$$A = QR \Leftrightarrow Q^{-1} A = R \Leftrightarrow G_\varphi A = R$$
+%		$$Rx = Q^T \cdot b$$
+%	}
+%		
+		Zerlege die Matrix A mit der QR-Zerlegung und rechne das Ergebnis des LGS mithilfe der Zerlegung aus:
+		
+		\begin{enumerate}
+			\itemf $Ax = b$ mit $A = 
+			\begin{bmatrix}
+				3 & 2 \\
+				4 & 1
+			\end{bmatrix}; \quad b = 
+			\begin{bmatrix}
+				5 \\ 6
+			\end{bmatrix}$
+			\itemf $Ax = b$ mit $A = 
+			\begin{bmatrix}
+			0 & 2 & 2\\
+			1 & 1 & 1\\
+			1 & 0 & 2
+			\end{bmatrix}; \quad b = 
+			\begin{bmatrix}
+			1 \\ 2 \\ 3
+			\end{bmatrix}$
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item $x = (\frac{7}{5}; \frac{2}{5})\trans$ mit 
+				$$Q = 
+				\begin{bmatrix}
+					\frac{3}{5} & -\frac{4}{5} \\
+					\frac{4}{5} & \frac{3}{5}
+				\end{bmatrix}; \quad R = 
+				\begin{bmatrix}
+					5 & 2 \\
+					0 & -1
+				\end{bmatrix}$$
+			\item $x=(0; 0.5; 1.5)\trans$ mit $$Q =
+			\begin{bmatrix}
+				0 					& \frac{4}{3 \sqrt{2}} & -\frac{1}{3} \\
+				\frac{1}{\sqrt{2}}	& \frac{1}{3 \sqrt{2}} & \frac{2}{3} \\
+				\frac{1}{\sqrt{2}}	& -\frac{1}{3 \sqrt{2}}& -\frac{2}{3}
+			\end{bmatrix}; \quad R =
+			\begin{bmatrix}
+				\sqrt{2}	& \frac{1}{\sqrt{2}}	& \frac{3}{\sqrt{2}} \\
+				0			& -\frac{1}{3 \sqrt{2}} & -\frac{7}{3 \sqrt{2}} \\
+				0 & 0 		& -\frac{4}{3}
+			\end{bmatrix}$$
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bsubsec{Lineares Ausgleichsproblem}{
+%	Allgemeine Geradengleichung:
+%	$$y = m \cdot x + t$$
+%	Die Normalengleichung: $$ A^T \cdot b = A^T \cdot A \cdot x' $$
+%	Mit QR Zerlegung:
+%	$$Rx = \beta_1$$ 
+%	$$\begin{bmatrix}
+%	Die rechte Seite der Gleichung entspricht \fat{NICHT} einem Bruch, sondern der Aufteilung des Vektores in einen oberen ($=\beta_1$) und unteren ($=\beta_2$) Teil.
+%	
+%}
+%	
+	Es soll eine Gerade bestimmt werden, die möglichst gut durch folgende Punkte geht:
+	$$P_0(1|-3) \aae P_1(2|3) \aae P_2(4|-2)$$
+	
+	\begin{enumerate}
+		\itemf Stelle das LGS zu obigen Problem auf.
+		\itemf Löse obiges Problem mit der Normalengleichung.
+	\end{enumerate}
+	
+}
+\bsol{
+	
+	\begin{enumerate}
+		\itemf $$\begin{bmatrix}
+		1 & 1 \\
+		1 & 2 \\
+		1 & 4 \\
+		\end{bmatrix} \cdot \begin{bmatrix}
+		t \\ m
+		\end{bmatrix} = 
+		\begin{bmatrix}
+		-3 \\ 3 \\ -2
+		\end{bmatrix}$$
+		\itemf $$\begin{bmatrix}
+			3 & 7 &|& -2 \\
+			7 & 21 &|& -5
+		\end{bmatrix} \longrightarrow \begin{bmatrix}
+		3 & 7 &|& -2 \\
+		-2 & 0 &|& 1
+		\end{bmatrix}$$
+		$$t = -\frac{1}{2} \aae m = -\frac{1}{14}$$
+		$$y = -\frac{1}{14}x - \frac{1}{2}$$
+	\end{enumerate}
+}
+%\btask{
+%	
+%	\begin{enumerate}
+%		\item Löse folgendes Lineares Ausgleichsproblem mit der QR-Zerlegung.
+%		$$\begin{bmatrix}
+%		1 & 1 \\
+%		1 & 2 \\
+%		1 & 0 \\
+%		\end{bmatrix} \cdot \begin{bmatrix}
+%		t \\ m
+%		\end{bmatrix} = 
+%		\begin{bmatrix}
+%		4 \\ 2 \\ 1
+%		\end{bmatrix}$$
+%	\end{enumerate}
+%	
+%}
+%\bsol{
+%	
+%	\begin{enumerate}
+%		\item 
+%	\end{enumerate}
+%}
+%----------------------------------------------------------------------------------
+\bquestion{
+%	}
+%		
+		Beantworte folgende (Trick-)Fragen möglichst genau:
+		\begin{enumerate}
+			\itemf Was ist \fat{Pivotisierung} und wie funktioniert es?
+			\itemf Gauß, LR und QR: Was ist am stabilsten? Warum?
+			\itemf Wenn du mit derselben Matrix ganz viele LGS lösen musst, welches der drei Verfahren wendest du an, wenn der Fokus auf der Laufzeit liegt?
+			\itemf Du hast eine Matrix der Form: $\begin{bmatrix}
+				a & b & c\\
+				0 & d & e\\
+				0 & 0 & f
+			\end{bmatrix}$ \sbreak
+			Du sollst die Matrix in Q und R zerlegen, was fällt dir auf?
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf siehe mein Skript \Smiley
+			\itemf QR-Zerlegung, weil dort mit orthogonalen Matrizen gerechnet wird.
+			\itemf LR-Zerlegung: QR ist zwar stabiler, aber leicht kostenaufwändiger.
+			\itemf Wir brauchen Givens-Rotation nicht anzuwenden, weil sich die Matrix schon in einer rechts oberen Dreiecksmatrix befindet (Sprich man kann direkt mit Rückwärtssubst. anfangen).
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------

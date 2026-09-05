@@ -1,0 +1,178 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \usepackage{tikz}
+ \usetikzlibrary{datavisualization}
+ \usetikzlibrary{datavisualization.formats.functions}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Sommersemester 2018}
+\author{\npauthor{}}
+\date{\today}
+\maketitle
+
+\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben oder Lösungen. \n Des Weiteren ist diese Klausur nur als ein ''Vorschlag'' von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Aufgaben sind vollkommen willkürlich.}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90 Minuten
+	\item In dieser Klausur können Sie insgesamt 42 Punkte erreichen. \\Zum Bestehen werden 17 Punkte benötigt.
+	\item Hinweis: Nach Auffassung des Autors ist diese Klausur schwerer als die ''richtige'' Klausur sein wird.
+	\item Die einzelnen Teilaufgaben sind unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Gleitkommazahlen [X + X + X Pkte]}
+%--------------------------------------------------------------
+	Erklärung
+	(a) 
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak
+	(b) 
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak
+	\\
+	(c) 
+	Aufgabenstellung
+	
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Quadratur [X + X + X Pkte]}
+%--------------------------------------------------------------
+	Erklärung
+	(a)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak
+	\\
+	(c) 
+	Aufgabenstellung
+
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Interpolation [X + X + X + X Pkte]}
+%--------------------------------------------------------------
+
+	Erklärung
+	\n
+	(a)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak
+	\\
+	(b)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak
+	\\
+	(c)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak
+	\\
+	(d)
+	Aufgabenstellung
+
+	
+%--------------------------------------------------------------
+\task{. Aufgabe: Iterative Verfahren [X + X + X Pkte]}
+%--------------------------------------------------------------
+	
+	Erklärung
+	\lbreak \\
+	(a)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c)
+	Aufgabenstellung
+
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Differentialgleichungen [X + X Pkte]}
+%--------------------------------------------------------------
+	
+	Erklärung
+	(a)
+	Aufgabenstellung
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Aufgabenstellung
+	
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Programmieraufgabe [X + X Pkte]}
+%--------------------------------------------------------------
+
+	Erklärung? \n 
+	Folgende Methoden seien gegeben:
+	\begin{lstlisting}
+		float[] matVec(float[][] mat, float[] vec) {
+			//returns result of matrix-vector multiplication of mat and vec
+		}
+		
+		float[] vecAdd(float[] a, float[] b) {
+			//returns result of vector addition
+		}
+		
+		float[] vecSub(float[] a, float[] b) {
+			//returns a - b via vector subtraction
+		}
+		
+		float[] scalVec(float scalar, float[] vec) {
+			// returns scalar * vec as correct operation
+		}
+	\end{lstlisting}
+	\newpage
+	(a) Aufgabenstellung
+	\n 
+	Sonderfälle oder die Korrektheit der Dimensionen der Variablen müssen nicht überprüft werden! \n 
+	\begin{lstlisting}
+	// A is the A matrix, first index stands for the column index
+	// b is the result vector from the formula Ax = b
+	// oldX is the x vector of the previous step
+	
+	float[] jacobiStep(float[][] A, float[] b, float[] oldX) {
+		
+		
+	}
+	\end{lstlisting}
+	\lbreak
+	(b) Aufgabenstellung
+
+\end{document}

@@ -1,0 +1,103 @@
+name: Build
+
+# Compiles every LaTeX document in the repository and keeps the resulting PDFs
+# as workflow artifacts. The PDFs are not committed -- this run, and the
+# releases produced by release.yml, are where they come from.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ---------------------------------------------------------------------
+  # Find every root document (a .tex file containing \begin{document}) and
+  # turn it into a build matrix entry. New documents are picked up on their
+  # own -- there is no list to keep in sync.
+  #
+  # A document containing \ifdefined\npprint has a second, print-styled
+  # variant; it becomes its own matrix entry with a \npprint pretex.
+  # ---------------------------------------------------------------------
+  discover:
+    runs-on: ubuntu-latest
+    outputs:
+      documents: ${{ steps.find.outputs.documents }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: find
+        shell: bash
+        run: |
+          entries=()
+          while IFS= read -r doc; do
+            doc=${doc#./}
+            dir=$(dirname "$doc")
+            base=$(basename "$doc" .tex)
+            slug=$(printf '%s' "${doc%.tex}" | tr '/ ' '--')
+            entries+=("$(jq -n --arg d "$dir" --arg b "$base" \
+                               --arg j "$base" --arg s "$slug" --arg p "" \
+                    '{dir:$d, base:$b, job:$j, slug:$s, pretex:$p}')")
+            if grep -q 'ifdefined.npprint' "$doc"; then
+              entries+=("$(jq -n --arg d "$dir" --arg b "$base" \
+                                 --arg j "${base}_print" --arg s "${slug}-print" \
+                                 --arg p '\def\npprint{}' \
+                      '{dir:$d, base:$b, job:$j, slug:$s, pretex:$p}')")
+            fi
+          done < <(grep -rl --include='*.tex' -F '\begin{document}' . |
+                   grep -v '^\./gemeinsam/' | sort)
+
+          documents=$(printf '%s\n' "${entries[@]}" | jq -s -c .)
+          echo "documents=$documents" >> "$GITHUB_OUTPUT"
+          echo "Found $(echo "$documents" | jq length) builds:"
+          echo "$documents" | jq -r '.[] | "  \(.dir)/\(.job)"'
+
+  # ---------------------------------------------------------------------
+  # One job per build. fail-fast is off so a single broken document does
+  # not hide the state of all the others.
+  # ---------------------------------------------------------------------
+  latex:
+    needs: discover
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        document: ${{ fromJSON(needs.discover.outputs.documents) }}
+    name: ${{ matrix.document.dir }}/${{ matrix.document.job }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: ${{ matrix.document.base }}.tex
+          working_directory: ${{ matrix.document.dir }}
+          # -halt-on-error so the log stops at the first real error instead of
+          # scrolling past hundreds of follow-up messages.
+          args: >-
+            -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+            -jobname=${{ matrix.document.job }}
+            ${{ matrix.document.pretex && format('-usepretex={0}', matrix.document.pretex) || '' }}
+
+      - name: Upload PDF
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdf-${{ matrix.document.slug }}
+          path: ${{ matrix.document.dir }}/${{ matrix.document.job }}.pdf
+          if-no-files-found: error
+
+      - name: Upload log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: log-${{ matrix.document.slug }}
+          path: ${{ matrix.document.dir }}/${{ matrix.document.job }}.log
+          if-no-files-found: ignore

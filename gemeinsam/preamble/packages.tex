@@ -1,0 +1,118 @@
+% ===========================================================================
+%  Every \usepackage of the article documents lives here.
+%
+%  Loaded first by preamble.tex. style.tex and commands.tex assume everything
+%  below is already available -- this file therefore has to stay self-contained
+%  and free of layout decisions.
+% ===========================================================================
+
+% ---------------------------------------------------------------------------
+% Build switches -- these come first because every later file keys off them.
+%
+%   \npstyle = screen  (default)  coloured links and info boxes, screen header
+%            = print              grayscale, two-sided, print-optimised
+%            = plain              no fancy header/footer at all (short handouts)
+%
+% A document selects one by defining \npstyle before loading the preamble.
+% ---------------------------------------------------------------------------
+
+\usepackage{etoolbox}               % \ifdefstring, \patchcmd
+\usepackage{ifthen}                 % \ifthenelse, used by the macros in commands.tex
+
+\providecommand{\npstyle}{screen}
+\newif\ifnpprint \ifdefstring{\npstyle}{print}{\npprinttrue}{\npprintfalse}
+\newif\ifnpfancy \ifdefstring{\npstyle}{plain}{\npfancyfalse}{\npfancytrue}
+
+% ---------------------------------------------------------------------------
+% Who wrote this. Loaded here because this is the one file every document
+% pulls in, so \npauthor / \npauthorurl / \npauthormail are always available.
+% ---------------------------------------------------------------------------
+\input{\npbase gemeinsam/preamble/metadata}
+
+% ---------------------------------------------------------------------------
+% Encoding, fonts and language
+% ---------------------------------------------------------------------------
+\usepackage[T1]{fontenc}            % proper hyphenation of words with umlauts
+\usepackage[utf8]{inputenc}         % source files are UTF-8
+\usepackage{lmodern}                % scalable Computer-Modern-like font
+\usepackage{mathpazo}               % Palatino for the title pages
+\usepackage[ngerman]{babel}         % German hyphenation and captions
+\usepackage[autostyle, german=guillemets]{csquotes}
+\MakeOuterQuote{"}                  % lets you type "..." for German quotes
+\usepackage{relsize}
+
+% ---------------------------------------------------------------------------
+% Page layout
+% ---------------------------------------------------------------------------
+\usepackage{fancyhdr}               % configured in style.tex
+\usepackage{multicol}
+\usepackage{float}                  % [H] float placement
+\usepackage{placeins}               % \FloatBarrier
+\usepackage{framed}                 % the coloured info boxes
+\usepackage{mdframed}
+\usepackage{rotating}
+
+% ---------------------------------------------------------------------------
+% Maths
+% ---------------------------------------------------------------------------
+\usepackage{amsmath, accents}
+\usepackage{amssymb}
+\usepackage{cancel}
+\usepackage{centernot}              % strike through long symbols such as ==>
+\usepackage{esdiff}                 % derivative operator
+\usepackage{nicefrac}
+\usepackage{fp}                     % fixed point arithmetic in macros
+
+% ---------------------------------------------------------------------------
+% Tables, colour and symbols
+% ---------------------------------------------------------------------------
+\usepackage{booktabs}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage{enumerate}
+\usepackage{pifont}                 % \ding checkmarks and crosses
+\usepackage{tikzsymbols}            % \Smiley, \Cooley, \Laughey, ...
+\tikzsymbolsset{global-scale=1.2}
+
+% ---------------------------------------------------------------------------
+% Graphics and plots
+%
+% pgfplots pulls in tikz; it MUST be loaded here because style.tex
+% calls \pgfplotsset.  (Documents used to load only the style file and failed
+% with "Undefined control sequence" on \pgfplotsset -- that is why there is a
+% single entry point now.)
+% ---------------------------------------------------------------------------
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{datavisualization}
+\usetikzlibrary{datavisualization.formats.functions}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{pgfplots.colorbrewer}
+
+% ---------------------------------------------------------------------------
+% Code listings
+% ---------------------------------------------------------------------------
+\usepackage{listings}
+\lstset{
+    frame            = tb,
+    language         = Python,
+    aboveskip        = 3mm,
+    belowskip        = 3mm,
+    showstringspaces = false,
+    columns          = flexible,
+    basicstyle       = {\small\ttfamily},
+    numbers          = none,
+    breaklines       = true,
+    breakatwhitespace= true,
+    tabsize          = 3,
+}
+
+% ---------------------------------------------------------------------------
+% Programming helpers used by commands.tex
+% ---------------------------------------------------------------------------
+\usepackage{environ}                % \NewEnviron
+\usepackage{catchfilebetweentags}   % pulling snippets into the complete script
+\usepackage{nccfoots}               % \Footnotetext
+\usepackage{verbatim}
+\usepackage{hyperref}               % keep last: it patches other packages

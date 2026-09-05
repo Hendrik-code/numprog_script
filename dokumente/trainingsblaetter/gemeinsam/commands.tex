@@ -1,0 +1,405 @@
+% ===========================================================================
+%  Macros for the Trainingsblaetter.
+%
+%  Self-contained on purpose: the worksheets have their own title page
+%  (\HAtitle) and their own task/solution layout, and share only the package
+%  list with the rest of the repository (gemeinsam/preamble/packages.tex).
+% ===========================================================================
+
+\newcommand{\HAtitle}[2]{
+	\begin{titlepage} % Suppresses displaying the page number on the title page and the subsequent page counts as page 1
+		\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for horizontal lines, change thickness here
+		\center % Centre everything on the page
+		\hspace{1cm} \\[3.5cm]
+		\HRule\\[0.4cm]
+		{\huge\bfseries Numerisches Programmieren Trainingsaufgaben #1}\\[0.4cm] % Title of your document
+		\textsc{\Large #2}\\[0.5cm] % Minor heading such as course title
+		\HRule\\[1.5cm]
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushleft}
+				\large
+				\textit{Autor}\\
+				\textsc{\npauthor{}} % Your name
+			\end{flushleft}
+		\end{minipage}
+		~
+		\begin{minipage}{0.4\textwidth}
+			\begin{flushright}
+				\large
+				\textit{Version vom:}\\
+				\textsc{\today} % Supervisor's name
+			\end{flushright}
+		\end{minipage}
+		\vfill\vfill % Position the date 3/4 down the remaining page
+		\large{\textit{Erst die Aufgaben rechnen, bevor Ihr die Lösung anguckt!}}
+		\vfill % Push the date up 1/4 of the remaining page
+	\end{titlepage}
+}
+
+\definecolor{easy}{rgb}{0.2 0.2 1}
+\definecolor{medium}{rgb}{0.9 0.4 0}
+\definecolor{hard}{rgb}{1 0 0.4}
+\definecolor{special}{rgb}{0.5 0.2 1}
+\newcommand{\easy}{\textcolor{easy}{(Easy)}}
+\newcommand{\medium}{\textcolor{medium}{(Medium)}}
+\newcommand{\hard}{\textcolor{hard}{(Hard)}}
+\newcommand{\transfer}{\textcolor{special}{(Transfer)}}
+
+\newcommand{\itemf}{\item}
+\newcommand{\itemeasy}{\item[\color{easy}]\alph*)}
+
+
+\newcommand{\task}[4]{
+	\clearpage
+	\section{#1}
+	%
+	#2
+	\begin{enumerate}[label=\alph*)]
+		#3
+	\end{enumerate}
+	
+	\vfill \textit{Auf der nächsten Seite folgt die Lösung\dots}
+	\clearpage
+	\Large \textbf{Lösung:}
+	\vspace{0.3cm}
+	\normalsize
+	\begin{enumerate}[label=\alph*), nolistsep, itemsep=\fill]
+		#4
+	\end{enumerate}
+	\vfill
+}
+
+\newcommand{\subtask}[1]{
+	\begin{enumerate}[label=(\roman*)]
+		#1
+	\end{enumerate}
+}
+
+\newcommand{\hinweis}{\textit{Hinweis: }}
+% =========================================================
+% Specific math variables:
+% =========================================================
+
+\newcommand{\fabs}{f_{\text{abs}}}
+\newcommand{\frel}{f_{\text{rel}}}
+
+\newcommand{\maxError}{\epsilon_{\text{Ma}}}
+
+\newcommand{\mddots}{\reflectbox{$\ddots$}}
+
+
+\newcommand{\umax}{_\text{max}}
+\newcommand{\umin}{_\text{min}}
+
+% =========================================================
+% Math Commands
+% =========================================================
+
+% Should be renamed or removed
+\newcommand{\st}[1]{^{(#1)}}
+
+% vertical line in the middle:
+\newcommand{\separator}[1]{\; #1 \;}
+\newcommand{\sep}{\separator{|}}
+\newcommand{\sepArrow}{\separator{\Longleftrightarrow}}
+
+% BigO
+\newcommand{\bigO}{\mathcal{O}} % Big-O notation
+
+% Norm with double |
+
+% Matrix Transpose and inverted
+\newcommand{\trans}{^{\mathrm{\mathsmaller T}}}
+\newcommand{\inv}{^{\mathrm{\mathsmaller{\text{-}1}}}}
+\newcommand{\unitM}{\mathbb{1}}
+
+
+% informal descriptions:
+\newcommand{\uleftDown}{_\text{linksUnten}}
+\newcommand{\uleftUp}{_\text{linksOben}}
+\newcommand{\uleft}{_\text{links}}
+\newcommand{\uleftDiagonal}{_\text{ganzLinksUnten}}
+\newcommand{\uleftUpDiagonal}{_\text{ganzLinksOben}}
+
+% Soll sein
+\newcommand{\shouldEq}{ \stackrel{!}{=} }
+
+% Formelnamen:
+\newcommand{\QT}{Q_{\text{T}}}
+\newcommand{\QTS}{Q_{\text{TS}}}
+\newcommand{\QS}{Q_{\text{S}}}
+\newcommand{\QSS}{Q_{\text{SS}}}
+\newcommand{\RTS}{R_{\text{TS}}}
+\newcommand{\RSS}{R_{\text{SS}}}
+%--------------------------
+
+% correct strange spacing around delimiters
+\renewcommand{\l}{\mathopen{}\mathclose\bgroup\left}
+\renewcommand{\r}{\aftergroup\egroup\right}
+
+% norms
+\newcommand{\norm}[1]{\l\lVert #1 \r\rVert}
+\newcommand{\pnorm}[2]{\norm{#1}_{#2}}
+
+\newcommand{\nvector}[1]{
+	\begin{pmatrix}
+		#1
+	\end{pmatrix}
+}
+
+\newcommand{\nmatrix}[1]{
+	\begin{bmatrix}
+		#1
+	\end{bmatrix}
+}
+
+\def\nLongrightarrow{\centernot \Longrightarrow}
+\def\nLongleftrightarrow{\centernot \Longleftrightarrow}
+\def\nforall{\centernot \forall}
+\def\nexists{\centernot \exists}
+\def\nsqsubseteq{\centernot \sqsubseteq}
+\def\nsubset{\centernot \subset}
+\def\nequiv{\centernot \equiv}
+
+\def\symdif{\triangle}
+\def\imp{\rightarrow}
+\def\bik{\leftrightarrow}
+\def\xor{\oplus}
+\def\nand{\, \bar{\land}\,}
+\def\nor{\,\bar{\lor}\,}
+
+
+% number sets
+\newcommand{\booleans}[0]{\mathbb{B}}			% Perhaps call it \binaries and defined it as \residuals{2} instead.
+\newcommand{\naturals}[0]{\mathbb{N}}
+\newcommand{\wholes}[0]{\mathbb{N}_0}
+\newcommand{\integers}[0]{\mathbb{Z}}
+\newcommand{\rationals}[0]{\mathbb{Q}}
+\newcommand{\reals}[0]{\mathbb{R}}
+\newcommand{\complexes}[0]{\mathbb{C}}
+\newcommand{\residuals}[1]{\mathbb{Z}_{#1}}
+\newcommand{\primes}[0]{\mathbb{P}}
+
+% brackets (round, square, curly, angled)
+\renewcommand{\(}[0]{\l(}						% \(...\) was defined for $...$ as \[...\] for $$...$$
+\renewcommand{\)}[0]{\r)}
+\newcommand{\rb}[1]{\l(#1\r)}
+\renewcommand{\sb}[1]{\l[#1\r]}
+\newcommand{\cb}[1]{\l\{#1\r\}}
+\newcommand{\ab}[1]{\l\langle#1\r\rangle}
+
+% generating set
+\newcommand{\generatingset}[1]{\ab{#1}}
+
+% floor and ceiling
+\newcommand{\ceil}[1]{\l\lceil#1\r\rceil}
+\newcommand{\floor}[1]{\l\lfloor#1\r\rfloor}
+
+
+% absolute value
+\newcommand{\abs}[1]{\l|#1\r|}
+
+% integrals
+\newcommand{\integral}[4]{\int_{#1}^{#2} #3 \ \mathrm{d}#4}
+\newcommand{\antiderivative}[2]{\integral{}{}{#1}{#2}}
+\renewcommand{\d}[1]{\ \mathrm{d}#1}
+
+% logarithms
+\newcommand{\ld}[0]{\operatorname{ld}}
+\newcommand{\lb}[0]{\operatorname{lb}}
+
+% signum function
+\newcommand{\sgn}[0]{\operatorname{sgn}}
+
+% fixed set
+\newcommand{\fix}[0]{\operatorname{fix}}		% fix(f) = {x|f(x) = x}
+
+% closures
+\newcommand{\refl}[0]{\operatorname{ref}}
+\newcommand{\symm}[0]{\operatorname{sym}}
+
+% sets of functions
+\newcommand{\inj}[0]{\operatorname{inj}}
+\newcommand{\surj}[0]{\operatorname{surj}}
+\newcommand{\bij}[0]{\operatorname{bij}}
+
+% fields
+\newcommand{\charac}[0]{\operatorname{char}}
+\newcommand{\GF}[0]{\operatorname{GF}}
+
+% least common multiple and greatest common divisor
+\newcommand{\ggT}[0]{\operatorname{ggT}}
+\newcommand{\kgV}[0]{\operatorname{kgV}}
+
+% average
+\newcommand{\avg}[0]{\operatorname{avg}}
+
+% order
+\newcommand{\ord}[0]{\operatorname{ord}}
+
+% ----------
+% round 
+\newcommand{\rd}[0]{\operatorname{rd}}
+\newcommand{\rdM}[0]{\operatorname{rd_M}}
+
+% condition value
+\newcommand{\cond}[0]{\operatorname{cond}}
+
+% complex numbers
+\newcommand{\realPart}{\operatorname{Re}}
+\newcommand{\imaginaryPart}{\operatorname{Im}}
+
+% Fourier transformation
+\newcommand{\DFT}{\operatorname{DFT}}
+\newcommand{\IDFT}{\operatorname{IDFT}}
+\newcommand{\FFT}{\operatorname{FFT}}
+\newcommand{\BFO}{\operatorname{BFO}}
+
+% diagonal entries of a matrix
+\newcommand{\diag}{\operatorname{diag}}
+% --------
+
+% sequent calculus
+\newcommand{\FL}[0]{\operatorname{FL}}
+\newcommand{\Nat}[0]{\operatorname{Nat}}
+
+% true and false
+\newcommand{\false}[0]{\operatorname{false}}
+\newcommand{\true}[0]{\operatorname{true}}
+
+% expected value
+\newcommand{\Eempty}[0]{\mathbb{E}}
+\newcommand{\E}[1]{\Eempty\sb{#1}}
+\newcommand{\Eindex}[2]{\Eempty_{#1}\sb{#2}}
+\newcommand{\Econd}[2]{\Eempty\sb{#1 \middle| #2}}	% E[#1|#2]
+
+% variance
+\newcommand{\Varempty}[0]{\operatorname{Var}}
+\newcommand{\Var}[1]{\Varempty\sb{#1}}
+\newcommand{\Varindex}[2]{\Varempty_{#1}\sb{#2}}
+\newcommand{\Varcond}[2]{\Varempty\sb{#1 \middle| #2}}	% Var[#1|#2]
+
+\newcommand{\MSE}[0]{\operatorname{MSE}}
+\newcommand{\Bias}[0]{\operatorname{Bias}}
+
+% probability distributions
+\newcommand{\Ber}[0]{\operatorname{Ber}}
+\newcommand{\Bin}[0]{\operatorname{Bin}}
+\newcommand{\Poi}[0]{\operatorname{Poi}}
+\newcommand{\Geo}[0]{\operatorname{Geo}}
+\newcommand{\NegBin}[0]{\operatorname{NegBin}}
+\newcommand{\Hyp}[0]{\operatorname{Hyp}}
+\newcommand{\NegHyp}[0]{\operatorname{NegHyp}}
+\newcommand{\Nor}[0]{\operatorname{\mathcal{N}}}
+\newcommand{\Exp}[0]{\operatorname{Exp}}
+\newcommand{\Erl}[0]{\operatorname{Erl}}
+\newcommand{\ConUni}[0]{\operatorname{Uni}}
+\newcommand{\DisUni}[0]{\operatorname{Uni}}
+\newcommand{\Uni}[0]{\operatorname{Uni}}					% TODO: cambiar por \UniDis y \UniCon
+
+% relations
+\newcommand{\id}[1]{\operatorname{id}_{#1}}					% Identitätsrelation
+\newcommand{\all}[1]{#1 \times #1}							% Allrelation
+
+% =========================================================
+% TikZ Commands
+% =========================================================
+
+\newcommand{\tikzPoint}[3]{
+	\node[label={#1:{#2}},circle,fill,inner sep=2pt] at (axis cs:#3) {};
+}
+\newcommand{\tikzPointLeft}[2]{
+	\tikzPoint{180}{#1}{#2}
+}
+\newcommand{\tikzPointRight}[2]{
+	\tikzPoint{0}{#1}{#2}
+}
+\newcommand{\tikzPointUp}[2]{
+	\tikzPoint{90}{#1}{#2}
+}
+\newcommand{\tikzPointDown}[2]{
+	\tikzPoint{270}{#1}{#2}
+}
+\newcommand{\tikzPointUL}[2]{
+	\tikzPoint{135}{#1}{#2}
+}
+\newcommand{\tikzPointUR}[2]{
+	\tikzPoint{45}{#1}{#2}
+}
+\newcommand{\tikzPointDL}[2]{
+	\tikzPoint{225}{#1}{#2}
+}
+\newcommand{\tikzPointDR}[2]{
+	\tikzPoint{315}{#1}{#2}
+}
+
+%[red, very thick, |-] (0,0) -- (22,0);
+\def \tikzPattern{on 1pt off 3pt on 3pt off 3pt}%dash pattern=on 1pt off 3pt on 3pt off 3pt}
+
+\newcommand{\tikzLineDotted}[3]{
+	\draw[gray, dotted] (axis cs:#2) -- node[left]{#1} (axis cs:#3);
+}
+\newcommand{\tikzLine}[4]{
+	\draw[#1] (axis cs:#3) -- node[left]{#2} (axis cs:#4);
+}
+\newcommand{\tikzLineUp}[4]{
+	\draw[#1] (axis cs:#3) -- node[above]{#2} (axis cs:#4);
+}
+\newcommand{\tikzNormalLine}[3]{
+	\tikzLine{black, thick}{#1}{#2}{#3}
+}
+\newcommand{\tikzFatLine}[3]{
+	\tikzLine{blue, very thick}{#1}{#2}{#3}
+}
+\newcommand{\tikzFatterLine}[3]{
+	\tikzLine{blue, line width=0.65mm}{#1}{#2}{#3}
+}
+\newcommand{\tikzMegaFatLine}[3]{
+	\tikzLine{blue, line width=0.95mm}{#1}{#2}{#3}
+}
+
+\newcommand{\tikzArrow}[3]{
+	\draw[very thick, ->] (axis cs:#2) -- node[above]{#1} (axis cs:#3);
+}
+% Angles:
+% 0 -> right, 90 = up, 270 = down, 180
+\newcommand{\tikzCircle}[3]{
+	\draw(axis cs:#2) circle[#1, radius=#3];
+}
+
+\newcommand{\tikzTrigonometric}{
+	xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+	xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+}
+
+
+\newcommand{\tikzFigure}[2]{
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+		#1
+		\end{tikzpicture}
+		\caption{#2}
+	\end{figure}
+}
+\newcommand{\tikzFigureStandard}[4]{
+	\tikzFigure{
+		\begin{axis}[
+			axis lines=left,
+			xlabel=$x$,
+			ylabel=$y$,
+			enlargelimits,
+			%xtick={-3.14159, -1.5708, 0,1.5708,3.14159,4.7123889},
+			%xticklabels={$-\pi$, $-\frac{\pi}{2}$, $0$,$\frac{\pi}{2}$,$\pi$,$\frac{3\pi}{2}$},
+			%ymax=2,
+			%ymin=-0.5]
+			%[domain=0:1,legend pos=outer north east]
+			\addplot[domain=#1:#2] {#3} node[left]{};
+			%				( 0, 4 / pi )
+			%				( pi, 0 )
+			%				( 0, 0)
+			%				( 0, 4 / pi)
+			%			};
+		\end{axis}
+	}{#4}
+}

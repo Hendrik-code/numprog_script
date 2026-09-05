@@ -1,0 +1,175 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Sommersemester 16/17}
+\author{\npauthor{}}
+\date{31.07.2017}
+\maketitle
+
+\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben und Lösungen. Des Weiteren ist diese Klausur nur als ein "Vorschlag" von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Aufgaben sind vollkommen willkürlich}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90(+) Minuten
+	\item In dieser Klausur können Sie insgesamt 45 Punkte erreichen. \\Zum Bestehen werden 21 Punkte benötigt.
+	\item Hinweis: Nach Aufassung des Autors ist diese Klausur schwerer als die ''richtige'' Klausur sein wird.
+	\item Die einzelnen Teilaufgaben sind bis auf wenige Ausnahmen unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also
+	einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Gleitkommazahlen [4.5 + 2.5 Pkte]}
+%--------------------------------------------------------------
+	In dieser Aufgabe gehen wir von einer Darstellung durch Gleitkommazahlen 8-Bit-$G_{B,t}$ aus. $G_{B,t}$ entspricht der IEEE Form mit folgenden Außnahmen:
+	\begin{itemize}
+		\item Der Exponent $E$ hat nur 3 Bits,
+		\item der Exponent besitzt nicht wie bei IEEE einen Shift, sodass es negative und positive Exponenten gibt sondern entspricht einer normalen binären Zahl (also sind hier Exponenten von 0 bis 7 möglich).
+		\item Für die Mantisse $M$ werden nur 4 Bits verwendet,
+		\item das Vorzeichen bit existiert weiterhin!
+	\end{itemize}
+	(a) 
+	Wandle folgende Zahlen in die 8-Bit-$G_{B,t}$ Darstellung um:
+	\begin{enumerate}
+		\item $64_{10}$
+		\item $1,375_{10}$
+		\item $- 0xE_{16}$
+	\end{enumerate}
+	\fat{Hinweis:} Die IEEE Form bringt noch mehr Regeln mit außer dem Vorzeichen Bit!
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b) 
+	Erkläre das Problem der ''Absorption'' und gib ein Beispiel in der 8-Bit-$G_{B,t}$ Darstellung an, bei dem das Problem auftreten würde.
+	
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Differentialgleichungen [3 + 2.5 + 2.5 Pkte]}
+%--------------------------------------------------------------
+
+	\sbreak
+	$$y'(x) = -\frac{1}{2} \cdot x \cdot y(x)^2$$
+	Weiterhin gilt $$y(-1) = 1; x \ge -1$$
+	
+	\sbreak
+	(a)
+	Stelle ein Koordinatensystem auf, mit dessen Hilfe du das obige AWP graphisch lösen würdest und zeichne eine Vermutung ein, wie die Funktion sein könnte.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Berechne nun die exakte Funktion mithilfe von Separation der Variablen.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c)
+	Berechne zwei Schritte des impliziten Euler Verfahren, um das Ergebnis des AWPs an der Stelle $x=1$ anzunähern.
+	$$y_{k+1} = y_k + \delta t \cdot f(t_{k+1}, y_{k+1})$$
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Interpolation [2.5 + 3 + 3.5 Pkte]}
+%--------------------------------------------------------------
+
+	Es seien folgende Stützpunkte gegeben:
+	$$p_0 = (-1 | 3); p_1 = (0 | 2); p_2 = (1 | 1)$$
+	\n
+	(a)
+	Geben sie das Ergebnis der Interpolationsfunktion an der Stelle $x = 3$ aus, indem sie die regulären Polynom Basisfunktionen verwenden.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Wenn man nun an der Interpolationsfunktion interessiert ist und einfach neue Stützpunkte hinzufügen können möchte, welches Verfahren würde man nutzen? \\
+	Rechne mit diesem Verfahren und den obigen Stützpunkten die Interpolationsfunktion aus!
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c)
+	Nun soll ein Verfahren gewählt werden, welches effektiv mit unterschiedlichen Stützwerten, aber gleichbleibenden Stützstellen umgehen kann.\\
+	Stelle für die folgenden Stützstellen das Verfahren auf und rechne das Interpolationspolynom so gut wie möglich aus:
+	$$p_0 = (-1 | y_0); p_1 = (0 | y_1); p_2 = (1 | y_2)$$
+
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Quadratur [1 + 3 + 3.5 + 1.5 Pkte]}
+%--------------------------------------------------------------
+	\lbreak
+	
+	(a)
+	Berechne mithilfe der Trapezregel das Integral über eine Funktion $f_0$, die durch folgende Punkte geht: $$P_0(0|3); P_1(2|1)$$
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Berechne das Integral über die beiden voherigen Punkten und den folgenden zusätzlichen mit klasisschen Quadraturregeln bestmöglich: $$P_2(1|2); P_3(3|1)$$
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c) 
+	Ein weiterer Punkt über die Funktion $f_0$ ist bekannt, nämlich $P_4(5|8)$. Berechne mit schon obig verwendeten Methoden wieder das Integral über den gesamten Bereich bestmöglich.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(d)
+	Gib die Lösung folgender Rechnung mit Quadratur nach Romberg an. \\(Rechenweg ist diesmal nicht relevant!)
+	$$\int_{0}^{2 \pi}sin(x)^3dx$$
+
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Iterative Verfahren [3 + 3 Pkte]}
+%--------------------------------------------------------------
+Wurde gelöscht weil meeeh.
+%	$$\Phi(x) = \frac{1}{4} \cdot (3x^2 - 2x)$$
+%	(a)
+%	Zeige mithilfe des Banach'schen Fixpunktsatzes, ob sich im Intervall $I:=[-\frac{1}{3}; \frac{1}{3}]$ ein anziehender Fixpunkt befindet.
+%	(b)
+%	Eignet sich die obige Iterationsvorschrift, um eine Nullstelle einer Funktion auszurechnen? Begründe!
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Programmieraufgabe [4.5 + 1.5 Pkte]}
+%--------------------------------------------------------------
+
+Wir möchten eine iteratives Verfahren zur Nullstellenbestimmung mithilfe von Bisektion umsetzen. \\
+Es sei schon folgende Methode definiert:
+\begin{lstlisting}
+float f(float x) {
+	// returns f(x) as float value
+}
+\end{lstlisting}
+\lbreak
+Vervollständige die folgende Methode, welche einen Bisektionsschritt ausrechnen und das Ergebnis auf eine sinnvolle Art und Weise zurückgeben soll. \n
+1.5 der 6 Punkte werden für das Behandeln von Sonderfällen gegeben. Generell soll gelten, dass wenn der Bisektionsschritt nicht (mehr) ausgerechnet werden kann, die alten Variablen unverändert zurückgegeben werden.
+\n 
+\begin{lstlisting}
+// xLeft and xRight are the current reference points left/right from the zero point
+
+float[] bisecStep(float xLeft, float xRight) {
+	// returns the next xLeft and xRight values as an Array
+	
+	
+}
+\end{lstlisting}
+
+\end{document}

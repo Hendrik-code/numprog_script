@@ -1,0 +1,151 @@
+	
+	
+\Bsec{Zahlenbasen}{
+	
+		\begin{itemize}
+			\item Umwandlung von dezimalen Zahlen in binäre Zahlen
+			\itemf Umwandlung von binären Zahlen in Hex
+			\itemf Gleitkommazahlen und ihre Umwandlung
+			\itemf IEEE-Standard
+			\itemf NSDR Format
+		\end{itemize}
+		}
+		
+%----------------------------------------------------------------------------------
+\bsubsec{Dezimal zu Binär}{
+	Führe folgende dezimale Zahlen ins binäre System um:
+		\begin{enumerate}
+			\itemf 14
+			\itemf 63
+			\itemf 1.25
+			\itemf $\nicefrac{3}{8}$
+			\itemf $\nicefrac{13}{64}$
+		\end{enumerate}
+%			12 (Dezimal) soll als binäre Zahl geschrieben werden:
+%			12 - 2^{3} = 4 \imp 1\\
+%			4 - 2^{2} = 0 \imp 1\\
+%			0 - 2^{1} < 0 \imp 0\\
+%			0 - 2^{0} < 0 \imp 0
+%			Somit ergibt sich (von oben nach unten) ''$\fat{1100}_2$''!
+		}
+%		Führe folgende dezimale Zahlen ins binäre System um:
+%		
+%		}
+	\bsol{
+		\begin{enumerate}
+			\itemf $1110_2$
+			\itemf $111111_2$
+			\itemf $01.01_2$
+			\itemf $0.011_2$
+			\itemf $0.001101_2$
+		\end{enumerate}
+		}
+%----------------------------------------------------------------------------------
+\bsubsec{Binär zu Hex}{
+		Führe folgende binäre Zahlen ins Hexadezimale System um:
+		\begin{enumerate}
+			\itemf $10_2$
+			\itemf $101010_2$
+			\itemf $111000_2$
+			\itemf $0.11_2$ (\red{Advanced!})
+		\end{enumerate}
+	}
+%		
+%		Führe folgende binäre Zahlen ins Hexadezimale System um:
+%		
+%	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf 0x2
+			\itemf 0x2A
+			\itemf 0x38
+			\itemf 0x0.C
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bsubsec{Gleitkommazahlen}{
+%		
+%		Gleitkommazahl: $(-1)^{Vorzeichen} \cdot 2^{Exponent} \cdot Mantisse_2$
+%		
+%		$2^1 \cdot 10_2 \Longleftrightarrow 4$
+%		
+%		$2^{-1} \cdot 100_2 \Longleftrightarrow 2$
+%	}
+%		
+		Wie sähen folgende Gleitkommazahlen nach allgemeinem Standard ''normiert'' aus und zu welcher Zahl im gewohnten (dezimalen) System sind sie äquivalent?
+		\begin{enumerate}
+			\itemf $2^3 \cdot 101_2$
+			\itemf $2^{9} \cdot 11_2$
+			\itemf $2^{-2} \cdot 101_2$
+			\itemf $2^{-4} \cdot 1011.1_2$
+		\end{enumerate}
+%		
+	}
+	\bsol{
+%		
+		\begin{enumerate}
+			\itemf $2^5 \cdot 1.01_2 = 101000_2 = 40$
+			\itemf $2^{10} \cdot 1.1_2 = 11000000000_2 = 1536$
+			\itemf $2^0 \cdot 1.01_2 = 1.01_2 = 1.25$
+			\itemf $2^{-1} \cdot 1.0111_2 = 0.10111_2 = \nicefrac{23}{32}$
+		\end{enumerate}
+	}
+
+%----------------------------------------------------------------------------------
+\bsubsec{Maschinenzahlen (IEEE)}{
+		
+%	}
+%		
+		Forme folgende Zahlen in eine Maschinenzahl nach IEEE-Standard um:
+		\begin{enumerate}
+			\itemf $2^3 \cdot 101_2$
+			\itemf $-1 \cdot 2^{9} \cdot 11_2$
+			\itemf $2^{-2} \cdot 101.11010110001_2$
+			\itemf $2^{-4} \cdot 1011.1_2$
+		\end{enumerate}
+%		
+	}
+	\bsol{
+%		
+		\begin{enumerate}
+			\itemf $2^5 \cdot 1.01_2 =$\\$0|10000100|01000000000000000000000$
+			\itemf $2^{10} \cdot 1.1_2 =$\\$1|10001001|10000000000000000000000$
+			\itemf $2^0 \cdot 1.0111010110001_2 =$\\$0|01111111|01110101100010000000000$
+			\itemf $2^{-1} \cdot 1.0111_2 =$\\$0|01111110|01110000000000000000000$
+		\end{enumerate}
+	}
+	
+%----------------------------------------------------------------------------------
+\bsubsec{NSDR (New Super Digit Representation)}{
+	
+	Eine neue (erfundene) Zahlendarstellung, die ihr für die nächste Aufgabe benötigt
+	\begin{itemize}
+		\item Besteht aus 10 Bits
+		\item Exponent: 5 Bit (verhält sich wie in IEEE)
+		\item Mantisse: 5 Bit (Normiert)
+		\item 10 Nullen ist vor-reserviert für Infinity
+		\item 10 Einser ist vor-reserviert für -Infinity
+	\end{itemize}
+}
+
+	\orangeSlide{NSDR Tasks}{
+		
+		Forme folgende Zahlen in eine Maschinenzahl nach NSDR-Standard um:
+		\begin{enumerate}
+			\itemf $2^3 \cdot 101_2$
+			\itemf $-1 \cdot 2^{0} \cdot 11_2$
+			\itemf $2^{-2} \cdot 101.1101_2$
+			\itemf $2^{11} \cdot 111111.111111_2$
+		\end{enumerate}
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf $2^5 \cdot 1.01_2 = 10100|10100$
+			\itemf Kann nicht dargestellt werden, gibt kein Vorzeichen-Bit o.ä.
+			\itemf $2^0 \cdot 1.011101_2 = 01111|10111$ \\(Hier musste gerundet werden, nicht genug Bits)
+			\itemf $2^{16} \cdot 1.1111_2 = -\infty$ \\(Nur Einser ist vor-reserviert, ein PC würde vmtl. eine Exception werfen, da er aufrunden müsste und das außerhalb des darzustellbaren Bereiches wäre)
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------

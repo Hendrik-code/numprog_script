@@ -1,0 +1,127 @@
+
+\Bsec{Kondition und Stabilität} {
+		
+		\begin{itemize}
+			\itemf Fehlerberechnung
+			\itemf Kondition
+			\itemf Stabilitäts Bestimmung
+			\itemf Kombinations Aufgaben und Verständnisfragen
+		\end{itemize}
+}
+%----------------------------------------------------------------------------------
+\bsubsec{Fehlerberechnung}{
+%		
+%		Absoluter Fehler: $$f_{abs} = \abs{x - rd(x)}$$
+%		
+%		Relativer Fehler: $$f_{rel} = \frac{\abs{x - rd(x)}}{x}$$
+%		
+%	}
+%		
+		Rechne den exakten und gerundeten Wert der folgenden Operationen aus:
+		
+		Zusatz: Bestimme den absoluten und relativen Fehler nach jeder Operation.
+		
+		Sei 
+		\begin{align*}
+			a = 2,4142 \quad rd(a) = 2,42 \quad ,
+		\end{align*}
+		wir haben also 3 signifikante (dezimale) Stellen, runden nach jeder Operation und im Falle dessen immer auf.
+		\begin{enumerate}
+			\itemf $b = a + 0.2$
+			\itemf $c = b + b$
+			\itemf $d = c + 0.00123$
+			\itemf $e = d - c$
+			\itemf Wie nennt man die Probleme bei 3. und 4.?
+		\end{enumerate}
+%		
+	}
+	\bsol{
+		
+		Anfangs Fehler von ca. 0,24\%
+		\begin{enumerate}
+			\itemf $b = 2,6142; \quad rd(b) = 2,62;$ \quad Fehler von ca. 0,222\%
+			\itemf $c = 5,2284; \quad rd(c) = 5,24;$ \quad Fehler von ca. 0,222\%
+			\itemf $d = 5,22963; \quad rd(d) = 5,25;$ \quad Fehler von ca. 0,39\%, verursacht durch Absorption
+			\itemf $e = 0.00123; \quad rd(e) = 0,01;$ \quad Fehler von ca. 713\% (!), Ursache ist eine Auslöschung
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bsubsec{Kondition}{
+%		
+%		Konditionszahl: $$cond(f, x) = \abs{\frac{x \cdot f'(x)}{f(x)}}$$ \sbreak
+%		
+%		Eingabefehler: $$\abs{\frac{x - rd(x)}{x}}$$ \sbreak
+%			
+%		Ausgabefehler: $$\abs{\frac{f(x) - f(rd(x))}{f(x)}}$$ \sbreak
+%		
+%		Verstärkungsfaktor: $$\frac{rel. Ausgabefehler}{rel. Eingabefehler}$$ \sbreak
+%	}
+%		
+		Rechnen sie für folgenden Aufgaben die Konditionszahl aus und interpretieren sie das Ergebnis:
+		\begin{enumerate}
+			\itemf $f(x) = 2x^2$
+			\itemf $g(x) = 5e^x$
+			\itemf $h(x) = \ln(x)$
+			\itemf $i(x) = \sqrt{4x} \cdot x$
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf $\cond(f, x) = 2$ \\$\Rightarrow$ gut konditioniert
+			\itemf $\cond(g, x) = x$ \\$\Rightarrow$ bei $\abs{x} \gg 1$ schlecht konditioniert, ansonsten gut
+			\itemf $\cond(h, x) = \frac{1}{\ln(x)}$ \\$\Rightarrow$ schlecht konditioniert, solange $x \le e$ gilt
+			\itemf $\cond(i, x) = \frac{x * 3\sqrt{x}}{2 \cdot x^{3/2}} = \nicefrac{3}{2} $ \\$\Rightarrow$ gut konditioniert
+		\end{enumerate}
+	}
+
+%----------------------------------------------------------------------------------
+\bsubsec{Stabilität}{
+%		
+%		Jede Operation erzeugt einen Fehler:\\
+%		$(a$ $op_M$ $b) = (a$ op $b) * (1 + \epsilon)$
+%		
+%		Endergebnisfehler: $$\abs{\frac{rd(f)(x) - f(x)}{f(x)}}$$
+%	}
+%		
+		Bestimme, ob folgende Funktionen jeweils stabil oder nicht sind: (Verkettungen von Fehlern werden ignoriert)
+		\begin{enumerate}
+			\itemf $f(x) = 2x^2$
+			\itemf $g(x) = 5e^x$ (<- $e^x$ erzeugt \fat{einen} Fehler)
+			\itemf $h(x) = \ln(x) \cdot x$
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf Endergebnisfehler: $\abs{\epsilon_1 + \epsilon_2} \imp$ Stabil
+			\itemf Endergebnisfehler: $\abs{\epsilon_1 + \epsilon_2} \imp$ Stabil
+			\itemf Endergebnisfehler: $\abs{\epsilon_1 + \epsilon_2} \imp$ Stabil
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bquestion{
+%	}
+%		
+%		Beantworte folgende (Trick-)Fragen möglichst genau:
+		\begin{enumerate}
+			\itemf Was beschreibt die Konditionszahl?
+			\itemf Beschreibe kurz den Unterschied zwischen Kondition und Stabilität.
+			\itemf Erläutere, was eine Konditionszahl von $< 1$ bedeuten würde.
+			\itemf Aus dem Bauchgefühl: Ist f(x) = x stabil? Warum?
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\itemf Die ungünstigste Fehler Verstärkung eines Eingabesfehlers, der bei dem Problem auftreten kann.
+			\itemf Kondition: Fehler des Problems, vgl. Eingabe- und Ausgabefehler\\
+				Stabilität: Fehler vom Algorithmus, Fehler durch Arithmetik
+			\itemf Der Eingabefehler würde sich verkleinern, ist quasi nicht möglich.
+			\itemf Keine Operation, also auch keine Fehlererzeugung. Es muss stabil sein!
+		\end{enumerate}
+	}
+	%----------------------------------------------------------------------------------

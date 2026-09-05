@@ -1,0 +1,190 @@
+
+	\newpage
+	
+% =========================================================	
+	\section{Zahlendarstellung} \label{chap:zahlendarstellung}
+% =========================================================
+	
+	\defi{
+		\n 
+		Zahlendarstellungen sind eine wichtige Grundlage der Numerik. Zunächst betrachten wir die Zahlenbasen, welche für uns relevant sind und wie wir sie übersetzen.
+	%}
+	%
+	%
+		\n
+		Die wichtigsten Zahlenbasen sind für uns:
+		\begin{itemize}
+			\item Basis 2, binäre Zahlen genannt,
+			\item Basis 10, die Dezimalzahlen und
+			\item Basis 16 oder auch Hex-Zahlen.
+		\end{itemize}
+		Falls eine Darstellung nicht hinreichend gekennzeichnet ist, schreibe ich eine 2 in den Index bei binären Zahlen, bei Hex-Zahlen eine 0x vor die Zahl oder eine 16 in den Index. Falls die Darstellung durch einen Hex-Buchstaben trivialerweise einer Hex-Zahl entspricht, lasse ich eine Kennzeichnung weg.
+%	}
+%	
+		\n 
+		In der nächsten Tabelle lasse ich z.B. die Kennzeichnungen weg, da die erste Spalte die Basis der Zahlen angibt.
+%	}
+% =========================================================
+%Zahlenbasen Beispiele (Tabelle)
+	\begin{table}[H]
+		\centering
+			\begin{tabular}{lcccc}
+				\toprule
+				Basis   & \multicolumn{4}{c}{Beispiele} \\ \midrule
+				Binär   & 01100  & 10001 & 11101 & 00011 \\
+				Dezimal & 12     & 17    & 29    & 03    \\
+				Hex     & 0C     & 11    & 1D    & 03    \\
+				\bottomrule
+			\end{tabular}%
+		\caption{Beispiele für alle Basen.}
+		\label{table:basen}
+	\end{table}
+% =========================================================
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{lccccccccccc}
+			\toprule
+			Ganzzahl & 1                   & 2                   & 4                   & 8                   & 16                  & 32                  & 64                  & 128                 & 256                 & 512                 & 1024                 \\ \midrule
+			Potenzschreibweise & 2$^0$ & 2$^1$ & 2$^2$ & 2$^3$ & 2$^4$ & 2$^5$ & 2$^6$ & 2$^7$ & 2$^8$ & 2$^9$ & $2^{10}$ \\ 
+			\bottomrule
+		\end{tabular}
+		\caption{Die wichtigsten Zweierpotenzen.}
+		\label{table:2potenz}	
+	\end{table}
+% =========================================================
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{lcccccc}
+			\toprule
+			Hex-Buchstabe & A                   & B                   & C                   & D                   & E                  & F\\ \midrule
+			Dezimalwert & 10 & 11 & 12 & 13 & 14 & 15\\ 
+			\bottomrule
+		\end{tabular}
+		\caption{Wdh. Hex Buchstaben.}
+		\label{table:hex}
+	\end{table}
+}
+
+	\newpage
+% =========================================================
+	\subsection{Dezimal zu Binär}
+
+		Du hast beispielweise die Zahl 12 und möchtest diese binär darstellen.\\
+		
+		\methode{
+			\begin{itemize}
+				\item Überlege dir, welche größte Zweierpotenz noch in deine Zahl reinpasst\\
+				(Bei $12$ wäre das $8$, also $2^3$)
+				\item Subtrahiere deine Zahl durch diese Potenz und schreibe eine \qu{$1$}.
+				\item Geh jetzt jeweils durch alle kleineren Zweierpotenzen (bis $2^0$) und subtrahiere deine Zahl durch diese, wenn möglich \\
+				(Solang die Subtraktion nicht kleiner null wird)
+				\item Immer wenn man die Zahl nicht subtrahieren kann ($< 0$), schreibe eine \qu{$0$}, ansonsten eine \qu{$1$}.
+			\end{itemize}
+		}
+		
+		\sbreak	
+		\bsp{(von oben)
+			\begin{align*}
+				12 - 2^{3} &= 4 \imp 1\\
+				4 - 2^{2} &= 0 \imp 1\\
+				0 - 2^{1} &< 0 \imp 0\\
+				0 - 2^{0} &< 0 \imp 0
+			\end{align*}
+			Somit ergibt sich (von oben nach unten) \qu{$1100_2$}.
+		}
+				
+		\sbreak
+		\bsp{ Umwandlung von $37$:
+			\begin{align*}
+				37 - 2^{5} &= 5 \imp 1\\
+				5 - 2^{4} &< 0 \imp 0\\
+				5 - 2^{3} &< 0 \imp 0\\
+				5 - 2^{2} &= 1 \imp 1\\
+				1 - 2^{1} &< 0 \imp 0\\
+				1 - 2^{0} &= 0 \imp 1
+			\end{align*}
+			Das Ergebnis ist \qu{$100101_2$}.
+		}
+
+\newpage
+% =========================================================	
+	\subsection{Binär zu Hex}
+		\sbreak
+	
+		\methode{\n
+			Wenn wir eine binäre Zahl in eine hexadezimale Zahl umwandeln wollen, ergeben vier binäre Ziffern jeweils eine Hex-Ziffer der Hex-Zahl.
+			Also geht man durch die binäre Zahl von rechts nach links, trennt sie in Viererpakete auf und wandelt dann jedes Paket einzeln um.
+		}
+		
+		\sbreak
+		\bsp{ 
+			\n
+			$101010_2$ zu Hex umwandeln (Das wäre 42 als Dezimalzahl):
+			\n
+			Auftrennen in Viererpakete: \fat{0010|1010}
+			\n 
+			Die letzten (rechtesten) vier Ziffern ergeben im Dezimalsystem 10. Dies entspricht in Hex einem \qu{A} (siehe \refTable{table:hex}).
+			Das andere Päkchen entspricht einer 2 und in Hex damit einer 2.
+			\n 
+			Die Hex Zahl ist somit \qu{2A}.
+		}
+		
+		\sbreak
+		\bsp{\n 
+			Umwandlung von $110110011_2$: 
+			\n
+			Viererpakete: \fat{0001|1011|0011}
+			\n
+			Einzelne Umwandlungen: 
+			\begin{align*}
+				0001_2 &\imp 1& 1011_2 &\imp 11 (= \text{B})& 0011_2 \imp 3
+			\end{align*}
+			Die Hex Zahl ist somit "1B3"
+		}
+	
+	\newpage
+% =========================================================	
+	\subsection{Dezimalbrüche zu Binär}
+		
+		\sbreak
+		\methode{\n
+			Führe schriftliches Dividieren der Brüche im binären System aus (das geht analog zum dezimalen).
+			Das Ergebnis der Division ist auch das Ergebnis der Konvertierung.}
+	
+		\sbreak
+		\bsp{\n
+			$\frac{3}{4} = 011_2 : 100_2$
+			\begin{table}[H]
+				\label{table:dec>binary1}
+				\begin{tabular}{llllll}
+					0 	& 1 & 1 &   & \multicolumn{2}{l}{: $100_2$ = $0.11_2$} \\ \cline{1-4}
+						& 1 & 1 & 0 & &  	\\ 
+					- 	& 1 & 0 & 0 & &		\\ \cline{2-5}
+						&   & 1 & 0 & 0 &   \\
+						& - & 1 & 0 & 0 &   \\ \cline{3-5}
+						& & & & 0 &
+				\end{tabular}
+			\end{table}
+			\noindent Das Ergebnis ist also "$0.11_2$".
+		}
+		
+		\sbreak
+		\bsp{\n
+			$\frac{2}{3} = 010_2 : 011_2$
+			\begin{table}[H]
+				\label{table:dec>binary2}
+				\begin{tabular}{llllll}
+					0 & 1 & 0 &   & \multicolumn{2}{l}{: $011_2$ = $0.101_2$} \\ \cline{1-4}
+					& 1 & 0 & 0 & \\
+					- & 0 & 1 & 1 & \\ \cline{2-4}
+					& 0 & 0 & 1 & 0 & (Periodisch)
+				\end{tabular}
+			\end{table}
+			\noindent Hier haben wir den Fall, dass sich die Rechnung ständig wiederholt,
+			als nächstes würden wieder eine Null und eine Eins kommen usw.
+			\n 
+			Das Ergebnis ist also: 
+			\begin{align*}
+				0.1\overline{01}_2
+			\end{align*}
+		}

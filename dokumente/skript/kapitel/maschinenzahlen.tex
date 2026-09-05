@@ -1,0 +1,442 @@
+
+% =========================================================	
+% =========================================================	
+	\newpage
+	\subsection{Maschinenzahlen} \label{chap:maschinenzahlen}
+
+		\defi{
+			\n 
+			Der Computer speichert Zahlen in binärer Form und hat dafür nur begrenzt viel Speicher. Diese Zahlen nennt man \fat{Maschinenzahlen} (kurz M.Zahl).
+			\n
+			Es stehen allgemein gesprochen $n$ \fat{Bits} für eine Zahl zur Verfügung.
+		}
+	
+	\lbreak
+	\subsubsection{2-Komplement-Darstellung}
+	
+		\defi{\n
+			Die 2-Komplement-Darstellung ist eine Möglichkeit, mit Bits (also binär) positive sowie negative Ganzzahlen darzustellen (Ganzzahlen sind solche, die ohne ein Komma auskommen).
+			\n
+			In dieser Darstellung sind alle Bits normal binär kodiert mit einer Ausnahme. Das vorderste (erste/linkeste) Bit repräsentiert $-2^{n-1}$. 
+			\\
+			Das bedeutet: Wenn nur das erste Bit eine $1$ ist, stellt die Zahl die kleinst-möglichste Zahl dar. Bei $5$ Bits wäre das z.B. $-2^{5-1} = -2^{4} = -16$ \sbreak \\
+			Daraus folgt, dass man mit \textit{n} Bits die Zahlen von $(-2^{n-1})$ bis $(2^{n-1}-1)$ darstellen kann. 
+		}
+		
+		\sbreak
+		\bsp{\n
+			Mit 5 Bits kann man die Zahlen von -16 [$10000_2$] bis 15 [$01111_2$] darstellen.
+		}
+		
+		\sbreak
+		\methode{
+			\n
+			Wenn man nun umrechnen will, geht man am besten von links nach rechts und addiert alle umgewandelten Ziffern aufeinander (eigentlich analog zu einer binären Zahl).
+			\n
+			Die Bitstelle im Folgenden wurde von links nach rechts nummeriert.
+			Das $n$-te Bit ist also das Bit ganz rechts.
+			%
+			\begin{table}[H]
+				\label{table:komplement-darstellung}
+				\centering
+				\begin{tabular}{lccccc}
+					Stelle des Bits & 1        & 2       & 3       & \dots & $n$   \\ \midrule
+					Wert des Bits   & $-2^{n-1}$ & $2^{n-2}$ & $2^{n-3}$ & \dots & $2^0$
+				\end{tabular}
+				\caption{Darstellung}
+			\end{table}
+			%
+			\noindent \fat{Anmerkung:}
+			\\
+			Im Grunde sind das normale binäre Zahlen mit Ausnahme des ersten Bits!
+		}
+			
+		\newpage
+		\bsp{\n
+			Im Folgenden seien 4 Bits verfügbar: \\
+			(Zur besseren Übersicht wurde das erste Bit sichtbar getrennt)
+			\begin{table}[H]
+				\label{table:komplement}
+				\centering
+				\begin{tabular}{ccc}
+					M.Zahl &$\imp$ & Dezimalzahl \\
+					0\sep 001 &$\imp$& $1$ \\
+					0\sep 101 &$\imp$& $5$ \\
+					1\sep 000 &$\imp$& $-8$ \\
+					1\sep 001 &$\imp$& $-7$ \\
+					1\sep 011 &$\imp$& $-5$
+				\end{tabular}
+			\end{table}
+		}
+	
+		\sbreak
+		\methode{ Eine Zahl zu invertieren (z.B. 5 in -5)
+			\n 
+			Erst einmal die Zahl in die 2-Komplement Darstellung bringen.
+			\begin{itemize}
+				\item Bitweise Negation (also nullen zu einsen und andersherum)
+				\item Addiere 1 auf die Zahl
+			\end{itemize}
+			Von Minus nach Plus dann alles rückwärts (statt addieren ist es dann subtrahieren)
+		}
+	
+		\sbreak
+		\bsp{\n
+			5 in -5 umwandeln:
+			\begin{align*}
+				5 &\imp 0101 && \text{(Binär schreiben)} \\
+				0101 &\imp 1010 && \text{(Bitweise Negation)} \\
+				1010 &\imp 1011 && \text{(Addition)}
+			\end{align*}
+			-7 in 7 umwandeln:
+			\begin{align*}
+			-7 &\imp 1001 && \text{(Binär schreiben)} \\
+			1001 &\imp 1000 && \text{(Subtraktion)} \\
+			1000 &\imp 0111 && \text{(Bitweise Negation)}
+			\end{align*}
+		}
+
+% =========================================================	
+% =========================================================	
+	\newpage
+	\subsubsection{Gleitkommazahlen} \label{chap:gleitkommazahlen}
+	
+		\defi{
+			\n 
+			Nun möchten wir aber auch reelle Zahlen, oder Approximationen solcher, darstellen können. Das nennen wir die Gleitkommazahlen (im englischen "floating point numbers"). 
+			\n 
+			Für diese benötigen wir das Verständnis von binären Kommazahlen, also hier eine kurze Wiederholung:
+			\begin{table}[H]
+				\label{table:binary_kommazahlen}
+				\centering
+				\begin{tabular}{lccccccc}
+					\toprule
+					Binär & $1.0_2$ & $0.1_2$ & $0.01_2$ & $0.001_2$ & $0.0001_2$ & $0.00001_2$ &\dots \\
+					Dezimalwert & 1 & \nicefrac{1}{2}     & \nicefrac{1}{4}  & \nicefrac{1}{8}   & \nicefrac{1}{16}  & \nicefrac{1}{32} & \dots \\ \bottomrule
+				\end{tabular}
+				\caption{Wdh. Binäre Kommazahlen}
+			\end{table}
+		}
+		
+		\sbreak
+		\bsp{
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{ccc}
+					\toprule
+					Binäre Zahl &$\imp$& Dezimalzahl \\ \midrule
+					$1.11_2$ &$\imp$& $1.75$ \\
+					$111.001_2$ &$\imp$& $7.125$ \\
+					$0.01_2 + 0.01_2 = 0.1_2$ &$\imp$& $\nicefrac{1}{4} + \nicefrac{1}{4} = \nicefrac{1}{2}$ \\
+					\bottomrule
+				\end{tabular}%
+				\caption{Binäre Kommazahlen und deren dezimales Äquivalent.}
+				\label{table:bsp_binary_kommazahlen}
+			\end{table}
+		}
+
+% =========================================================	
+	
+		\newpage
+		\defi{ \n 
+			Gleitkommazahlen bestehen (in den meisten Darstellungen) aus \fat{Vorzeichen, Exponent und Mantisse.}
+			\begin{align}
+				\text{Wert der Gleitkommazahl = } (-1)^{\text{Vorzeichen}} \cdot 2^{\text{Exponent}} \cdot \text{Mantisse}_2
+			\end{align}
+			Abgekürzt schreibt man das häufig auch:
+			\begin{align*}
+				\text{G} = (-1)^{\text{V}} \cdot 2^{\text{E}} \cdot \text{M}
+			\end{align*}
+			Man kann sich die Zahl so vorstellen, dass der Exponent lediglich eine Kommaverschiebung ist. Zum Beispiel gilt 
+			\begin{align*} 
+				(1.0)_2 \cdot 2^0 = (0.01)_2 \cdot 2^2 = (1000)_2 \cdot 2^{-3} 
+			\end{align*}
+			In dezimal wäre das:
+			\begin{align*} 
+				1 \cdot 1 = \frac{1}{4} \cdot 4 = 8 \cdot \frac{1}{8} 
+			\end{align*}
+		}
+		
+		\sbreak
+		\wichtig{
+			\n
+			Ohne eine Normierung ist die Darstellung nicht eindeutig, was bedeutet, dass es zur einer (dezimal) Zahl mehrere Möglichkeiten gibt, diese korrekt darzustellen (siehe oben). Also wenn zwei Zahlen (ohne Normierung) verglichen werden, muss nicht zwangsläufig diejenige Gleitkommazahl größer sein, die den größeren Exponenten hat!
+		}
+		
+		%Eine Mantisse ist genau dann normiert, wenn diese eine
+		%führende Eins hat und sofort ein Komma folgt.
+		
+		\sbreak
+		\defi{ Normierung 
+			\n
+			Bei einer normierten Mantisse wird der Exponent genau so gewählt, dass die Mantisse eine von Null verschiedene Stelle vor dem Komma hat (also dass die Mantisse die Form 1, \dots hat). So löst sich auch der letzte \red{Wichtig}-Block. Das machen wir aus dem Grund, da nun jede Zahl eine eindeutige Darstellung hat. Also ist die Mantisse genau dann normiert, wenn diese eine führende Eins hat und sofort ein Komma folgt.
+			\n
+			Damit bezeichnet die normierte Mantisse unsere Nachkommastellen (plus die Eins vor dem Komma).
+		}
+		
+		\sbreak
+		\bsp{
+			\n
+			Eine dezimale $16$ würde man von $(0.1)_2 \cdot 2^5$ zu $(1.0)_2 \cdot 2^4$ normieren.
+		}
+	
+% =========================================================	
+	%\lbreak
+	\newpage
+	\subsubsection{IEEE-Standard} \label{chap:ieee}
+	
+		\defi{
+			\n 
+			Der sogenannte IEEE Standard ist eine Darstellungsmöglichkeit, die in vielen Bereichen verwendet wird. Ihr stehen 32 Bits zur Verfügung, die folgende Verteilungen besitzen:
+			\begin{itemize}
+				\item 1 Bit für das Vorzeichen: \\
+				Null für positiv, Eins für negativ
+				\item 8 Bits für den Exponenten: \\
+				Der Exponent soll aber auch negative Werte annehmen können, eine Erklärung wie das gemacht wird folgt noch.
+				\item 23 Bits für die Mantisse (Nachkommastellen): \\
+				Von einer Normalisierung mit führender Eins wird ausgegangen.\\
+				Diese Eins muss \fat{nicht} abgespeichert werden, wodurch man sich ein Bit spart.
+				\item Genügen 23 Bits nicht für die Darstellung, muss gerundet werden.
+			\end{itemize}
+			Der Exponent entspricht einer normalen binären Zahl, aber da man negative Werte darstellen möchte, zieht man eine Konstante ab. So shiftet man den darstellbaren Bereich für den Exponenten von 0 bis $(2^n-1)$ auf $(-2^{n-1} +1)$ bis $(2^{n-1})$. Die Konstante entspricht also $(2^{n-1} - 1)$. Im Beispiel der 8 Bits des Exponenten würde also die binäre Zahl um 127 verringert werden, damit man den eigentlichen Exponenten hat.
+			%Die Binärzahl entspricht dem (Dezimal-)Exponenten + 127. Andersherum: Der (Dezimalwert minus 127) entspricht dem Exponenten in der IEEE Darstellung.
+			%Warum +127 beim Exponenten? \\
+			%Damit wir (ähnlich der 2-Komplement Darstellung) Exponenten von -127 bis 128 darstellen können anstelle von 0 bis 256.
+		}
+	
+		\sbreak
+		\bsp{ 
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{ccc}
+					\toprule
+					Abgespeicherten Bits   & & Wert \\ \midrule
+					01111101 & $\imp$ & $-2$ \\
+					00000001 & $\imp$ & $-126$ \\
+					11111110 & $\imp$ & $127$ \\
+					10000000 & $\imp$ & $1$ \\
+					\bottomrule
+				\end{tabular}%
+				\caption{Beispiele der IEEE Exponenten und ihre tatsächlichen Werte (wegen dem konstanten Abzug von 127).}
+				\label{table:ieeeExponent}
+			\end{table}
+%				(Da der Dezimal wert 125 ist, minus 127 ist gleich -2)
+%				(0, Infinity, NaN, \dots)
+		}
+	
+		\wichtig{ \n
+			$00000000_2$ und $11111111_2$ des Exponenten sind allerdings speziell reserviert (0, Infinity, NaN, \dots).
+		}
+	
+		\sbreak
+		\methode{ Dezimalzahl in IEEE umwandeln:
+			\begin{itemize}
+				\item Dezimalzahl in binäre Zahl umwandeln,
+				\item Exponent so bestimmen, dass die restliche Zahl (Mantisse) normiert ist,
+				\item Vorzeichen direkt umwandeln (Eins für negative, Null für positive Zahl),
+				\item Exponent $+127$ nehmen und dann in binär umwandeln,
+				\item Mantisse einfach hinschreiben (die Eins vor dem Komma weglassen!) und wenn nötig runden.
+			\end{itemize}
+		}
+	
+		\sbreak
+		\bsp{
+			\begin{table}[H]
+				\centering
+				\begin{tabular}{cccc}
+					\toprule
+					Dezimal & Binär 		& Gleitkommadarstellung 	& IEEE (V | E | M)\\ \midrule
+					$32.00$ & $100000_2$ 	& $2^5 \cdot 1.0_2$ 		& $0|10000100|00000000000000000000000$ \\ \greyMidRule
+					$13.75$ & $1101.11_2$ 	& $2^3 \cdot 1.10111_2$ 	& $0|10000010|10111000000000000000000$\\ \greyMidRule
+					$-0.125$ & $-0.001_2$ 		& $-1 \cdot 2^{-3} \cdot 1.0_2$ & $1|01111100|00000000000000000000000$\\
+					\bottomrule
+				\end{tabular}%
+				\caption{Beispiele von Dezimalzahlen und ihre dazugehörige normierte Gleitkommadarstellung und wie die 32 Bits in IEEE aussehen würden.}
+				\label{table:bsp_gleitkommazahlen}
+			\end{table}
+		}
+	
+%			Gute Umformungsregeln für das IEEE-Format kann man hier finden:
+%			Einen Umrechnungsrechner kann man hier finden:
+%			Eine bildliche Veranschaulichung inklusive Erklärungstext für Umwandlung in das IEEE-Format ist unter:
+%		}
+
+	\newpage
+% =========================================================	
+	\subsubsection{Rundung} \label{chap:rundung}
+	
+	\defi{
+		\n
+		$\rd(x)$ ist die Zahl, die herauskommt, wenn man $x$ rundet.
+		\n
+		Aber \fat{wie} rundet man denn überhaupt bei Gleitkommazahlen? \\
+		Im Folgenden sei eine Zahl bis zu dem Zeichen "|" korrekt darstellbar (sprich alle Zahlen dahinter müssen gerundet werden).
+	}
+	
+%	}
+	
+	\sbreak
+	\methode{ \n 
+		Es gibt vier Fälle für das Runden. Sei $y$ jeweils beliebig:
+		\begin{align*}
+			&y \sep 0x \quad \text{ mit $x$ "beliebig"} &&\imp \text{Abrunden} \\%\label{eq:round} \\
+			&y \sep 1x \quad \text{ mit $x$ "nicht nur Nullen"} &&\imp \text{Aufrunden}\\
+			&y1 \sep 1x \quad \text{ mit $x$ "nur Nullen"} &&\imp \text{Aufrunden}\\
+			&y0 \sep 1x \quad \text{ mit $x$ "nur Nullen"} &&\imp \text{Abrunden}
+		\end{align*}
+	}
+
+	\sbreak
+	\wichtig{
+		\n 
+		Die letzten beiden Regeln des vorangegangenen Blocks werden häufig auch die "uneindeutigen Fälle" genannt, je nach Notation und Darstellung können die Rundungsregeln dafür anders definiert sein (oben sind sie so definiert, dass sie immer zur geraden Mantisse gerundet wird). Schaut also hierbei, was in der Klausur angegeben ist!
+	}
+	
+	\sbreak
+	\bsp{
+		\begin{table}[H]
+			\centering
+			\begin{tabular}{ccc}
+				\toprule
+				Originalzahl & Gerundet & Aktion\\ \midrule
+				$1.0\sep 1010_2$ & $1.1_2$ & Aufgerundet \\
+				$1.0\sep 0111_2$ & $1.0_2$ & Abgerundet \\
+				$1.1\sep 1000_2$ & $10_2$ & Aufgerundet \\
+				$1.0\sep 1000_2$ & $1.0_2$ & Abgerundet \\
+				\bottomrule
+			\end{tabular}%
+			\label{table:bsp_rundung}
+		\end{table}
+%			&1.0\sep 101_2 &&\imp 1.1_2 &&\text{(Aufgerundet)} \\
+%			&1.0\sep 0111_2 &&\imp 1.0_2 &&\text{(Abgerundet)} \\
+%			&1.1\sep 1000_2 &&\imp 10_2 &&\text{(Aufgerundet)} \\
+%			&1.0\sep 1000_2 &&\imp 1.0_2 &&\text{(Abgerundet)}
+	}
+		
+	\newpage
+	\defi{
+		\n 
+		Durch Rundungen entstehen jedes Mal Fehler. Wir unterscheiden zwischen folgenden Fehlertermen.
+		\n 
+		Absoluter Fehler: 
+		\begin{align} 
+			 \fabs := \abs{x - \rd(x)} 
+		\end{align}
+		Relativer Fehler:
+		\begin{align} 
+			\frel := \abs{\frac{\fabs}{x}} 
+		\end{align}
+	}
+
+	\sbreak
+	\bsp{
+		\n 
+		Sei eine Zahl $x$ bis zu dem Zeichen "|" exakt darstellbar. Mit $x = 10.0|11_2$ wird aufgerundet (siehe oben). Also ist $\rd(x) = 10.1_2$.
+		\n 
+		Der absolute Fehler dieser Rundung beträgt:
+		\begin{align*} 
+			\fabs(x) &= \abs{x - \rd(x)} \\
+				&= \abs{10.011_2 - 10.1_2} \\
+				&= 0.001_2 \\
+				&= \frac{1}{8}
+		\end{align*}
+		Den relative Fehler können wir dann wie folgt bestimmen:
+		\begin{align*} 
+			\frel(x) &= \abs{\frac{\fabs}{x}} \\
+				&= \abs{\frac{\nicefrac{1}{8}}{10.011_2}} \\
+				&= \abs{\frac{\nicefrac{1}{8}}{2.375}} \\
+				&= \abs{\frac{1}{8} \cdot \frac{8}{19}} \\
+				&= \frac{1}{19}
+		\end{align*}
+	}
+	
+% =========================================================	
+	\newpage
+	\subsubsection{Maschinengenauigkeit} \label{chap:maschinengenauigkeit}
+	
+	\defi{ \n 
+		Die Maschinengenauigkeit beschreibt die größte positive Zahl $x$, sodass $\rd(x+1) = 1$ gilt. \n
+		Wird berechnet durch: 
+		\begin{align} 
+			\epsilon = \frac{1}{2} \cdot \beta^{1-t} 
+		\end{align}
+		\begin{itemize}
+			\item $\epsilon$ = Maschinengenauigkeit
+			\item $\beta$ = Zahlenbasis (bei uns immer 2)
+			\item $t$ = Mantissenlänge \\
+			(bei IEEE ist dies 24, weil 23 Bits plus die nicht abgespeicherte Eins)
+		\end{itemize}
+		Damit beschreibt die Maschinengenauigkeit das Maß der Rundungsfehler, sie gibt also den maximalen relativen Rundungsfehler (bei der Darstellung von Zahlen) an. Mit anderen Worten: Egal wie präzise und genau ein Algorithmus ist, in aller Regel kann er nicht genauer als die Maschinengenauigkeit sein (deswegen der Name \Winkey).
+	}
+
+	\sbreak
+	\bsp{
+		\n 
+		Mit IEEE (siehe \refChapter{chap:ieee}) wäre die Maschinengenauigkeit also:
+		\begin{align*}
+			\epsilon_{\text{IEEE}} &= \frac{1}{2} \cdot \beta^{1-t} \\
+				&= \frac{1}{2} \cdot 2^{1-24} \\
+				%&= \frac{1}{2} \cdot 2^{-23} \\
+				&= 2^{-24}
+		\end{align*}
+		$1 + 2^{-24}$ im IEEE-Format ergibt gerundet noch genau Eins.
+	}
+	
+%==========================================================	
+	\newpage
+	\subsubsection{Absorption} \label{chap:absorption}
+	
+	\defi{ \n
+		Ein Problem der Gleitkommaarithmetik ist die sogenannte \fat{Absorption}.
+		\n
+		Diese findet statt, wenn bei der Addition zwei sehr unterschiedlich großer Zahlen Information verloren geht aka gerundet werden muss.
+	}
+	
+	\sbreak
+	\bsp{ \n
+		Man möchte $0.75$ auf $7$ aufaddieren, hat aber nur 3 Bits für die Mantisse zur Verfügung.\\
+		Zu rechnen: 
+		\begin{align*}
+			111_2 + 0.11_2 = 111.11_2
+		\end{align*}
+		$111.11_2$ ist nicht mit 3 Bits darstellbar und führt damit zu einem Rundungsfehler!
+		\n 
+		In diesem Beispiel würde das Ergebnis aufgerundet werden und damit $1000_2$ ergeben. Das wäre in dezimal eine $8$. Mit exakter Arithmetik wäre es aber $7.75$, wir haben einen absoluten Fehler von $0.25$. Die $7$ hat die $0.75$ absorbiert, nennt man dann so.
+	}
+	
+	\sbreak
+	\wichtig{ \n 
+		Aus Absorption können wir folgendes herleiten: Bei Gleitkommazahlen geht die Eigenschaft des Assoziativgesetzes verloren!
+	}
+	
+	\newpage
+	\subsubsection{Auslöschung} \label{chap:auslöschung}
+	
+	\defi{\n	
+		Unter \fat{Auslöschung} versteht man den Verlust an Genauigkeit, wenn man zwei fast gleich große Gleitkommazahlen subtrahiert. Denn wenn man dies rechnet, rundet sich das Ergebnis zu einer Null, was verheerende Folgen haben kann. In aller Regel ist Auslöschung schlimmer als Absorption.}
+	
+	\sbreak
+	\bsp{ \n
+		Sei
+		\begin{align*}
+			a = 2.3546; \quad b = 2.3510
+		\end{align*}
+		Seien Zahlen im dezimalen nur auf 3 Ziffern genau darstellbar und der Rest jeweils normal nach der nächsten Ziffer gerundet.
+		\n
+		Wenn wir jetzt auf die korrekten Ziffern kürzen:
+		\begin{align*}
+			2.35 - 2.35 = 0
+		\end{align*}
+		Dabei wäre es analytisch: 
+		\begin{align*}
+			2.3546 - 2.3510 = 0.0036 \quad \Longrightarrow \text{Keine einzige korrekte Ziffer!}
+		\end{align*}
+		}
+	
+	\sbreak
+	\vertief{
+		\n 
+		Warum das so verheerend ist, kann man sich gut aus dem Beispiel erschließen. Denn gehen wir mal davon aus, dass wir nach der Operation aus dem Beispiel nur noch Multiplikationen ausführen müssen. Dann würde im verfälschten Fall immer Null das Ergebnis sein, exakt aber etwas völlig anderes!
+		\n 
+		Beispielsweise nach obiger Rechnung wird das Ergebnis (aus welchen Grund auch immer) mit $1000$ multipliziert. Dann würde als verfälschte Lösung $0$ rauskommen, exakt wäre aber eigentlich $3.6$.
+	}

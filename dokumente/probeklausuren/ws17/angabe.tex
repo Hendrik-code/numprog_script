@@ -1,0 +1,224 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \usepackage{tikz}
+ \usetikzlibrary{datavisualization}
+ \usetikzlibrary{datavisualization.formats.functions}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Wintersemester 17/18}
+\author{\npauthor{}}
+\date{28.02.2018}
+\maketitle
+
+\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben oder Lösungen. \n Des Weiteren ist diese Klausur nur als ein ''Vorschlag'' von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Aufgaben sind vollkommen willkürlich.}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90 Minuten
+	\item In dieser Klausur können Sie insgesamt 45 Punkte erreichen. \\Zum Bestehen werden 20 Punkte benötigt.
+	\item Hinweis: Nach Auffassung des Autors ist diese Klausur schwerer als die ''richtige'' Klausur sein wird.
+	\item Die einzelnen Teilaufgaben sind unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also
+	einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Gleitkommazahlen [4 + 2 + 2.5 Pkte]}
+%--------------------------------------------------------------
+	In dieser Aufgabe gehen wir von einer (fiktiven) Darstellung durch Gleitkommazahlen 8-Bit-$D_{B,t}$ aus. $D_{B,t}$ entspricht der IEEE Form mit Ausnahme von folgender Bit-Verteilung und Regeln:
+	\begin{itemize}
+		\item Der Exponent $E$ hat nur 4 Bits (also sind hier Exponenten von $-7$ bis $8$ möglich)
+		\item Für die normalisierte Mantisse $M$ stehen die letzten 4 Bits zur Verfügung
+		\item Die erste Eins der Mantisse muss abgespeichert werden
+	\end{itemize}
+	(a) 
+	Wandle folgende Zahlen in die 8-Bit-$D_{B,t}$ Darstellung um:
+	\begin{enumerate}
+		\item $6_{10}$
+		\item $\nicefrac{9}{8}$
+		\item $100111_{2}$
+	\end{enumerate}
+	\lbreak \lbreak \lbreak
+	(b) 
+	Was für Probleme neben Sinnlosigkeit und der abgespeicherten Eins hat Darstellungsform aus Teilaufgabe (a)?
+	\lbreak \lbreak \lbreak
+	\\
+	(c) 
+	Die Zahlen $x = 13$ und $y = 13,375$ werden in eine Operation geworfen. Es wird die Rechnung $z = x - y$ ausgeführt. Der Computer spuckt $z = 0$ als Ausgabe aus. Eingaben werden zunächst in die 8-Bit-$D_{B,t}$ umgewandelt, bevor mit ihnen gerechnet wird. \sbreak \\
+	Was ist passiert? Zeige deine Theorie, indem du einen Rechenweg angibst.
+	
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Quadratur [2.5 + 4 + 2 Pkte]}
+%--------------------------------------------------------------
+	
+	(a)
+	Wir nehmen an, dass vier Stützstellen an den festgelegten Koordinaten $x_0 = 0$, $x_1 = 2$, $x_2 = 3$ und $x_3 = 4$ einer unbekannten Funktion gegeben sind. Argumentiere, ob sich die Gauß Quadratur und das Romberg-Verfahren hier geeignet wären.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Untersuchen wir eine uns unbekannte Funktion $f(x)$.
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+		\datavisualization [school book axes,
+		visualize as smooth line,
+		y axis={label={$f'(x)$}},
+		x axis={label} ]
+		
+		data [format=function] {
+			var x : interval [-4:4] samples 12;
+			func y = .5 *((\value x*\value x*\value x) / 4 - (3 * \value x));
+		};
+		\end{tikzpicture}
+		\caption{Gegebene Informationen über $f'(x)$}
+	\end{figure}Wir haben folgende Grafik gegeben und möchten die Funktion auf ihre Kondition überprüfen.
+	Erläutere für die x-Positionen $x_0 = -2$, $x_1 =0$, $x_2 = 2$ und $x_3 = 4$ jeweils, ob sie (verglichen mit den anderen Positionen) einen gut oder schlecht konditionierten Bereich der Funktion $f(x)$ entspricht.
+	\lbreak \lbreak \lbreak
+	\\
+	(c) 
+	Mit den x-Koordinaten aus Teilaufgabe (b) als Stützstellen, berechne die Fläche unter $f'(x)$ im Intervall $[0, 4]$ mit klassischen Quadraturregeln bestmöglich. Gib einen Rechenweg an.
+
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Interpolation [3 + 1 + 1.5 + 1.5 Pkte]}
+%--------------------------------------------------------------
+
+	Es seien folgende Stützpunkte gegeben:
+	$$p_0 = (-1 | 2); p_1 = (0 | 1); p_2 = (1 | 2)$$
+	\n
+	(a)
+	Berechnen sie das Interpolationspolynom und geben sie das Ergebnis an der Stelle $x = 3$ an. Nutzen sie hierfür eine beliebige sinnvolle Kombination aus polynomiellen Basisfunktionen.
+	\lbreak \lbreak \lbreak
+	\\
+	(b)
+	Ein Kollege Ü. behauptet, er löst Teilaufgabe (a) lieber, indem er das Newton-Verfahren anwendet. Sein Grund; ein genaueres Ergebnis hat bei ihm höchste Priorität. Erläutere, ob das sinnvoll ist oder nicht.
+	\lbreak \lbreak \lbreak
+	\\
+	(c)
+	Derselbe Kollege Ü. zeigt einem seine Rechnung, die er mit Aitken-Neville angefertigt hat. Dabei seht ihr, dass in seiner Tabelle seine Stützstellen nicht in numerisch aufsteigender Reihenfolge angeordnet sind. Was sagt ihr dazu? Markiert in der Berechnungsfunktion, um eure These zu unterlegen. \\
+	Berechnungsformel von Aitken-Neville:
+	$$p[i,k] := p[i, k-1] + \frac{x-x[i]}{x[i+k]-x[i]} \cdot (p[i+1, k-1] - p[i, k-1])$$
+	\lbreak \lbreak \lbreak
+	\\
+	(d)
+	Ein Tag später kommt der Kollege Ü. wieder. Er hat seine ultimative Antwort: Spline-Interpolation. Für die einzelnen Splines hat er definiert:
+	$$p_0(t_0(x)), x \in [-1, 1]$$
+	$p_0(t_0(x))$ sei korrekt ausgerechnet worden und es sollen die kubischen Basispolynome, die im Intervall $[0, 1]$ berechnet worden sind, dafür genutzt werden. \sbreak \\
+	Definiere $t_0(x)$ sinnvoll und erläutere kurz, warum Spline-Interpolation nicht vernünftig genutzt wurde.
+
+	
+%--------------------------------------------------------------
+\task{. Aufgabe: Iterative Verfahren [3.5 + 2 + 1.5 Pkte]}
+%--------------------------------------------------------------
+	
+	Es sei eine Matrix $A$ gegeben, welche die Eigenwerte $\lambda_0 = 1$ und $\lambda_1 = 4$ besitzt.
+	\lbreak \\
+	(a)
+	Es seien die Eigenvektoren $$v_0 = \begin{pmatrix}
+		1 \\ 0
+	\end{pmatrix}, v_1 = \begin{pmatrix}
+		3 \\ 1
+	\end{pmatrix}$$ gegeben. Dabei sei $v_0$ der Eigenvektor zum Eigenwert $\lambda_0$ und $v_1$ zu $\lambda_1$. Berechne die Matrix $A$.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Berechne die Konvergenzrate $q_0$ mit einem Shift von $\mu_0 = 0$ und $q_1$ mit einem Shift von $\mu_1 = 2$.
+	Gegen die Eigenvektoren welcher Eigenwerte konvergiert die Power Iteration bei beiden Shifts jeweils? Vergleiche die Konvergenzraten. Was kann man daraus folgern (bezüglich Shift und Konvergenzgeschwindigkeit)?
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(c)
+	Der beförderte Kollege Ü. kommt vorbei und macht einen Vorschlag: Um auf den Eigenvektor $v_0$ möglichst schnell iterativ zu kommen, schlägt er einen Shift von $\mu = 4$ vor. Argumentiere, ob das sinnvoll ist. Wenn nicht, mache einen besseren Vorschlag.
+
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Differentialgleichungen [4 + 3 Pkte]}
+%--------------------------------------------------------------
+	
+	Gegeben sei 
+	$$y'(t) = t^2 \cdot y(t)$$
+	Weiterhin gilt $$y_0 = y(0) = 1; t \ge -1$$
+	(a)
+	Stelle ein Koordinatensystem auf, mit dessen Hilfe du das obige AWP grafisch lösen würdest. Zeichne in die Grafik einen Schritt mit Heun und mit explizitem Euler Verfahren ein. Die Anfangswerte seien dafür jeweils $y_0 = 1$ und $t_0 = 0$, die Schrittweite $\delta t = 2$.
+	\lbreak \lbreak \lbreak \lbreak
+	\\
+	(b)
+	Durch einen instabilen Algorithmus des Kollegen Ü. sei immer eine fehlerhafte Eingabe garantiert: $$y_\epsilon(0) = y_0 + \epsilon$$
+	Bestimmen sie mithilfe von Separation der Variablen die fehlerhafte Funktion $y_\epsilon(t)$ \n
+	Schauen sie die zwei Fälle an: $$\lim_{t \rightarrow \infty} \abs{y(t) - y_\epsilon(t)}$$ und $$\lim_{t \rightarrow 0} \abs{y(t) - y_\epsilon(t)}$$
+	Aus den zwei Fällen jeweils schließend, gut oder schlecht konditioniert?
+	
+
+%--------------------------------------------------------------
+\task{. Aufgabe: Programmieraufgabe [5.5 + 1.5 Pkte]}
+%--------------------------------------------------------------
+
+	Wir möchten das Jacobi-Verfahren zum Lösen von linearen Gleichungssystemen implementieren. \\
+	Ein Schritt des Jacobi Verfahrens:
+	$$x\st{k+1} = x\st{k} + (diag(A))^{-1}(b - Ax\st{k})$$
+	Folgende Methoden seien gegeben:
+	\begin{lstlisting}
+		float[] matVec(float[][] mat, float[] vec) {
+			//returns result of matrix-vector multiplication of mat and vec
+		}
+		
+		float[] vecAdd(float[] a, float[] b) {
+			//returns result of vector addition
+		}
+		
+		float[] vecSub(float[] a, float[] b) {
+			//returns a - b via vector subtraction
+		}
+		
+		float[] scalVec(float scalar, float[] vec) {
+			// returns scalar * vec as correct operation
+		}
+	\end{lstlisting}
+	\newpage
+	(a) Vervollständige die folgende Methode, welche einen Jacobi Schritt ausrechnet und das Ergebnis als ein float Array zurückgeben soll.
+	\n 
+	Sonderfälle oder die Korrektheit der Dimensionen der Variablen müssen nicht überprüft werden! \n 
+	\begin{lstlisting}
+	// A is the A matrix, first index stands for the column index
+	// b is the result vector from the formula Ax = b
+	// oldX is the x vector of the previous step
+	
+	float[] jacobiStep(float[][] A, float[] b, float[] oldX) {
+		
+		
+	}
+	\end{lstlisting}
+	\lbreak
+	(b) Dein beförderter Kollege Dr. Ü. verlangt, dass das ''in-place'' Prinzip angewendet wird. Erläutere kurz, wie du den Programmcode abändern müsstest, um dies umzusetzen.
+
+\end{document}

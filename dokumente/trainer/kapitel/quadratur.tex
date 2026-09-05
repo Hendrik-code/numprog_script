@@ -1,0 +1,85 @@
+
+
+\Bsec{Quadratur}{
+		
+		\begin{itemize}
+			\item Trapez-Quadratur
+			\item TBD: Quadratur nach Romberg
+			\item TBD: Gauß-Quadratur
+			\item Verständnis/Trick Fragen
+		\end{itemize}
+		}{}
+		
+%----------------------------------------------------------------------------------
+\bsubsec{Trapez-Quadratur}{
+		
+		$$H = b-a \aae h = \frac{b-a}{N} \aae f_i = f(x_i) \aae x_i = a + i \cdot h$$
+		Trapezregel: 
+		$$Q_T(f) = H \cdot \frac{1}{2} \cdot (f(a) + f(b))$$
+		Trapezsumme: 
+		$$Q_{TS}(f;h) = h \cdot (\frac{f_0}{2} + f_1 + ... + f_{N-1} + \frac{f_N}{2})$$
+		
+	}
+	\btask{
+		
+		\begin{enumerate}
+			\item Berechne (mithilfe von Trapezen) das Integral über eine Funktion $f_0$, die durch folgende Punkte geht: $$P_0(0|3) \aae P_1(2|1)$$
+			\item Berechne das Integral über die beiden vorherigen Punkten und den folgenden zusätzlichen mit Trapezen bestmöglich: $$P_2(1|2) \aae P_3(3|1)$$
+			\item Ein weitere Punkt über die Funktion $f_0$ ist bekannt, nämlich $P_4(5|8)$. Berechne wieder das Integral über den gesamten Bereich.
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item $$Q_T(f_0) = 2 \cdot \frac{1}{2} \cdot (3 + 1) = 4$$
+			\item $$Q_{TS}(f_0; 1) = 1 \cdot (\frac{3}{2} + 2 + 1 + \frac{1}{2}) = 5$$
+			\item Problem: Wir können Trapezsumme nicht für alles verwenden, weil die Schrittweite nicht konstant wäre (von 3 nach 5!). Hier müsste die Trapezsumme für die ersten vier Punkte angewendet werden plus die Trapezregel von den letzten zwei:
+			$$5 + (2 \cdot \frac{1}{2} \cdot (1 + 8)) = 5 + 9 = 14$$
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bsubsec{Quadratur nach Romberg}{
+		
+		Hier gibt es noch nichts zu sehen!
+	}
+		
+	%	TBD 
+		
+	%}
+		
+	%}
+
+%----------------------------------------------------------------------------------
+\bsubsec{Gauß-Quadratur}{
+		
+		Hier gibt es noch nichts zu sehen!
+	}
+		
+	%	TBD
+	%	
+	%}
+		
+	%	\begin{enumerate}
+	%		\item TBD
+	%	\end{enumerate}
+	%}
+%----------------------------------------------------------------------------------
+\bquestion{
+	}
+	\btask{
+		
+		Beantworte folgende (Trick-)Fragen möglichst genau:
+		\begin{enumerate}
+			\item Wir wollen Romberg Quadratur machen und haben dafür Trapezsummen mit $N=1\dots3$ gegeben. Wieviele Einträge haben wir am Ende in unserem Dreiecksschema?
+			\item TBD
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item Drei. Mit $N=3$ können wir nichts anfangen, da wir Zweierpotenzen für $N$ bei Romberg benutzen.
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------

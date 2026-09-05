@@ -1,0 +1,84 @@
+% ===========================================================================
+%  The body of the complete script -- the chapter order in one place.
+%
+%  Included by numprog_skript.tex, which builds both the screen and the
+%  print version from it, so a chapter added here shows up in both.
+%
+%  The chapter files sit next to this one in kapitel/, so the paths below
+%  are relative to the document -- no \npbase needed.
+% ===========================================================================
+
+	\normalsize
+	\tableofcontents \label{chap:toc}
+	\addtocontents{toc}{\protect\hypertarget{toc}{}}
+
+	\onecolumn
+	\normalsize
+
+% ---------------------------------------------------------------------------
+% Front matter
+% ---------------------------------------------------------------------------
+	\input{kapitel/vorwort}                    % Vorwort
+	\input{kapitel/legende}                    % Legende der Infoboxen
+	\input{kapitel/notation}                   % Notationsverzeichnis
+
+% ---------------------------------------------------------------------------
+% Zahlendarstellung
+% ---------------------------------------------------------------------------
+	\input{kapitel/zahlenbasen}                % Zahlenbasen + Umrechnung
+	\input{kapitel/maschinenzahlen}            % Zweierkomplement + Gleitkommazahlen
+
+% ---------------------------------------------------------------------------
+% Fehleranalyse
+% ---------------------------------------------------------------------------
+	\input{kapitel/kondition}                  % Kondition
+	\input{kapitel/stabilitaet}                % Stabilität
+
+% ---------------------------------------------------------------------------
+% Lineare Gleichungssysteme
+% ---------------------------------------------------------------------------
+	\input{kapitel/lgs}                        % Gauß-Elimination
+	\input{kapitel/lr_zerlegung}               % LR-Zerlegung
+	\input{kapitel/qr_zerlegung}               % Orthogonale Matrizen und QR-Zerlegung
+	\input{kapitel/lineares_ausgleichsproblem} % Lineares Ausgleichsproblem (auch mit QR)
+	\input{kapitel/matrixnorm}                 % Matrixnorm
+
+% ---------------------------------------------------------------------------
+% Interpolation
+% ---------------------------------------------------------------------------
+	\input{kapitel/interpolation_polynom}      % Polynominterpolation
+	\input{kapitel/interpolation_linear}       % Lineare Interpolation
+	\input{kapitel/interpolation_stueckweise}% Hermite + Splines
+
+% ---------------------------------------------------------------------------
+% Fourier
+% ---------------------------------------------------------------------------
+	\input{kapitel/komplexe_zahlen}            % Komplexe Zahlen
+	\input{kapitel/fourier}                    % Fourier + FFT
+
+% ---------------------------------------------------------------------------
+% Quadratur
+% ---------------------------------------------------------------------------
+	\input{kapitel/quadratur}                  % Klassische Quadratur
+	\input{kapitel/quadratur_romberg}          % Romberg
+	\input{kapitel/quadratur_gauss}            % Gauß-Quadratur
+	% kapitel/quadratur_archimedes.tex exists but is not finished yet.
+
+% ---------------------------------------------------------------------------
+% Iterative Verfahren
+% ---------------------------------------------------------------------------
+	\input{kapitel/fixpunkte}                  % Fixpunkte, Newton
+	\input{kapitel/fixpunktiteration}          % Fixpunktiteration für LGS
+	\input{kapitel/eigenwertproblem}           % Eigenwertproblem + Power Iteration
+
+% ---------------------------------------------------------------------------
+% Differentialgleichungen
+% ---------------------------------------------------------------------------
+	\input{kapitel/ode}                        % ODE, Anfangswertprobleme
+	\input{kapitel/ode_2}                      % ODE Teil 2
+
+% ---------------------------------------------------------------------------
+% Back matter
+% ---------------------------------------------------------------------------
+	\input{kapitel/haeufige_fehler}            % Häufige Fehler
+	\input{kapitel/abschlussworte}             % Abschlussworte

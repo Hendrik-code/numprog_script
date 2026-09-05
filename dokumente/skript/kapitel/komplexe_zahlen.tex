@@ -1,0 +1,51 @@
+
+\newpage
+% =========================================================	
+\section{Komplexe Zahlen} \label{chap:komplexeZahlen}
+% =========================================================
+
+\defi{
+	\n 
+	Komplexe Zahlen $z \in \complexes$ bestehen aus einem \fat{Realteil} und einem \fat{Imaginärteil}.
+	Hier sind kurz und knapp alle wichtigen Fakten in Stichpunkten zusammengefasst.
+	\begin{itemize}
+		\item $z = x + iy$
+		\item $x = \realPart(z) \aae y = \imaginaryPart(z)$
+		\item $i = \sqrt{-1}$
+		\item $\compl{z} = x - iy$ \quad(komplex konjugiertes)
+		\item $\compl{z \cdot w} = \compl{z} \cdot \compl{w}$
+		\item $\abs{z} = \sqrt{\realPart(z)^2 + \imaginaryPart(z)^2} = \sqrt{z \cdot \compl{z}}$
+		\item Euler-Formel: $e^{i\cdot m} = \cos(m) + i \cdot \sin(m)$
+		\item $ e^z = e^{x + iy} = e^x (\cos(y) + i \cdot \sin(y))$
+		\item $z_1 + z_2 = (x_1 + x_2) + i \cdot (y_1 + y_2)$
+		\item $z_1 - z_2 = (x_1 - x_2) + i \cdot (y_1 - y_2)$
+		\item $z_1 \cdot z_2 = (x_1 x_2 - y_1 y_2) + i \cdot (x_1 y_2 + x_2 y_1)$
+	\end{itemize}
+}
+
+\bsp{
+	\begin{align*}
+	a = & 3 + 4i; \quad b = 5 + 3i \\
+	\\
+	\compl{a} &= 3 - 4i \\
+	\\
+	\realPart(a) &= 3 \\
+	\imaginaryPart(a) &= 4 \quad \text{(nicht $4i$ \;!!!)} \\
+	\\
+	\abs{a} &= \sqrt{3^2 + 4^2} \\
+		&= 5
+	\end{align*}
+	\n
+	\begin{align*}
+	e^a &= e^{3 + 4i} \\
+		&= e^3 \cdot \l(\cos(4) + i \cdot \sin(4)\r)\\
+	\\
+	c &= a + b \\
+		&= 8 + 7i \\
+	\\
+	d &= a \cdot b \\
+		&= 3 \cdot 5 + 3 \cdot 3i + 4i \cdot 5 + 4i \cdot 3i \\
+		&= (15 - 12) + (9 + 20)i \\
+		&= 3 + 29i
+	\end{align*}
+}

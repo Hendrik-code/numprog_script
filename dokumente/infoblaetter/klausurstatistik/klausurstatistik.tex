@@ -1,0 +1,72 @@
+
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\newcommand{\npstyle}{plain}
+\input{\npbase gemeinsam/preamble/preamble}
+
+
+\usepackage[left=2.1cm, top=0cm, right=3.1cm]{geometry}
+% =========================================================
+\title{Numprog Exam Statistics}
+\subtitle{Version von: \today}
+\date{\vspace{-5ex}}
+
+\renewcommand*{\pagemark}{}
+
+\begin{document}
+	\thispagestyle{empty}
+	\maketitle
+	\textbf{Allgemeine Infos:}
+	\begin{itemize}
+		\item Anzahl ausgewerteter Klausuren: $5$ (SoSe17, WiSe17, SoSe18, SoSe19, WiSe19)
+		\item Maximale Punktzahl pro Klausur (avg): $41.8$
+		\item Benötigte Punktzahl zum Bestehen (avg): $16.5$
+		\item Anzahl an Teilaufgaben einer Klausur (avg): $17$
+		\item Anzahl Themenbereiche, in der ich die Themen zusammengefasst habe: 16
+		\item Anzahl an vorgekommenen Themenbereichen pro Klausur (avg): 8.6
+		\item Prozent der abgedeckten Themenbereiche pro Klausur (avg): 53.75
+	\end{itemize}
+%%			Anzahl ausgewerter Klausuren & Gesamtpunkte & Durschnitt benötigter Punkte zum Bestehen & Teilaufgaben & Anzahl Themenbereiche & Vorgekommene Themenbereiche pro Klausur & Prozent der abgedeckten Themen pro Klausur \\ \midrule
+%%			5 & 41.8 & 16.5 & 17 & 16 & 8.6 & 53.75
+%%			Anzahl ausgewerter Klausuren & Gesamtpunkte & Durschnitt benötigter Punkte zum Bestehen & Teilaufgaben \\ \midrule
+%%			5 & 41.8 & 16.5 & 17 \\ \midrule
+%%			%
+%%			Anzahl Themenbereiche & Vorgekommene Themenbereiche pro Klausur & Prozent der abgedeckten Themen pro Klausur \\ \midrule
+%%			16 & 8.6 & 53.75
+	\sbreak
+	\textbf{Themen-spezifische Informationen:}\\
+	Wichtig ist zu vermerken, dass diese Statistik \textbf{ohne Rücksicht} auf veränderte Themen oder Semesterart (Unterscheidung Sommer- und Wintersemester) gemacht wurde. Es können daher Themen auftreten, die ihr gar nicht hattet. Hier folgt aber erstmal eine kurze Legende:
+	\begin{itemize}
+		\item Aufgetreten: Anzahl der Klausuren (in Prozent), in welcher der Themenbereiche vorgekommen ist.
+		\item Pkte: Anzahl an Punkten pro Klausur, die dieser Themenbereich gegeben hat (avg).
+		\item Tasks: Anzahl der Teilaufgaben über diesen Themenbereich pro Klausur (avg).
+		\item Pkte/Task: Meint die Anzahl an Punkte, die eine Teilaufgabe dieses Themas gab (avg).
+	\end{itemize}
+	
+	\begin{table}[H]
+		\centering
+		\begin{tabular}{lcccc}
+			\toprule
+			Themenbereich & Aufgetreten & Pkte & Tasks & Pkte/Task \\ \midrule
+			Gleitkommaarithmetik (\& IEEE) 		& 100 		& 4 	& 1.2 	& 3.33 \\
+			Kondition \& Matrixnorm 	& 80		& 3.75 	& 1.5 	& 2.5 \\
+			Stabilität \& Epsilontik	& 40		& 3.25	& 1.5	& 2.17 \\
+			LR-Zerlegung				& 20		& 8		& 2		& 4 Me \\
+			QR-Zerlegung \& Lineares Ausgleichsproblem & 60 & 8.33 & 2.33 & 3.58 \\
+			Polynominterpolation		& 60 		& 4.33 	& 1.33	& 3.26 \\
+			Aitken-Neville \& Newton-Verfahren & 40	& 6.5 & 2	& 3.25 \\
+			Klassische Quadratur		& 100		& 4.8	& 2		& 2.4 \\
+			Romberg Quadratur			& 20		& 3		& 1		& 3 \\
+			Gauß-Quadratur				& 40		& 3		& 1.5	& 2 \\
+			Fixpunktiteration \& Newton-Verfahren & 40 & 5.25	& 2.5	& 2.1 \\
+			Banach'scher Fixpunktsatz	& 20		& 4		& 1		& 4 \\
+			Jacobi/Gauß-Seidel Verfahren \& Steepest Descent & 40	& 8.5 & 2.5 & 3.4 \\
+			Power Iteration \& Rayleigh Quotient & 40 & 9 	& 3.5 	& 2.57 \\
+			Differentialgleichungen (ODE, AWP) & 60 & 8.67 	& 3.67	& 2.36 \\ \midrule
+			Programmieraufgabe 			& 100 		& 8		& 2		& 4
+		\end{tabular}
+	\end{table}
+\end{document}

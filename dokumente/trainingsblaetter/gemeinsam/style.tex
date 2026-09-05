@@ -1,0 +1,28 @@
+% ===========================================================================
+%  Page style for the Trainingsblaetter.
+%
+%  The worksheets load gemeinsam/preamble/packages.tex from the root for all
+%  packages, and then this file for their own running header: it shows the
+%  sheet number (\num) and the topic (\topic) that each worksheet defines.
+% ===========================================================================
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\npauthor{} -- \num \;-- \topic}
+\fancyfoot[C]{\textbf{\thepage}}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
+
+% Worksheets use blank-line paragraph spacing instead of indentation, and
+% enumitem for the (a) (b) (c) sub-task labels.
+\usepackage[skip=0.0cm, indent=0pt]{parskip}
+\usepackage{enumitem}
+
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks = true,
+	linktoc    = all,
+	linkcolor  = blue,
+	urlcolor   = blue,
+}

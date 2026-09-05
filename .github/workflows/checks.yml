@@ -1,0 +1,132 @@
+name: Repository checks
+
+# Cheap hygiene checks that do not need a TeX installation. They keep the
+# things that were painful to clean up once from creeping back in.
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: No LaTeX build artefacts committed
+        shell: bash
+        run: |
+          # .aux/.log/.synctex.gz files used to outnumber the sources here.
+          # PDFs are build output too -- they come from releases, not git.
+          artefacts=$(git ls-files \
+            '*.aux' '*.bbl' '*.blg' '*.fdb_latexmk' '*.fls' '*.lof' '*.lot' \
+            '*.nav' '*.out' '*.snm' '*.soc' '*.synctex' '*.synctex.gz' \
+            '*.toc' '*.vrb' '*~txs*' '*.bak' '*.pdf')
+          if [ -n "$artefacts" ]; then
+            echo "::error::Build artefacts are committed; they belong in .gitignore:"
+            echo "$artefacts"
+            exit 1
+          fi
+          echo "No build artefacts tracked."
+
+      - name: File names are portable
+        shell: bash
+        run: |
+          # Spaces and umlauts in paths break \input, latexmk -outdir and URLs
+          # on at least one platform each.
+          bad=$(git ls-files | grep -P '[^\x00-\x7F]| ' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::These paths contain spaces or non-ASCII characters:"
+            echo "$bad"
+            exit 1
+          fi
+          echo "All paths are plain ASCII without spaces."
+
+      - name: Sources are UTF-8
+        shell: bash
+        run: |
+          bad=""
+          while IFS= read -r f; do
+            if ! iconv -f UTF-8 -t UTF-8 "$f" >/dev/null 2>&1; then
+              bad="$bad$f"$'\n'
+            fi
+          done < <(git ls-files '*.tex' '*.txt' '*.md')
+          if [ -n "$bad" ]; then
+            echo "::error::These files are not valid UTF-8:"
+            echo "$bad"
+            exit 1
+          fi
+          echo "All text sources are UTF-8."
+
+      - name: Every \input target resolves
+        shell: bash
+        run: |
+          # Catches a chapter that was renamed or moved but not updated
+          # everywhere. Two kinds of path occur in this repository:
+          #   \input{Kondition}                 relative to the document
+          #   \input{\npbase gemeinsam/preamble/style}   relative to the repository root
+          # Anything else built from macros is left to the build job.
+          # Commented-out \input lines are stripped first -- they are not
+          # build dependencies.
+          status=0
+          while IFS= read -r doc; do
+            dir=$(dirname "$doc")
+            while IFS= read -r target; do
+              [ -n "$target" ] || continue
+              case "$target" in
+                '\npbase '*) base="${target#'\npbase '}" ;;
+                *'\'*)       continue ;;                  # other macro path
+                *)           base="$dir/$target" ;;
+              esac
+              if [ ! -f "$base" ] && [ ! -f "$base.tex" ]; then
+                echo "::error file=$doc::missing \\input target: $target"
+                status=1
+              fi
+            done < <(sed -E 's/(^|[^\\])%.*/\1/' "$doc" |
+                     grep -oE '\\(input|include)\{[^}]+\}' |
+                     sed -E 's/\\(input|include)\{//; s/\}$//')
+          done < <(git ls-files '*.tex')
+          [ "$status" -eq 0 ] && echo "All \\input targets resolve."
+          exit "$status"
+
+      - name: Author details only in gemeinsam/preamble/metadata.tex
+        shell: bash
+        run: |
+          # \npauthor / \npauthorurl / \npauthormail exist so the name, site
+          # and mail address can be changed in exactly one file.
+          hits=$(git ls-files '*.tex' | grep -v '^gemeinsam/preamble/metadata.tex$' |
+                 xargs -r grep -nIE 'fam-moe|moeller@tum\.de' || true)
+          if [ -n "$hits" ]; then
+            echo "::error::Author details belong in gemeinsam/preamble/metadata.tex only:"
+            echo "$hits"
+            exit 1
+          fi
+          echo "Author details are centralised."
+
+      - name: No plain http:// links
+        shell: bash
+        run: |
+          # .tex only -- the markdown files talk *about* the rule.
+          hits=$(git ls-files '*.tex' | xargs -r grep -nI 'http://' || true)
+          if [ -n "$hits" ]; then
+            echo "::error::Use https:// for these links:"
+            echo "$hits"
+            exit 1
+          fi
+          echo "All links use https."
+
+  chktex:
+    runs-on: ubuntu-latest
+    # Style warnings only -- informative, never a reason to block a change.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install chktex
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends chktex
+      - name: Lint
+        run: git ls-files '*.tex' | xargs -r chktex -q -n1 -n8 -n13 -n36 || true

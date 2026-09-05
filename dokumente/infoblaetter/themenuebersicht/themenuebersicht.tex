@@ -1,0 +1,118 @@
+
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+
+\title{\huge Themenübersicht}
+\author{\npauthor{}}
+%\subtitle{Numerisches Programmieren: Winter Semester 2018}
+% =========================================================
+
+\usepackage[left=1.3cm,right=1.2cm,top=1.4cm,bottom=1cm,includeheadfoot]{geometry}
+\newcommand{\subit}{\subitem --  }
+\newcommand{\susit}{\subsubitem +  }
+
+\begin{document}
+	\twocolumn
+	\input{\npbase gemeinsam/titelseiten/themenuebersicht}
+	\newpage
+	
+	% =========================================================	
+	\section{Themenauflistung}
+	
+	Begriffe/Themen, mit denen ihr einiges anfangen können solltet.
+	% =========================================================
+	
+
+	\begin{itemize}
+		\item Zahlen
+			\subit Zahlenbasen und ihre Umrechnungen
+			\subit Zahlendarstellungen
+			\subit Gleitkommazahlen, IEEE-Standard
+			\subit Rechenungenauigkeit, Rundung
+			\subit Absorption, Auslöschung
+		\item Kondition und Stabilität
+		\item LGS
+			\subit Gauß Elimination (Pivotisierung)
+			\subit LR Zerlegung
+			\subit Orthogonale Matrizen
+
+		\item Interpolation
+			\subit Polynominterpolation
+			\subit Basisfunktionen
+			\subit Lagrange--Basen
+			\subit Newton Verfahren
+			\subit Aitken--Neville
+			\subit Runge Effekt
+			\subit Hermite Interpolation
+			\subit Spline Interpolation
+
+		\item Quadratur
+			\subit Trapez-- und Simpson--/Fassregel
+			\subit Trapez-- und Simpsonsumme
+			\subit Restglied
+			\subit Quadratur nach Romberg
+			\subit Gauß Quadratur
+
+		\item Fourier Transformation
+			\subit Komplexe Zahlen
+			\subit DFT und IDFT
+			\subit Butterfly Operator und FFT
+
+		\item Fixpunkte
+			\subit Newton Verfahren (für Nullstellen)
+		
+		\item Iterative Verfahren für LGS
+			\subit Jacobi Verfahren
+			\subit Gauss-Seidel Verfahren
+			\subit Steepest Descent
+			
+		\item Eigenwertproblem
+			\subit Eigenwert, Eigenvektor
+			\subit Rayleigh Quotient
+			\subit (Shifted--) Power Iteration
+			\subit Konvergenzrate
+		
+		\item Differentialgleichungen
+			\subit Separation der Variablen
+			\subit Richtungsfelder
+			\subit Explizite Einschrittverfahren
+			\subit Euler, Heun und Runge Kutta
+			\subit Implizites Euler Verfahren
+			\subit Diskretisierungsfehler \& --ordnung
+			\subit Konvergenz und Konsistenz
+			\subit Steifheit
+			\subit Mehrschrittverfahren %wie Mittelpunktsregel
+	\end{itemize}
+
+
+	\newpage
+	\section{Mein Skript}
+	
+	In den Tutorien kamen alle Kapitel dran außer:
+	\begin{itemize}
+		\item 8.4 QR-Zerlegung
+		\item 8.5 Lineares Ausgleichproblem
+		\item 13.2 Eigenschaften (von Fixpunkten)
+		\item 13.3 Banach'scher Fixpunktsatz
+	\end{itemize}
+	
+	\newpage
+	\section{Andere Themen}
+	
+	Hier sind Themen aufgelistet, die teils in der Vorlesung drankamen und insofern Teil des zu lernenden Stoffes sein könnten (Konjunktivus Irrealis). Es kann gut sein, dass diese nicht aktuell sind.
+	
+	\begin{itemize}
+		\item Bezier-Kurven
+		\item Sekanten Verfahren %(nach Newton mit Tangenten)
+		\item Bisektion
+		\item (Horner-Schema)
+		\item Fixpunkte, Banach'scher Fixpunktsatz
+		\item QR Zerlegung und lineares Ausgleichproblem
+	\end{itemize}
+	
+\end{document}

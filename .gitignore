@@ -1,0 +1,67 @@
+# ---------------------------------------------------------------------------
+# LaTeX build artefacts
+# ---------------------------------------------------------------------------
+*.aux
+*.bbl
+*.blg
+*.brf
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+*.nav
+*.out
+*.snm
+*.soc
+*.synctex
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.vrb
+*.xdv
+
+# latexmk / build script output directory
+build/
+_build/
+
+# ---------------------------------------------------------------------------
+# Editor backups (TeXstudio, Kile, vim, ...)
+# ---------------------------------------------------------------------------
+*~
+*~txs*
+*.bak
+*.sav
+.vscode/
+.idea/
+
+# ---------------------------------------------------------------------------
+# OS clutter
+# ---------------------------------------------------------------------------
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# Generated documents.
+#
+# No PDF belongs in this repository -- they are build output. The current ones
+# are attached to every CI run as artifacts, and tagged versions are published
+# as GitHub releases. Build them locally with ./build.sh.
+# ---------------------------------------------------------------------------
+*.pdf
+
+# ---------------------------------------------------------------------------
+# Binary source formats. Slide decks and contributed chapters belong in the
+# repository as LaTeX, not as office documents.
+# ---------------------------------------------------------------------------
+*.odt
+*.doc
+*.docx
+*.ppt
+*.pptx
+
+# Local output of ./build.sh
+.build/

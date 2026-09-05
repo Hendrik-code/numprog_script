@@ -1,0 +1,45 @@
+% ===========================================================================
+%  Shared preamble -- the single entry point for every document in this
+%  repository.
+%
+%  HOW TO USE IT
+%  -------------
+%  Put this directly after \documentclass, before the document body:
+%
+%      \documentclass{scrartcl}
+%      \newcommand{\npbase}{../../}       % path from THIS file to the repo root
+%      \input{\npbase gemeinsam/preamble/preamble}
+%
+%  \npbase is the only thing a document has to know about its own location.
+%  It must end with a slash:
+%
+%      ../../     for a document two levels below (dokumente/skript/, ...)
+%      ../../../  for a document three levels below
+%                 (dokumente/probeklausuren/ss17/, ...)
+%
+%  OPTIONAL SWITCHES  (define them BEFORE the \input line above)
+%  ------------------------------------------------------------
+%      \newcommand{\npstyle}{print}
+%          Grayscale variant for printing: black links, black info boxes,
+%          no coloured highlighting.
+%      \newcommand{\npstyle}{plain}
+%          No running header or footer -- for short standalone handouts.
+%          Default is "screen": coloured links and boxes, header with the
+%          current section.
+%
+%  WHAT GETS LOADED
+%  ----------------
+%      gemeinsam/preamble/packages.tex  all \usepackage calls and options
+%      gemeinsam/preamble/style.tex     page layout, headers, hyperref, plots
+%      gemeinsam/preamble/commands.tex  the macros (\bsp, \wichtig, \norm, ...)
+%
+%  Beamer presentations load gemeinsam/preamble/beamer.tex instead of
+%  style.tex; see dokumente/trainer/ for an example.
+% ===========================================================================
+
+% npbase is already defined -- the document needed it to find this file.
+% npstyle defaults to "screen" in packages.tex, which also derives
+% the ifnpprint / ifnpfancy switches that the two files below key off.
+\input{\npbase gemeinsam/preamble/packages}
+\input{\npbase gemeinsam/preamble/style}
+\input{\npbase gemeinsam/preamble/commands}

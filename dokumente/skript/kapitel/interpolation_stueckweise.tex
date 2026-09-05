@@ -1,0 +1,506 @@
+
+	\newpage
+% =========================================================	
+	\subsection{Hermite Interpolation} \label{chap:hermite_interpolation}
+% =========================================================
+	
+	\defi{
+		\n 
+		Ein Problem, welches wir mit einer Interpolationsfunktion bekommen könnten: Sie ist nicht stetig differenzierbar (wie stückweise lineare Interpolation, siehe \refChapter{chap:linearInterpolation}). 
+		\n 
+		Dieses Problem löst die Hermite Interpolation als netten Nebeneffekt, da sie für die Interpolation auch die Ableitung der Stützstellen einberechnet. Eigentlich ist sie "nur" eine genauere Interpolations Möglichkeit.
+		\n 
+		Schonmal gleich im Voraus, die Hermite Interpolation ist mit einer Laufzeit von $\bigO(n^3)$ aber relativ kostenaufwändig.
+		\n 
+		Mit der Standard Polynom Funktion dritten Grades
+		\begin{align} 
+ 			p(t) = c_3 \cdot t^3 + c_2 \cdot t^2 + c_1 \cdot t + c_0 
+ 		\end{align}
+ 		und dessen Ableitung können wir ein LGS aufstellen und lösen. Also wir verwenden nicht nur die Position von den Stützpunkten, sondern auch deren Ableitungen. Im konkreten Hermite Fall zwei Stützstellen und deren Ableitungen, weswegen wir auf einen Grad von $3$ kommen.
+	}
+	
+	\sbreak 
+	\methode{
+		\begin{itemize}
+			\item LGS mithilfe von Stützstellen und deren Ableitung aufstellen.
+			\item LGS lösen.
+			\item Ergebnis des LGS in allgemeine Polynomfunktion einsetzen.
+			\item Nach allen y und y' sortieren, also sodass da $y_0 \cdot \text{\qu{irgendwas}} + y_1 \cdot \text{\qu{irgendwas}} + \dots$ steht.
+			\item Mithilfe von Koeffizientenvergleich auf die Basisfunktionen schließen, nach dem letzten Punkt entsprechen die "irgendwas" den Basisfunktionen.
+			\item Hermite-Funktion (sortiert mit kubischen Basispolynomen):
+			\begin{align} 
+ 				p(t) = y_0 \cdot H_0(t) + y_1 \cdot H_1(t) + y_0'\cdot H_2(t) + y_1' \cdot H_3(t) \quad\in [0;1] 
+ 			\end{align}
+		\end{itemize}
+	}
+		
+	\newpage
+	\bsp{
+		\n 
+		Wir haben eine unbekannte Funktion $f(x)$ gegeben.\\
+		Folgende Informationen seien über $f(x)$ bekannt:
+		\begin{align*} 
+ 			f(0) = 0 \aae f(1) = 2 \aae f'(0) = 2 \aae f'(1) = 1 
+ 		\end{align*}
+		Terme aufstellen (mithilfe der Funktion eines allg. Polynom dritten Grades):
+		\begin{align*} 
+ 			f(t) &= c_3 \cdot t^3 + c_2 \cdot t^2 + c_1 \cdot t + c_0 \\
+ 			f(0) &= c_0 \shouldEq y_0 = 0 \\
+ 			f(1) &= c_3 + c_2 + c_1 + c_0 \shouldEq y_1 = 2 
+ 		\end{align*}
+		Jetzt müssen wir in die Ableitung einsetzen:
+		\begin{align*} 
+ 			f'(t) &= 3c_3 \cdot t^2 + 2c_2 \cdot t + c_1 \\
+ 			f'(0) &= c_1 \shouldEq y_0' = 2 \\
+ 			f'(1) &= 3\cdot c_3 + 2\cdot c_2 + c_1\shouldEq y_1' = 1 
+ 		\end{align*}
+		Das entspricht folgender Vektor-Matrix-Schreibweise und damit LGS:
+		\begin{align*}
+			\begin{bmatrix}
+				0 & 0 & 0 & 1 \\
+				1 & 1 & 1 & 1 \\
+				0 & 0 & 1 & 0 \\
+				3 & 2 & 1 & 0 
+			\end{bmatrix} \cdot 
+			\nvector{
+				c_3 \\ c_2 \\ c_1 \\ c_0
+			} = 
+			\nvector{
+				y_0 \\ y_1 \\ y_0' \\ y_1'
+			} = 
+			\nvector{
+				0 \\ 2 \\ 2 \\ 1
+			}
+		\end{align*}
+		LGS lösen (Gauß-Elimination) ergibt:
+		\begin{align*} 
+ 			c_0 = 0 \aae c_1 = 2 \aae c_2 = 1 \aae c_3 = -1 
+ 		\end{align*}
+		Die Interpolationsfunktion entspricht also:
+		\begin{align*} 
+ 			p(t) = -t^3 + t^2 + 2 t + 0 
+ 		\end{align*}
+		Nach den Stützwerten und deren Ableitung sortieren, um auf die kubischen Basisfunktionen zu schließen wurde hier nicht (mehr) ausgeführt.
+	%}
+	%	
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}
+				\begin{axis}[
+					axis lines=middle,
+					xlabel=$x$,
+					ylabel=$y$,
+					enlargelimits,
+					grid=major,
+					legend pos=outer north east,
+					]
+					\addplot[domain=-0.5:1.5] {-1*x^3 + x^2 + 2*x} node[left]{};
+					\tikzPointDR{$f(0)$}{0,0}
+					\tikzPointDown{$f(1)$}{1,2}
+					\tikzLineUp{dash pattern=on 1pt off 3pt on 3pt off 3pt}{$f'(0)$}{-0.5,-1.0}{0.5,1.0}
+					\tikzLineUp{dash pattern=on 1pt off 3pt on 3pt off 3pt}{$f'(1)$}{0.5,1.5}{1.5,2.5}
+					\legend{Interpolationsfunktion}
+				\end{axis}
+			\end{tikzpicture}
+			\caption{Obige Hermite-Interpolation grafisch. Wir verwenden nicht nur die Position der zwei Stützstellen, sondern auch deren Ableitung (hier als kurze gepunktete Linie eingezeichnet).}
+		\end{figure}
+	}
+
+	\sbreak
+	\methode{
+		\n
+		Aus obigen Beispiel können wir eine neue Formel herleiten. Für zwei Stützstellen an den Positionen $x_0 = 0$, $x_1 = 1$ und deren Ableitungen entspricht das LGS:
+		\begin{align}
+			\begin{bmatrix}
+				3 & 2 & 1 & 0 \\
+				1 & 1 & 1 & 1 \\
+				0 & 0 & 1 & 0 \\
+				0 & 0 & 0 & 1
+			\end{bmatrix} \cdot 
+			\nvector{
+				c_3 \\ c_2 \\ c_1 \\ c_0
+			} = 
+			\nvector{
+				y_1' \\ y_1 \\ y_0' \\ y_0
+			}
+		\end{align}
+		Die berechneten $c_0$ bis $c_3$ können wir dann in unser Schema einsetzen
+		\begin{align*}
+			p(t) = c_3 \cdot t^3 + c_2 \cdot t^2 + c_1 \cdot t + c_0 
+		\end{align*}
+		und erhalten damit unser Ergebnis.
+	}
+
+
+	\newpage
+	\vertief{
+		\n 
+		Den letzten Methodenblock können wir natürlich jetzt etwas optimieren, da er immer gleich bleibt.
+		\n 
+		LR Zerlegung wollt ihr? Kein Problem! Ich erspar euch den langen Rechenweg, Fakt ist das Ergebnis entspricht
+		\begin{align*}
+			L = 
+			\begin{bmatrix}
+				1 & 0 & 0 & 0 \\
+				\nicefrac{1}{3} & 1 & 0 & 0 \\
+				0 & 0 & 1 & 0 \\
+				0 & 0 & 0 & 1
+			\end{bmatrix}
+			\quad \quad
+			R = 
+			\begin{bmatrix}
+				3 & 2 & 1 & 0 \\
+				0 & \nicefrac{1}{3} & \nicefrac{2}{3} & 1 \\
+				0 & 0 & 1 & 0 \\
+				0 & 0 & 0 & 1 
+			\end{bmatrix}
+		\end{align*}
+		Jetzt könnt ihr einfach das und euer Wissen aus \refChapter{chap:lr_zerlegung} nutzen um so schneller Hermite Interpolationen durchzuführen. Für die Laufzeit eines Computerprogrammes hilft das natürlich herzlich wenig.
+		\n 
+		Die Zahlen der QR-Zerlegung sind leider weniger hübsch, sonst würde ich sie hier auch aufführen.
+		\n 
+		Um obige Korrektheit zu überprüfen, rechnen wir einfach die letzte Beispielbox mithilfe von LR Zerlegung.
+		Zunächst müssen wir dafür $Ly = b$ lösen, also
+		\begin{align*}
+			\begin{bmatrix}
+				1 & 0 & 0 & 0 \\
+				\nicefrac{1}{3} & 1 & 0 & 0 \\
+				0 & 0 & 1 & 0 \\
+				0 & 0 & 0 & 1
+			\end{bmatrix} \cdot y = 
+			\nvector{
+				1 \\ 2 \\ 2 \\ 0
+			}
+		\end{align*}
+		Das Zwischenergebnis (hier ungünstig $y$ genannt, obwohl unsere $y$-Koordination auch den Namen haben) ist nach Gauß:
+		\begin{align*}
+			y = 
+			\nvector{
+				1 \\ \nicefrac{5}{3} \\ 2 \\ 0
+			}
+		\end{align*}
+		Jetzt noch $Rx = y$ berechnen, wobei $x$ in dem Fall unseren $c_0$ bis $c_3$ entsprechen:
+		\begin{align*}
+			\begin{bmatrix}
+				3 & 2 & 1 & 0 \\
+				0 & \nicefrac{1}{3} & \nicefrac{2}{3} & 1 \\
+				0 & 0 & 1 & 0 \\
+				0 & 0 & 0 & 1 
+			\end{bmatrix} \cdot
+			\nvector{
+				c_3 \\ c_2 \\ c_1 \\ c_0
+			} = 
+			\nvector{
+				1 \\ \nicefrac{5}{3} \\ 2 \\ 0
+			}
+		\end{align*}
+		Wenn man das mit Gauß berechnet, kommt in der Tat 
+		\begin{align*} 
+			c_0 = 0 \aae c_1 = 2 \aae c_2 = 1 \aae c_3 = -1 
+		\end{align*}
+		wie bei obiger Beispielbox heraus.
+	}
+		
+	\newpage
+	\defi{ \label{sec:intervall_transformation} %\fat{Transformation von Intervallen} 
+		\n
+		Kubische Polynome nennt man übrigens ganzrationale Polynome dritten Grades.
+		\n 
+		Das schöne bei der Hermite Interpolation ist es, dass man die kubischen Basisfunktionen für jeden (Interpolations-)Bereich derselben Funktion immer wiederverwenden kann und nicht mehr auszurechnen ist. Damit dies funktioniert müssen wir lediglich das neue Intervall (=Interpolationsbereich) auf das Intervall abbilden, in dem wir die Basisfunktionen ausgerechnet haben.
+		\n 
+		Wir rechnen also die kubischen Basisfunktionen immer im Intervall $[0,1]$ aus und müssen nur noch beliebige andere Intervalle, die wir ausrechnen wollen dahin transformieren.
+		\n 
+		Formal ausgedrückt müssen wir das neue (hier allgemeine) Intervall $[x_i, x_{i+1}]$ auf das vorherige $t \in [0;1]$ abbilden.
+		\n 
+		Das geht mit folgender Funktion: 
+		\begin{align} 
+ 			t_i(x) := \frac{x-x_i}{x_{i+1} - x_i} \in [0;1] = \frac{x-x_i}{h_i} \in [0;1]
+ 		\end{align}
+		Informell ist $h_i$ die Länge des Intervalls.
+		\n 
+		Wenn wir die transformierte (also auf das allg. Intervall abgebildete) Funktion ableiten wollen, müssen wir die Kettenregel berücksichtigen.
+		\begin{align}
+ 			\frac{\d}{\d{x}}(f(t_i(x))) = \frac{\d}{\d{t}}(f(t_i(x))) \cdot \frac{\d t}{\d x} = \frac{\d}{\d t}(f(t_i(x)))\cdot \frac{1}{x_{i+1} - x_i} 
+ 		\end{align}
+		Dadurch wird das sogenannte "kubische Teilpolynom" $p_i(t(x))$ auch noch folgendermaßen erweitert: Bei den Summanden der Ableitungen kommt der Faktor $h_i$ hinzu, weil dort bei der Ableitung sonst ein $\frac{1}{h_i}$ auftauchen würde, welche die Interpolation verfälschen würde. 
+		\n 
+		Damit haben wir die Formel für eine beliebige Hermite-Funktion:
+		\begin{align} 
+ 			p_i(t_i(x)) = y_i\cdot H_0(t_i(x))+y_{i+1}\cdot H_1(t_i(x))+h_i\cdot y_i'\cdot H_2(t_i(x))+h_i\cdot y_{i+1}'\cdot H_3(t_i(x)). 
+ 		\end{align}
+	}
+
+	\newpage
+	\bsp{
+		\n 
+		Wir wollen das Intervall $[3, 4]$ auf das Intervall $[0, 1]$ transformieren. Wir müssen also die Transformation nach obigem Schema aufstellen:
+		\begin{align*}
+			t(x) &= \frac{x - 3}{4 - 3} \\
+				&= \frac{x - 3}{1}
+		\end{align*}
+		Jetzt müssen wir nur schreiben, dass $x \in [3,4]$ gilt und wir sind fertig, $t(x) \in [0,1]$ wie wir es wollten.
+	}
+
+	\sbreak
+	\vertief{
+		\n 
+		Die Formel aus dem letzten Erklärblock ist um auf $[0, 1]$ zu transformieren. Wir können das natürlich für beliebige Intervalle ausbauen. Nützlich wenn wir beispielsweise die kubischen Basisfunktionen gar nicht für das Intervall $[0,1]$ ausrechnen können (warum auch immer).
+		\n 
+		Wenn wir ein beliebiges Intervall $[a, b]$ auf ein anderes beliebiges Intervall $[c, d]$ transformieren wollen, bilden wir folgende Transformationfunktion:
+		\begin{align*}
+			h_\text{ab} :&= b - a \\
+			h_\text{cd} :&= d - c \\
+			t(x) :&= \frac{x}{\nicefrac{h_\text{ab}}{h_\text{cd}}} + \l( c - \frac{a}{\nicefrac{h_\text{ab}}{h_\text{cd}}} \r) \\
+			&= \frac{x \cdot h_\text{cd}}{h_\text{ab}} + \l( c - \frac{a \cdot h_\text{cd}}{h_\text{ab}} \r)
+		\end{align*}
+	}
+
+	\sbreak
+	\bsp{
+		\n 
+		Wir wollen das Intervall $[2,4]$ auf $[8, 14]$ transformieren. Wir nutzen obige Formel:
+		\begin{align*}
+			h_\text{ab} &= 4 - 2 = 2 \\
+			h_\text{cd} &= 14 - 8 = 6 \\
+			t(x) &= \frac{x \cdot 6}{2} + \l( 8 - \frac{2 \cdot 6}{2} \r) \\
+				&= 3x + 2
+		\end{align*}
+		Und fertig \Laughey.
+	}
+	
+		
+	\newpage
+	\subsection{Interpolation mit Splines}
+	\label{chap:splines}
+	
+	\defi{
+		\n 
+		Die Interpolation mit Splines ist eine stückweise Interpolation. Sprich wir unterteilen den zu interpolierenden Bereich in diesem Fall bei jedem Stützpunkt, der sich nicht am Rand befindet. Jeder Bereich bildet hier ein sogenanntes "Spline".
+		\n 
+		Bei der Interpolation mit Splines wollen wir den gleichen Polynomgrad wie bei der Hermite-Interpolation erreichen, nur dass wir keine Ableitungen zur Verfügung haben. Aus diesem Grund verwenden wir als zusätzliche Bedingung, dass die Verknüpfungsstellen zwischen 2 Polynomen sowohl in der ersten als auch in der 2. Ableitung übereinstimmen. Diese Eigenschaft nennt man C2--Stetigkeit.
+		\n
+		Dies generiert 2 weitere Bedingungen, fehlen noch zwei, um auf den gewünschten Grad zu gelangen. Wir nehmen deshalb die Ableitungen an den Rändern, um die letzten Gleichungen zu erhalten.
+		%Vorstellbar ist diese Vorgehensweise mithilfe einer Straklatte.
+		%Man interpoliert gegebene Stützstellen mit Hilfe von stückweise stetiger Polynome (Splines genannt).
+		}
+	
+	\lbreak
+	\methode{
+		\n 
+		Mit 
+		\begin{align*} 
+ 			x_{i+1} - x_i = h := \frac{x_n - x_0}{n}\aae i = 0,1,\dots,n-1 
+ 		\end{align*}
+		Löse das System
+		\begin{align}
+			\begin{bmatrix}
+				4 & 1 \\
+				1 & 4 & \ddots\\
+				  & \ddots & \ddots & 1\\
+				  &   & 1 & 4
+			\end{bmatrix} \cdot
+			\nvector{
+				y_1' \\ y_2' \\ \vdots \\ y_{n-2}' \\ y_{n-1}'
+			}
+			 = \frac{3}{h} \cdot
+			\nvector{
+				y_2 - y_0 \\
+				y_3 - y_1 \\
+				\vdots \\
+				y_{n-1} - y_{n-3} \\
+				y_n - y_{n-2}
+			} - 
+			\nvector{
+				y_0' \\ 0 \\ \vdots \\ 0 \\ y_n'
+			}
+		\end{align}
+		Bestimme mithilfe dieser Gleichung die Ableitungen aller Stützwerte außer den an den Rändern. Dann hat man alle Informationen, um für jedes Paar benachbarter Stützstellen die entsprechenden Hermite-Funktionen aufzustellen.
+		\n 
+		Für jedes Spline muss eine Transformationsfunktion aufgestellt werden, um die Intervalle zu normieren (siehe \refChapter{sec:intervall_transformation}). Danach kann man die Spline-Funktion definieren, die alle Splines vereinigt.
+		\n
+		Aufgrund dieser Tri-diagonalmatrix (nennt man so) ist die Laufzeit von Splines in $\bigO(n)$.
+		}
+	
+	\sbreak
+	\bsp{ Beispiel von oben erweitert:
+		\begin{align*} 
+ 			f(0) = 0 \aae f(1) = 2 \aae f(2) = 4 \aae f(3) = 8 
+ 		\end{align*}
+		Die Ableitung an den Rändern sei vorgegeben: 
+		\begin{align*}
+			f'(0) = 2 \aae f'(3) = 4
+		\end{align*}
+		Wir haben also 3 Splines mit einer Länge von eins ($h=1$).\\
+		In die obige Formel einsetzen, um die restlichen zwei Ableitungen zu approximieren:
+		\begin{align*}
+			\begin{bmatrix}
+				4 & 1 \\
+				1 & 4
+			\end{bmatrix} \cdot
+			\nvector{
+				y_1' \\ y_2'
+			} &= \frac{3}{1} \cdot
+			\begin{bmatrix}
+				4 - 0 \\
+				8 - 2
+			\end{bmatrix} - 
+			\nvector{
+				2 \\ 4
+			} \\
+			\Longrightarrow
+			\begin{bmatrix}
+				4 & 1 \\
+				1 & 4
+			\end{bmatrix} \cdot
+			\nvector{
+				y_1' \\ y_2'
+			} &= 
+			\begin{bmatrix}
+				12 - 2 \\
+				18 - 4
+			\end{bmatrix} = 
+			\nvector{
+				10 \\
+				14
+			}
+		\end{align*}
+		Dies entspricht einem LGS; die Lösung mithilfe von Gauß ist:
+		\begin{align*} 
+ 			y_1' = \frac{26}{15} \aae y_2' = \frac{46}{15} 
+ 		\end{align*}
+		Damit lässt sich dann mithilfe der kubischen Basispolynome von Hermite die Spline-Funktion aufstellen, die alle drei Splines vereint. Dafür müssen wir unter anderem noch die $t$-Funktionen setzen. Beispiel dafür folgt noch.
+	}
+	
+	\lbreak
+	\wichtig{ \n 
+		Ein paar wichtige Dinge zu Splines: \\
+		Wenn sich ein Stützpunkt ändert, wirkt sich das immer nur lokal auf einen kleinen Bereich der Kurve aus (halt nur ein bis zwei Splines), der Großteil der Kurve bleibt unverändert. \\
+		Außerdem sind Spline Kurven so konstruiert, das sie möglichst glatt durch die Stützstellen laufen, da die Krümmung der Gesamtfunktion minimiert wird.
+		\n 
+		Starke Oszillationen wie bei Polynominterpolation hohen Grades (sprich Runge-Effekt) können nicht auftreten!
+	}
+
+	\newpage
+	\bsp{ \n 
+		Wir haben folgende Stützpunkte über eine unbekannte Funktion $f(x)$ gegeben und alle fehlenden Ableitungen nach der eingeführten Formel korrekt ausgerechnet:
+		\begin{table}[H]
+			\label{table:splinebsp}
+			\centering
+			\begin{tabular}{ccccc}
+				\toprule
+				$i$ 	& 0 	& 1 	& 2 	& 3 \\ \midrule
+				$x_i$	& $-2$  	& 0 	& 2 	& 4 \\
+				$y_i$	& 12 	& 4 	& 6    	& 3    \\
+				$y'_i$  & $-4$    & $0.5$   & $-1$    & 1    \\
+				\bottomrule
+			\end{tabular}
+			\caption{Alle Informationen als Tabelle}
+		\end{table}
+		\noindent Da wir vier Stützpunkte (an den Stellen $-2$, $0$, $2$ und $4$) haben, erhalten wir drei Splines. Deren Intervall ist in allen Fällen zwei lang (von $-2$ bis $0$ \dots).
+		\n 
+		Gegeben sei außerdem, dass die kubischen Basispolynome der unbekannten Funktion $f(x)$ im Intervall $[0;1]$ schon korrekt ausgerechnet worden sind.
+		\n 
+		Wir definieren unsere Spline-Funktion mit allen drei Splines:
+		\begin{align*}
+			s(x) = 
+			\begin{Bmatrix}
+				p_0(t_0(x)); & x\in[-2;0[ \\
+				p_1(t_1(x)); & x\in[0;2[\\
+				p_2(t_2(x)); & x\in[2;4]
+			\end{Bmatrix}
+		\end{align*}
+		Die einzelnen $p$-Funktionen sind die einzelnen Splines und damit Hermite-Funktionen (die wir noch definieren müssen). Erst einmal müssen wir jetzt aber die Transformationsfunktionen $t_0(x), t_1(x)$ und $t_2(x)$ definieren, die das Intervall des jeweiligen Splines nach $[0;1]$ transformiert (weil dort die kubischen Basispolynome schon ausgerechnet worden sind).
+		\n 
+		Fangen wir vorne an:
+		\begin{align*} 
+ 			&&&t_i(x) := \frac{x - x_i}{x_{i+1} - x_i} \\
+			t_0(x) &= \frac{x + 2}{2} && x\in [-2;0] && t_0(x) \in [0;1] \\
+			t_1(x) &= \frac{x}{2} && x\in [0;2] && t_1(x) \in [0;1] \\
+			t_2(x) &= \frac{x - 2}{2} && x\in [2;4] && t_2(x) \in [0;1] 
+ 		\end{align*} \n
+		Jetzt müssen wir noch die einzelnen Splines definieren. Wir nutzen obige allgemeine Hermite-Funktion:
+		\begin{align*} 
+ 			p_i(t_i(x)) &= y_i \cdot H_0(t_i(x)) + y_{i+1} \cdot H_1(t_i(x)) + h_i \cdot y_i' \cdot H_2(t_i(x)) + h_i \cdot y_{i+1}' \cdot H_3(t_i(x))
+ 		\end{align*}
+		Jetzt müssen wir nur noch aus unserer Tabelle die Werte einsetzen:
+		\begin{align*} 
+ 			p_0(t_0(x)) &= y_0\cdot H_0(t_0(x))+y_{1}\cdot H_1(t_0(x))+h_0\cdot y_0'\cdot H_2(t_0(x))+h_0\cdot y_{1}'\cdot H_3(t_0(x)) \\
+			&= 12\cdot H_0(t_0(x))+ 4\cdot H_1(t_0(x))+2\cdot (-4)\cdot H_2(t_0(x))+2\cdot \frac{1}{2}\cdot H_3(t_0(x)) 
+ 		\end{align*}
+		Der Rest geht analog:
+		\begin{align*} 
+ 			p_1(t_1(x)) &= 4\cdot H_0(t_1(x))+ 6\cdot H_1(t_1(x))+2\cdot \frac{1}{2}\cdot H_2(t_1(x))+2\cdot (-1)\cdot H_3(t_1(x)) \\
+			p_2(t_2(x)) &= 6\cdot H_0(t_2(x))+ 3\cdot H_1(t_2(x))+2\cdot (-1)\cdot H_2(t_2(x))+2\cdot 1\cdot H_3(t_2(x)) 
+ 		\end{align*}
+		Wir definieren mit obigen Hermite-Funktionen unsere fertige Spline-Funktion:
+		\begin{align*}
+			s(x) = 
+			\begin{Bmatrix}
+				p_0(t_0(x)); & x\in[-2;0[; & t_0(x) = \nicefrac{(x+2)}{2}\\
+				p_1(t_1(x)); & x\in[0;2[;  & t_1(x) = \nicefrac{x}{2}\\
+				p_2(t_2(x)); & x\in[2;4];  & t_2(x) = \nicefrac{(x-2)}{2}
+			\end{Bmatrix}
+		\end{align*}
+	}
+	
+	\sbreak
+	\defi{ \n 
+		Ihr fragt euch sicher, warum wir oben als Randbedingung Ableitungen zur Verfügung haben, wenn die Idee doch eigentlich ist, keine zu benötigen. 
+		\\ Die Antwort ist einfach: Dadurch, dass sich eine Änderung nur lokal auswirkt und in der Praxis die Interpolationsbereiche riesig sind, interessiert es uns nicht so sehr, wenn die Ränder der Interpolation ungenau sind. 
+		\n 
+		Also wir brauchen die Randableitungen dann doch nicht mehr, wir setzen sie einfach auf $0$. Sie verfälschen zwar dadurch unsere Ergebnisse (gerade an den Rändern), aber nicht viel. Bei einer niedrigen Spline Anzahl wäre das natürlich fataler.
+		\n 
+		Wie zur Hölle kommt man auf das Gleichungssystem, welches man für Splines verwendet\dots?
+	}
+
+	\newpage
+	\vertief{ \fat{Spline-Interpolation Herleitung:} \n 
+		Wir stellen wieder nach dem Hermite-Ansatz unsere Interpolationsfunktionen auf:
+		\begin{align*} 
+ 			p_i(t_i(x)) = y_i \cdot H_0(t_i(x)) + y_{i+1} \cdot H_1(t_i(x)) + h \cdot y_i' \cdot H_2(t_i(x)) + h \cdot y_{i+1}' \cdot H_3(t_i(x)) 
+ 		\end{align*}
+		Dafür benötigen wir wieder obige Transformationsfunktion und die Kettenregel, die schon oben eingebaut ist. 
+		\n 
+		Nun können wir alle $y_i$ bestimmen, indem wir die letzte Bedingung der C2-Stetigkeit nutzen. Wir setzen einfach die zweite Ableitung der Funktionen $p_i(t(x) = 1)$ und $p_{i+1}(t(x) = 0)$ an den Klebestellen gleich.
+		\begin{align*} 
+ 			p_i"(t=1) = p_{i+1}"(t = 0) \aae i = 0, 1, \dots, n - 2 
+ 		\end{align*}
+		Durch zweimaliges Ableiten der Basispolynome erhält man mit Kettenregel den Faktor $\nicefrac{1}{h^2}$, also:
+		\begin{align*} 
+ 			&\frac{1}{h^2} \cdot [y_i \cdot H_0"(1) + y_{i+1} \cdot H_1"(1) + h \cdot y_i' \cdot H_2"(1) + h \cdot y_{i+1}' \cdot H_3"(1)] \\
+ 			= &\frac{1}{h^2} \cdot [y_{i+1} \cdot H_0"(0) + y_{i+2} \cdot H_1"(0) + h \cdot y_{i+1}' \cdot H_2"(0) + h \cdot y_{i+2}' \cdot H_3"(0)] 
+ 		\end{align*}
+		Jetzt sortieren wir $y'$ auf die linke und $y$ auf die rechte Seite:
+		\begin{align*} 
+ 			&\frac{h}{h^2} \cdot [y_i' \cdot H_2"(1) + y_{i+1}' \cdot (H_3"(1) - H_2"(0)) - y_{i+2}' \cdot H_3"(0)] \\
+ 			= &\frac{1}{h^2} \cdot [- y_{i} \cdot H_0"(1) + y_{i+1} \cdot (-H_1"(1) + H_0"(0)) + y_{i+2} \cdot H_1"(0)] 
+ 		\end{align*}
+		Wenn wir hier nun unsere kubischen Basisfunktionen $H_i"$ mit $i = 0, \cdots, n-2$ einsetzen, kommen wir zwangsläufig auf:
+		\begin{align*} 
+ 			[y_i' + 4y'_{i+1} + y'_{i+2}] = \frac{3}{h} \cdot [y_{i+2} - y_i] 
+ 		\end{align*}
+		Und daraus können wir dann obiges Gleichungssystem ableiten:
+		\begin{align*}
+			\begin{bmatrix}
+				4 & 1 \\
+				1 & 4 & \ddots\\
+				& \ddots & \ddots & 1\\
+				&   & 1 & 4
+			\end{bmatrix} \cdot
+			\nvector{
+				y_1' \\ y_2' \\ \vdots \\ y_{n-2}' \\ y_{n-1}'
+			}
+			= \frac{3}{h} \cdot
+			\nvector{
+				y_2 - y_0 \\
+				y_3 - y_1 \\
+				\vdots \\
+				y_{n-1} - y_{n-3} \\
+				y_n - y_{n-2}
+			} - 
+			\nvector{
+				y_0' \\ 0 \\ \vdots \\ 0 \\ y_n'
+			}
+		\end{align*}
+	}
+		

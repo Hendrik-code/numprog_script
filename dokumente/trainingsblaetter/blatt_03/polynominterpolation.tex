@@ -1,0 +1,74 @@
+\task{Polynominterpolation}
+{
+	Befassen wir uns mit der regulären Polynominterpolation mithilfe von Basisfunktionen. Gegeben seien folgende Stützpunkte:
+	\begin{align*}
+	P_0(0|0); \quad P_1(2|5); \quad P_2(4|6)
+	\end{align*}
+	% 0.25x^3 - 2x^2 + 5.5x
+	}{
+		\itemf Wenn wir obige Punkte interpolieren, was für eine Art Funktion kommt dabei heraus?
+		\itemf Berechnen Sie die Interpolationspolynomfunktion und geben Sie als Rechenweg die entsprechenden Lagrange-Basisfunktionen an.
+		\itemf Schätzen Sie den "worst-case" Interpolationsfehler an der Stelle $x=3$ ab. Hierfür seien folgende Ableitungen gegeben:
+		\begin{align*}
+			% f'(x) = 3x^2  / 4 - 4x + 11/2
+			f''(x) &= \frac{3}{2}x - 4 \\
+			f'''(x) &= \frac{3}{2}
+		\end{align*}
+		\itemf Welchen Wert muss ein neuer, vierter Stützpunkt an der Stelle $x=-2$ besitzen, damit sich die resultierende Interpolationspolynomfunktion aus (b) nicht ändert?
+	}{
+		\itemf Da wir drei Stützpunkte haben und diese nicht auf einer Gerade liegen, erhalten wir eine Polynomfunktion zweiten Grades, also eine Parabelfunktion.
+		\itemf Aus der Angabe lesen wir:
+		\begin{align*}
+			x_0 = 0 &\quad y_0 = 0 \\
+			x_1 = 2 &\quad y_1 = 5 \\
+			x_2 = 4 &\quad y_2 = 6
+		\end{align*}
+		Wir berechnen zuerst die Lagrange-Bassifunktionen.
+		\begin{align*}
+			L_j &= \prod_{i=0; i\ne j}^{n-1} \frac{x-x_i}{x_j-x_i} \\
+			L_0 &= \prod_{i=0; i\ne 0}^{2} \frac{x-x_i}{0-x_i} \\
+				&= \frac{x-x_1}{0-x_1} \cdot \frac{x-x_2}{0-x_2} \\
+				&= \frac{x-2}{0-2} \cdot \frac{x-4}{0-4} \\
+				&= \frac{2-x}{2} \cdot \frac{4-x}{4} \\
+				&= \frac{(2-x)\cdot(4-x)}{8}
+		\end{align*}
+		Analog sind die anderen zwei Basisfunktionen:
+		\begin{align*}
+			L_1 &= \frac{x-x_0}{x_1-x_0} \cdot \frac{x-x_2}{x_1-x_2} \\
+				&= \frac{x-0}{2-0} \cdot \frac{x-4}{2-4} \\
+				&= \frac{x(x-4)}{-4} \\
+			L_2 &= \frac{x-x_0}{x_2-x_0} \cdot \frac{x-x_1}{x_2-x_1} \\
+				&= \frac{x-0}{4-0} \cdot \frac{x-2}{4-2} \\
+				&= \frac{x(x-2)}{8}
+		\end{align*}
+		Jetzt noch die Interpolationsfunktion aufstellen:
+		\begin{align*}
+			p(x) &= y_0 \cdot L_0 + y_1 \cdot L_1 + y_2 \cdot L_2 \\
+				&= 0 \cdot L_0 + 5 \cdot L_1 + 6 \cdot L_2 \\
+				&= 5 \cdot \frac{x(x-4)}{-4} + 6 \cdot \frac{x(x-2)}{8} \\
+				&= -\frac{5}{4} \cdot (x^2-4x) + \frac{6}{8} \cdot (x^2-2x) \\
+				&= -\frac{5}{4}x^2 + 5x + \frac{3}{4}x^2 - \frac{3}{2}x) \\
+				&= \frac{7}{2}x - \frac{1}{2}x^2
+		\end{align*}
+		\itemf Wir setzen in unsere Fehlerabschätzungsformel ein:
+		\begin{align*}
+			\abs{f(x) - p(x)} &= \abs{\frac{f^{(n)}(\xi)}{(n)!} \cdot \prod_{k=0}^{n-1}(x-x_k)}
+		\end{align*}
+		Wir setzen ein: $x=3$, $n=3$:
+		\begin{align*}
+			&= \abs{\frac{f'''(\xi)}{3!}(x-x_0)(x-x_1)(x-x_2)} \\
+			&= \abs{\frac{3}{2 \cdot 6}(x-0)(x-2)(x-4)} \\
+			&= \abs{\frac{1}{4}(3-0)(3-2)(3-4)} \\
+			&= \abs{\frac{1}{4}3 \cdot 1 \cdot (-1)} \\
+			&= \abs{\frac{-3}{4}} \\
+			&= \frac{3}{4}
+		\end{align*}
+		Der maximale Fehler der Interpolation aus (b) beträgt also $\frac{3}{4}$.
+		\itemf Damit sich die Polynomfunktion nicht mehr ändert, muss ein neuer Stützpunkt schon auf der Parabel aus (b) liegen. Wir setzen also $p(-2)$ ein.
+		\begin{align*}
+			p(-2) &= \frac{7}{2}\cdot -2 - \frac{1}{2} \cdot 4 \\
+				&= -7 - 2 \\
+				&= -9
+		\end{align*}
+		Der neue Stützpunkt müsste einen $y$-Wert von $-9$ besitzen.
+}

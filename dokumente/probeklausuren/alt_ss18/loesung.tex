@@ -1,0 +1,471 @@
+\documentclass{scrartcl}
+
+% Path from this folder to the repository root, and which layout to use
+% (see gemeinsam/preamble/preamble.tex for the available styles).
+\newcommand{\npbase}{../../../}
+\input{\npbase gemeinsam/preamble/preamble}
+
+ \usepackage{mathpazo}
+ \usepackage{lmodern}
+ \usepackage[utf8]{inputenc}
+ \usepackage[T1]{fontenc}
+ \usepackage{amsmath}
+ \usepackage{listings}
+ 
+ \usepackage{tikz}
+ \usetikzlibrary{datavisualization}
+ \usetikzlibrary{datavisualization.formats.functions}
+ 
+ \lstset{frame=tb,
+ 	language=Java,
+ 	aboveskip=3mm,
+ 	belowskip=3mm,
+ 	showstringspaces=false,
+ 	columns=flexible,
+ 	basicstyle={\small\ttfamily},
+ 	numbers=none,
+ 	breaklines=true,
+ 	breakatwhitespace=true,
+ 	tabsize=3
+ }
+ 
+ 
+\begin{document}
+
+\title{Probeklausur Numerisches Programmieren}
+\subtitle{Sommersemester 2018, MUSTERLÖSUNG}
+\author{\npauthor{}}
+\date{Version vom: \today}
+\maketitle
+
+\textbf{Der Autor übernimmt keine Garantie über die Korrektheit der Aufgaben oder Lösungen. \n Des Weiteren ist diese Klausur nur als ein ''Vorschlag'' von möglichen Aufgaben(-typen) anzusehen, wie sie in der eigentlichen Klausur drankommen könnten. Ein Bezug oder Ähnlichkeit zu vorhandenen Altklausuren (der von Sommersemester 2018 zum Beispiel) oder Aufgaben sind vollkommen willkürlich.}
+\sbreak
+
+\begin{itemize}
+	\item Schreiben Sie nicht mit Bleistift oder in roter/grüner Farbe!
+	\item Als Hilfsmittel ist einzig und allein ein handschriftlich, beidseitig beschriebenes Blatt DIN A4 mit eigenen Notizen erlaubt (keine Ausdrucke, keine Kopien).
+	\item Die vorgesehene Arbeitszeit beträgt 90 Minuten
+	\item In dieser Klausur können Sie insgesamt 42 Punkte erreichen. \\Zum Bestehen werden 17 Punkte benötigt.
+	\item Die einzelnen Teilaufgaben sind unabhängig voneinander lösbar.
+	Sollten Sie zu einer Teilaufgabe keine Lösung finden, so können Sie diese Teilaufgabe also einfach überspringen und mit der nächsten Teilaufgabe fortfahren.
+\end{itemize}
+
+
+%--------------------------------------------------------------
+\task{Stabilität \& Kondition [2 + 2 + 3.5 = 7.5 Pkt.]}
+%--------------------------------------------------------------
+	
+	Es soll eine Darstellung für Gleitkommazahlen untersucht werden: Die Basis ist $2$, wir haben keine Bits für das Vorzeichen und $3$ Bits für den Exponenten. Der Exponent wird als vorzeichenbehaftete Ganzzahl kodiert, wobei das erste der drei Bits als Vorzeichenbit verwendet wird. Sonderzahlen werden nicht betrachtet. Für die Mantisse soll $1$ Bit verwendet werden, wobei von einer Normalisierung mit führender Eins ausgegangen wird, die nicht gespeichert wird.
+	\n
+	a) 
+	Bestimmen sie die größte und kleinste Zahl, die mit angegebenem Format für Gleitkommazahlen dargestellt werden können. 
+	\n
+	Wie groß ist die Maschinengenauigkeit?
+	\n 
+	Wie lautet die kleinste positive Ganzzahl, die nicht exakt darstellbar ist?
+	\sol{
+		\n 
+		Größte darstellbare: $011|1 = 1,1 \cdot 2^3 = 1100 = 12$
+		\n 
+		Kleinste darstellbare: $111|0 = 1,0 \cdot 2^{-3} = 2^{-3}$
+		\n 
+		Maschinengenauigkeit: $2^{-2}$
+		\n 
+		Kleinste positive Ganzzahl: $0$ bzw. $5$, wobei $0$ keine Punkte bekommen hat, da es nicht eindeutig eine \fat{positive} Ganzzahl ist -.-
+	}
+	\lbreak 
+	\\
+	b) 
+	\begin{align*}
+		f(x) = (\exp(x) - 1 ) / 5
+	\end{align*}
+	Untersuchen Sie die Kondition von $f(x)$ für die Stelle $x=0$.
+	\sol{
+		\begin{align*}
+			cond(f,x) &= \abs{\frac{x \cdot \frac{e^x}{5}}{\frac{e^x - 1}{5}}} = \abs{\frac{x\cdot e^x}{e^x - 1}} \\
+			\lim\limits_{x \rightarrow 0}& \abs{\frac{x\cdot e^x}{e^x - 1}} = 1
+		\end{align*}
+		Ist also gut konditioniert.
+	}
+	\newpage 
+	c)
+	\begin{align*}
+		f(x) = \frac{e^x - 1}{5}
+	\end{align*}
+	Die Funktion sei mit folgendem Java-Code implementiert worden:
+	\begin{lstlisting}
+		double f(double x) {
+			double erg = Math.exp(x) - 1;
+			return erg / 5;
+		}
+	\end{lstlisting}
+	Untersuchen Sie die Stabilität dieser Implementierung mit Hilfe der Epsilontik.
+	\fat{Hinweis:} Die Auswertung der Exponentialfunktion erzeugt nur einen Fehler.
+	\sol{
+		\begin{align*}
+			rd(f) &= \frac{\left( e^x \cdot(1+ \epsilon_1) - 1 \right) \cdot (1 + \epsilon_2)}{5} \cdot (1 + \epsilon_3) \\
+				&= \left( \frac{e^x - 1}{5} + \frac{\epsilon_1 \cdot e^x}{5} \right) \cdot(1 + \epsilon_2 + \epsilon_3) \\
+			& \\
+			& \abs{\frac{\frac{\epsilon_1 \cdot e^x}{5} \cdot(1 + \epsilon_2 + \epsilon_3)}{f(x)} + \epsilon_2 + \epsilon_3} \\
+			=& \abs{\frac{\epsilon_1 \cdot e^x \cdot(1 + \epsilon_2 + \epsilon_3)}{e^x - 1} + \epsilon_2 + \epsilon_3} \\
+			=& \abs{\frac{\epsilon_1 \cdot e^x}{e^x - 1} + \epsilon_2 + \epsilon_3}
+		\end{align*}
+		Es ist also stabil.
+	}
+	\lbreak 
+	\\
+	d)
+	Gegeben sei:
+	\begin{align*}
+		\rd(f)(x) = f(x) + \epsilon_2 \cdot f(x) + \epsilon_1 \cdot e^x
+	\end{align*}
+	Betrachten Sie den relativen Fehler an der Stelle $x=0$. Wie sieht es mit der Stabilität aus?
+	\sol{
+		\begin{align*}
+			f_{\text{rel},x=0} &= \abs{\frac{\epsilon_2 \cdot (e^x-1) + 5\epsilon_1 \cdot e^x}{e^x - 1}} \\
+			&= \abs{\epsilon_2 + \frac{5\epsilon_1 e^x}{e^x - 1}} \\
+			& \lim\limits_{x \rightarrow 0} \abs{\epsilon_2 + \frac{5\epsilon_1 e^x}{e^x - 1}} = \infty
+		\end{align*}
+		Sieht nicht so gut aus.
+	}
+	
+
+%--------------------------------------------------------------
+\task{Interpolation [4 + 3 = 7 Pkt.]}
+%--------------------------------------------------------------
+	\begin{align*}
+		f(x) = 3\cdot \frac{x + 2}{x - 2}
+	\end{align*}
+	a)
+	Stellen Sie das Interpolationspolynom $p(x)$ vom Grad 2 mithilfe von Lagrange-Polynomen auf, indem Sie die Funktion $f$ an den Stellen $x_0 = -1$, $x_1 = 0$ und $x_2 = 1$ auswerten.
+	\sol{
+		\begin{align*}
+			f(-1) &= -1 \\
+			f(0) &= -3 \\
+			f(1) &= -9 \\
+			&\\ 
+			L_0 &= \frac{x^2 - x}{2} \\
+			L_1 &= -x^2 + 1 \\
+			L_2 &= \frac{x^2}{2} + \frac{x}{2} \\
+			& \\
+			p(x) &= -2x^2 - 4x -3
+		\end{align*}
+	}
+	\\
+	(b)
+	Der \fat{maximale} bei der Interpolation gemachte Fehler soll an der Stelle $\hat{x} = 0.5$ abgeschätzt werden.
+	\n 
+	Nutzen Sie hierfür als Formel $D^{n+1} f(\xi)$, $\xi \in [-1, 1]$ und die folgenden gegebenen Ableitungen:
+	\begin{align*}
+		D^1f(x) &= \frac{-12}{(x-2)^2} \\
+		D^2f(x) &= \frac{24}{(x-2)^3} \\
+		D^3f(x) &= \frac{-72}{(x-2)^4} \\
+		D^4f(x) &= \frac{288}{(x-2)^5} \\
+		D^5f(x) &= \frac{-1440}{(x-2)^6} \\
+	\end{align*}
+	\sol{
+		\begin{align*}
+			D^3f(1) &= \frac{-72}{(1-2)^4} \\
+				&= \frac{72}{1} \\
+			&\\
+			\abs{f(x) - p(x)} &= \abs{\frac{D^3f(\xi)}{(n+1)!} \cdot \prod_{k=0}^{n}(x-x_k)} \\
+				&= \abs{\frac{72}{3!} \cdot (0.5 + 1) \cdot (0.5 - 0) \cdot (0.5 - 1)} \\
+				&= \abs{\frac{72}{6} \cdot \left( \frac{3}{2} \cdot \frac{1}{2} \cdot \frac{-1}{2} \right)} \\
+				&= \abs{\frac{72}{6} \cdot \frac{-3}{8}} \\
+				&= \abs{\frac{72 \cdot 3}{6 \cdot 8}} \\
+				&= \frac{72}{16} \\
+				&= \frac{9}{2}
+		\end{align*}
+	}
+
+
+%--------------------------------------------------------------
+\task{  Quadratur [3 + 3 = 6 Pkt.]}
+%--------------------------------------------------------------
+
+	\begin{align*}
+		f(x) = \frac{1}{3}x^3 + 2x^2 +x - 1
+	\end{align*}
+	Das Integral $I(f) = \int_{a}^{b}f(x)\d{x}$ soll mit $[a,b] = [-1,1]$ approximiert werden.
+	\n
+	(a)
+	Geben Sie die allgemeine Formel der Trapez-Summe $Q_{TS}(f,h)$ an und berechnen Sie mit jener eine Approximation für $I(f)$ mit $n=4$.
+	\n 
+	Zeichen Sie in unten stehender Abbildung genau die Fläche ein, die von der Trapez-Summe berechnet wird.
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+				axis lines=left,
+				xlabel=$x$,
+				ylabel=$f(x)$,
+				enlargelimits,
+				grid=major,
+				legend pos=outer north east
+				]
+				\addplot[domain=-1:1] {(1/3)*x^3 + 2*x^2 + x - 1} node[left]{};
+				\addplot coordinates {
+					( -1, 0 )
+					( -1, -1/3)
+					( -0.5, -25/24)
+					( 0, -1)
+					( 0.5, 1/24)
+					( 1, 7/3)
+					(1, 0)
+					(-1, 0)
+				};
+				\legend{$f(x)$}
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Plot der Funktion $f(x)$.}
+	\end{figure}
+	\sol{
+		\n 
+		Die rot eingezeichnete Fläche ist ebenjene, die von der Trapezsumme mit $n=4$ berechnet wird.
+		\begin{align*}
+			f(-1) &= -\frac{1}{3} \\
+			f(-0.5) &= \frac{-25}{24} \\
+			f(0) &= -1 \\
+			f(0.5) &= \frac{1}{24} \\
+			f(1) &= \frac{7}{3}\\
+		\end{align*}
+		\begin{align*}
+			Q_{TS}(f, 0.5) &= \frac{1}{2} \cdot \left( \frac{-1}{6} - \frac{25}{24} -1 + \frac{1}{24} + \frac{7}{6} \right) \\
+				&= -\frac{1}{2}
+		\end{align*}
+	}
+	\lbreak
+	\\
+	(b)
+	Berechnen Sie nun mithilfe der Simpson-Regel (oder auch Kepler-Regel oder Fass-Regel) $Q_{S}(f)$ die numerische Approximation von $I(f)$. Die Formel lautet:
+	\begin{align*}
+		Q_{S} = \frac{b - a}{6} \cdot \left( f(a) + 4\cdot f\left( \frac{a + b}{2} \right) + f(b) \right)
+	\end{align*}
+	Bestimmen Sie danach die exakte analytische Lösung und vergleichen Sie sie mit dem Ergebnis der Simpson-Regel. Was stellen Sie fest und warum?
+	\sol{
+		\begin{align*}
+			Q_{S} &= \frac{1 - (-1)}{6} \cdot \left( f(-1) + 4\cdot f\left( 0 \right) + f(1) \right) \\
+				&= \frac{1}{3} \cdot (2 - 4) = -\frac{2}{3} \\
+			&\\
+			I(f) &= \int_{-1}^{1} \frac{1}{3}x^3 + 2x^2 + x - 1 \d x \\
+				&= \left[ \frac{1}{12}x^4 + \frac{2}{3}x^3 + \frac{1}{2}x^2 - x \right]_{-1}^1 \\
+				&= \frac{4}{3} -1 -1 = \frac{-2}{3}
+		\end{align*}
+		Die Lösung ist exakt, da der vorhandene Grad noch exakt von der Simpson-Regel berechnet wird (Grad 3 bzw. 4 je nachdem wie man es betrachtet).
+	}
+
+	
+%--------------------------------------------------------------
+\task{  Lineare Ausgleichsrechnung [2 + 5 + 1 = 8 Pkt.]}
+%--------------------------------------------------------------
+	
+	\begin{align*}
+		y(t) = a + b \cdot t + c \cdot \cos\left( \frac{\pi}{2} \cdot t \right)
+	\end{align*}
+	\\
+	$a,b,c \in \Re$ sind unbekannte Konstanten. Man möchte $y(t)$ für den Zeitpunkt $t = 6$ approximieren.
+	\n 
+	Gegeben seien folgende Testergebnisse:
+	\begin{tabular}{c|cccc}
+		$t_i$ & $-1$ & 0 & 1 & 2 \\ \midrule
+		$y_i$ & 1 & 6 & 1 & 2
+	\end{tabular}
+	\n
+	(a)
+	Stellen Sie $y(t)$ mit den gegebenen Testergebnissen als ein überbestimmtes lineares Gleichungssystem mit Unbekannten $a, b$ und $c$ auf.
+	\n 
+	\fat{Hinweis:} 
+	\begin{tabular}{c|ccccc}
+		$x$ & $-\pi$ & $-0.5\pi$ & 0 & $0.5\pi$ & $\pi$ \\ \midrule
+		$\cos(x)$ & $-1$ & 0 & 1 & 0 & $-1$
+	\end{tabular}
+	\sol{
+		\begin{align*}
+			\begin{pmatrix}
+				1 & -1 & 0 &|& 1 \\
+				1 & 0 & 1  &|& 6 \\
+				1 & 1 & 0  &|& 1 \\
+				1 & 2 & -1 &|& 2
+			\end{pmatrix}
+		\end{align*}
+	}
+	\lbreak
+	\\
+	(b)
+	Lösen Sie das LGS aus a) mithilfe der zugehörigen Normalengleichung. Wie lautet die Vorhersage für den Zeitpunkt $t=6$?
+	\n 
+	Falls Sie a) nicht lösen konnten, dürfen Sie alternativ mit dem \fat{falschen} überbestimmten System
+	\begin{align*}
+		\begin{pmatrix}
+			1 & -1 & -2 \\
+			1 & 0 & -1 \\
+			1 & 1 & 0 \\
+			1 & 0 & 1
+		\end{pmatrix} \cdot 
+		\begin{pmatrix}
+			a \\ b \\ c
+		\end{pmatrix} =
+		\begin{pmatrix}
+			-3 \\ -2 \\ 5 \\ 2
+		\end{pmatrix}
+	\end{align*}
+	arbeiten.a
+	\sol{
+		\begin{align*}
+			\begin{pmatrix}
+				4 & 2 & 0  &|& 10 \\
+				2 & 6 & -2  &|& 4 \\
+				0 & -2 & 2  &|& 4 \\
+			\end{pmatrix}
+		\end{align*}
+		\begin{align*}
+			x_1 &= 2, \quad x_2 = 1, \quad x_3 = 3 \\
+			y(x) &= 2 + t + 3 \cos\left(\frac{\pi}{2}t \right) \\
+			y(6) &= 5
+		\end{align*}
+	}
+	\newpage
+	(c)
+	In der Praxis würde man ein solches lineares Ausgleichproblem eher mithilfe der QR-Zerlegung lösen. Nennen Sie \fat{einen} Vorteil gegenüber der Variante aus b) und beschreiben Sie \fat{kurz} eine problematische Eigenschaft der Normalengleichung.
+	\sol{
+		\n 
+		QR-Zerlegung ist stabiler. Eine problematische Eigenschaft der Normalengleichung beruht auf $cond(A\trans A) = cond(A)^2$. Die Kondition wird schlechter.
+	}
+
+
+%--------------------------------------------------------------
+\task{  Fixpunktiteration [2.5 + 1 + 3 = 6.5 Pkt.]}
+%--------------------------------------------------------------
+	
+	Formel des Newton-Verfahrens zur Nullstellenberechung ist definiert als:
+	\begin{align*}
+		x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}
+	\end{align*}
+	(a)
+	Leiten Sie das Newton-Verfahren mithilfe der Taylorreihe her. Die Taylorreihe von $f$, die um $a$ entwickelt wird ist definiert als:
+	\begin{align*}
+		\tilde{f}(x,a) = \sum_{n=0}^{\infty} \frac{f^n(a)}{n!} \cdot (x-a)^n
+	\end{align*}
+	\sol{
+		Setzen wir die ersten beiden Terme der Taylorreihe auf und diese dann null (da wir die Nullstelle suchen mit Newton):
+		\begin{align*}
+			f(a) + f'(a) \cdot (x-a) &= 0 \\
+			x - a &= \frac{-f(a)}{f'(a)} \\
+			x = x_{k+1}&, \quad a = x_k \\
+			x_{k+1} - x_{k} &= - \frac{f(x_k)}{f'(x_k)} \\
+			x_{k+1} &= x_k - \frac{f(x_k)}{f'(x_k)}
+		\end{align*}
+	}
+	\lbreak
+	\\
+	(b)
+	Wenn man das Newton-Verfahren als Fixpunktiteration betrachte, wie lautet die Iterationsfunktion $\Phi(x)$ für das Newton-Verfahren?
+	\sol{
+		\n 
+		Richtig billige Aufgabe. Oben steht die Vorschrift nur als Formel nicht als Funktion. Ergebnis ist also:
+		\begin{align*}
+			\Phi(x) &= x - \frac{f(x)}{f'(x)}
+		\end{align*}
+	}
+	
+	\newpage
+	(c)
+	\begin{figure}[ht]
+		\centering
+		\begin{tikzpicture}
+			\begin{axis}[
+			    width=0.85\textwidth,
+				height=0.9\textwidth,
+				axis lines=left,
+				xlabel=$x$,
+				ylabel=$g(x)$,
+				enlargelimits,
+				ymax = 2.5,
+				samples=60,
+				grid=major,
+				legend pos=outer north east
+				]
+				\addplot[domain=-2:3.5] {log10(0.5*x + 1) * 2} node[left]{};
+				\addplot coordinates {
+					( 3, 3)
+					( 3, 0.8)
+					( 0.8, 0.8)
+					( 0.8, 0.3)
+					( 0.3, 0.3)
+				};
+				\addplot coordinates {
+					( -2.3, -2.3)
+					( 3, 3)
+				};
+				\tikzPointLeft{$x_1$}{0.8, 0.8}
+				\tikzPointLeft{$x_2$}{0.3, 0.3}
+				\tikzPointLeft{$x^*_0$}{-1.7, -1.7}
+				\tikzPointDown{$x^*_1$}{0, 0}
+				%{0.7333333333333334*x^1-0.10666666666666667*x^2} node[left]{};
+				\legend{$g(x)$, Fixpunktiteration, Fixpunktgerade}
+			\end{axis}
+		\end{tikzpicture}
+		\caption{Plot der Funktion $g(x)$.}
+	\end{figure}
+	Bestimmen Sie in Abbildung 2 graphisch alle Fixpunkte von $g$ und markieren Sie diese.
+	\n 
+	Führen Sie (graphisch) zwei Schritte der Fixpunkt-Iteration für den Startwert $x_0=3$ in die Abbildung ein.
+	\n 
+	Bei welchen der Fixpunkte handelt es sich um anziehende und bei welchen um abstoßende Fixpunkte? Begründen Sie ihre Antwort anhand der Graphik.
+	\sol{
+		\n 
+		$x_1^*$ ist ein anziehender Fixpunkt, da wir uns mit den zwei Iterationen auf ebenjenen zubewegen. Wenn man die Iteration sich gedanklich mit dem zweiten Punkt überlegt merkt man, dass es sich um einen abstoßenden Fixpunkt handeln muss.
+	}
+
+
+%--------------------------------------------------------------
+\task{  Programmieraufgabe [2 + 5 = 7 Pkt.]}
+%--------------------------------------------------------------
+	(a) 
+	Was für Vorteile besitzt das Gauß-Seidel Verfahren gegenüber dem Jacobi Verfahren?
+	\sol{
+		\n 
+		Weniger Speicheraufwand und bessere Konvergenzgeschwindigkeit.
+	}
+	\lbreak
+	\\
+	(b)
+	Folgendes Programmgerüst sei gegeben. Vervollständigen Sie dieses ohne unnötige Berechnungen oder Speicherallokationen. Bibliotheksfunkionen dürfen \fat{nicht} verwendet werden.
+	\begin{lstlisting}
+	import java.util.Arrays;
+	public class CoolProgram {
+			
+		public static void main(String[] args) 
+		{
+			// parse input (separately implemented)
+			double[][] A = parseA(args); 
+			double[] b = parseB(args);
+			double[] x = parseX(args);
+			int numIterations = parseN(args);
+				
+			// calculate solution with gaussSeidel()
+				
+				
+			System.out.println("Solution:\n" + Arrays.toString(x));
+		}
+			
+		private static double[] gaussSeidel(double[][] A, double[] b, double[] x) 
+		{
+			
+			//TODO: implement one step of the gauss-seidel method
+			for (int i = 0; i < x.length; i++) {
+			
+				double r = b[i];
+				
+				// Mat-Vec Mult.
+				for (int j = 0; j < x.length; j++) {
+					r -= (A[i][j] * x[j]);
+				}
+				
+				x[i] += (1 / A[i][i]) * r;
+			}
+			return x;
+		}
+	}
+	\end{lstlisting}
+\end{document}

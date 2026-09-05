@@ -1,0 +1,181 @@
+
+
+\bsec{Fixpunkte}{
+		
+		\begin{itemize}
+			\item Newton-Verfahren
+			\item Fixpunkte
+			\item Banach'scher Fixpunktsatz
+			\item Verständnis/Trick Fragen
+		\end{itemize}
+		}
+		
+%----------------------------------------------------------------------------------
+\bsubsec{Newton-Verfahren}{
+		
+		Newton-Verfahren:
+		$$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$
+		
+	}
+
+	\btask{
+		\begin{figure}[ht]
+			\label{pic:fixpunkt}
+			\centering
+			\begin{tikzpicture}
+			\datavisualization [school book axes,
+			visualize as smooth line,
+			y axis={label={$f(x)$}},
+			x axis={label} ]
+			
+			data [format=function] {
+				var x : interval [-2:4] samples 22;
+				func y = .5 *((\value x*\value x*\value x) / 4 - (3 * \value x));
+			};
+			\end{tikzpicture}
+		\end{figure}
+		Mal das Bild vielleicht ab. Du wirst es in den nächsten Aufgaben benötigen und brauchst dann nicht immer hochzuscrollen.
+	}
+
+	\btask{
+
+		Alle Aufgaben beziehen sich auf obige Grafik auf Seite \ref{pic:fixpunkt}.
+		
+		\begin{enumerate}
+			\item Nur aus der Grafik gelesen: Wenn man das Newton-Verfahren für diese Funktion anwenden würde, entspräche $x=0$ einem anziehenden Fixpunkt oder nicht? Warum?
+			\item Zeige deine Theorie, indem du $x_0 = -1$ als Startwert nimmst und drei Schritte des Newton-Verfahrens grafisch ausführst.
+			\item Jemand behauptet, mit Newton wäre die Iterationsvorschrift für die Funktion $f(x)$:
+			$$x_{n+1} = x_n^2 - 9$$
+			Warum kann das nicht stimmen?
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item Ja, weil wenn man in der Nähe dieser Nullstelle Werte als Startwert von Newton nimmt, würde das Verfahren mit wenigen Schritten die Nullstelle erreicht haben.
+			\item Spätestens beim dritten Schritt ist man sehr nahe bei $x=0$
+			\item Die Schnittstellen der Iterationsfunktion und $f(x)$ entsprechen den Fixpunkten, die damit ausgerechnet werden sollen. $x=0$ und $x \sim 3.46$ sind weder Fixpunkte dieser Funktion noch Schnittstellen mit der Funktion $f(x)$.
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bsubsec{Fixpunkte}{
+		
+		$x*$ ist Fixpunkt einer Funktion $f(x)$, genau dann wenn $f(x*) = x*$
+		
+		Iterationsvorschrift $\Phi(x)$
+		$$x_{i+1} = \Phi(x_i)$$
+%		Anziehender Fixpunkt (konvergiert) $\longleftrightarrow$
+%		$$\abs{\Phi'(x*)} < 1$$
+%		Abstoßender Fixpunkt (divergiert):
+%		$$\abs{\Phi'(x*)} > 1$$
+%		Indifferent:
+%		$$\abs{\Phi'(x*)} = 1$$
+		$\abs{\Phi'(x*)} < 1 \Longrightarrow$ anziehender Fixpunkt (konvergiert) \\
+		$\abs{\Phi'(x*)} > 1 \Longrightarrow$ abstoßender Fixpunkt (divergiert) \\
+		$\abs{\Phi'(x*)} = 1 \Longrightarrow$ indifferent
+	}
+
+	\btask{
+		\begin{figure}[ht]
+			\label{pic:fixpunkt2}
+			\centering
+			\begin{tikzpicture}
+			\datavisualization [school book axes,
+			visualize as smooth line,
+			y axis={label={$g(x)$}},
+			x axis={label} ]
+			
+			data [format=function] {
+				var x : interval [-0.5:2.5] samples 22;
+				func y = (\value{x} - 1.0) * (\value{x} - 1.0) * (\value{x} - 1.0) - \value{x} + 2;
+			};
+			\end{tikzpicture}
+			%((x-1)^3 - x + 2)
+		\end{figure}
+		Mal das Bild vielleicht ab. Du wirst es in den nächsten Aufgaben benötigen und brauchst dann nicht immer hochzuscrollen.
+	}
+	\btask{
+		
+		
+		\begin{enumerate}
+			\item Zeige, wie du grafisch auf alle Fixpunkte der Funktion $g(x)$ kommen würdest.
+			\item Beweise deine Theorie für einen Fixpunkt rechnerisch. Nimm hierfür an, dass 
+				$$g(x) = (x-1)^3 - x + 2$$
+			\item Eignet sich folgende Iterationsvorschrift theoretisch, um $-\frac{1}{a}$ auszurechnen?
+				$$\Phi(x) = \frac{a + a^2 \cdot x + x^2}{x}$$
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item Zeichne die Gerade $m(x) = x$ ein. Alle Schnittpunkte zwischen $m(x)$ und $g(x)$ entspricht den Fixpunkten von $g(x)$. 
+			\item $$g(1) = (1-1)^3 - 1 + 2 = -1 + 2 = 1$$
+			\item Fixpunkt $-\frac{1}{a}$ einsetzen:
+				$$\Phi(-\frac{1}{a}) = \frac{a + a^2 \cdot -\frac{1}{a} + (-\frac{1}{a})^2}{-\frac{1}{a}} = = (-\frac{1}{a})^2 \cdot (-a) = -\frac{1}{a}$$ Passt. Jetzt noch überprüfen, ob dieser anziehend ist:
+				$$\Phi'(x) = \frac{x^2 - a}{x^2}$$
+				$$|\Phi'(-\frac{1}{a})| = |\frac{(-\frac{1}{a})^2 - a}{(-\frac{1}{a})^2}| = |\frac{(-\frac{1}{a})^2}{(-\frac{1}{a})^2} + \frac{-a}{(-\frac{1}{a})^2}| = |1 - a^3|$$
+				Daraus folgt: Genau dann wenn $-1 \le a \le 0$, eignet sich die Vorschrift, ansonsten nicht. (In der Praxis dadurch natürlich Quatsch!)
+		\end{enumerate}
+	}
+
+%----------------------------------------------------------------------------------
+\bsubsec{Banach'scher Fixpunktsatz}{
+		
+		Es existiert ein anziehender Fixpunkt im Intervall $I$ genau dann, wenn
+		\begin{enumerate}
+			\item $I$ abgeschlossen
+			\item $\forall x \in I: \Phi(x) \in I$
+			\item $\Phi$ ist ''Lipschitz-stetig'' im Intervall $I$ mit $0 < L < 1$: \\
+			$$\exists L: \abs{\Phi(x) - \Phi(y)} \le L \cdot \abs{x - y}$$
+		\end{enumerate}
+	}
+	\btask{
+		
+		Sei
+		$$f(x) = (x-1)^2 - x + 2$$
+		\begin{enumerate}
+			\item Berechne alle Fixpunkte von $f(x)$ rechnerisch!
+			\item Mithilfe des Intervalls $[0.5; 1.5]$, zeige mithilfe des Banach'schen Fixpunktsatzes, ob sich in dem Intervall ein anziehender Fixpunkt befindet oder nicht.
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item $$f(x) = (x-1)^2 - x + 2 = x \leftrightarrow 0 = (x-1)^2 + 2 - 2x$$
+			 $$\leftrightarrow 0 = (x^2 - 2x + 1) + 2 - 2x \leftrightarrow 0 = x^2 -4x + 3$$
+			 PQ-Formel:
+			 $$x_{1,2} = -\frac{-4}{2} \pm \sqrt{(\frac{4}{2})^2 - 3} = 2 \pm 1$$
+			 $$x_1 = 1 \aae x_2 = 3$$
+			 %$$\leftrightarrow 0 = (x-1)^2 + 2\cdot (1-x)$$
+			 \item \begin{enumerate}
+			 	\item Trivial
+			 	\item Ist streng monoton fallend in dem Intervall. Größter Wert bei 
+			 	$$f(\frac{1}{2}) = (-0.5)^2 - 0.5 + 2 = 1.75$$
+			 	Kleinster Wert bei
+			 	$$f(\frac{3}{2}) = (0.5)^2 - \frac{3}{2} + 2 = \frac{3}{4}$$
+			 	Nicht erfüllt! Kein anziehender Fixpunkt in diesem Intervall!
+			 \end{enumerate}
+			 %2x -3 ist Ableitung
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
+\bquestion{
+	}
+	\btask{
+		
+		Beantworte folgende (Trick-)Fragen möglichst genau:
+		\begin{enumerate}
+			\item TBD
+		\end{enumerate}
+		
+	}
+	\bsol{
+		
+		\begin{enumerate}
+			\item TBD
+		\end{enumerate}
+	}
+%----------------------------------------------------------------------------------
