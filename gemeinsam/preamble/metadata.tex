@@ -9,3 +9,11 @@
 \providecommand{\npauthor}{Hendrik Möller}
 \providecommand{\npauthorurl}{https://github.com/Hendrik-code/numprog_script}
 \providecommand{\npauthormail}{hendrik.moeller[AT]tum.de}
+
+% Die URL, wie sie *gesetzt* wird (Fusszeile, Vorwort, Titelfolie).
+% \npauthorurl selbst muss unangetastet bleiben -- es ist das Linkziel von
+% \href.  Ausgeschrieben im Text scheitert es aber an Sonderzeichen wie dem
+% Unterstrich in "numprog_script": der ist fuer TeX ein Tiefstellungszeichen
+% und beendet die Uebersetzung mit "Missing $ inserted".  \detokenize macht
+% daraus wieder ein gewoehnliches Zeichen.
+\providecommand{\npauthorurltext}{\expandafter\detokenize\expandafter{\npauthorurl}}
